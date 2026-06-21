@@ -31,7 +31,7 @@
 html{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-tap-highlight-color:transparent;font-size:17px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{min-height:100dvh;padding-top:var(--st);padding-bottom:calc(70px + var(--sb));overflow-x:hidden}
 ::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
-svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+svg.ic{width:20px;height:20px;stroke-width:2;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
 
 /* HEADER */
 header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:13px 18px;padding-top:calc(13px + var(--st));display:flex;align-items:center;justify-content:space-between}
@@ -45,11 +45,11 @@ header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-
 .hdr-btn svg{width:17px;height:17px}
 
 /* NAV */
-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding-bottom:var(--sb)}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 4px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:.62rem;font-weight:600;letter-spacing:.02em;text-transform:uppercase;transition:.2s;position:relative}
-.nb svg{width:22px;height:22px;transition:transform .2s}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border2);display:flex;padding-bottom:var(--sb)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 4px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.45);font-size:.62rem;font-weight:600;letter-spacing:.02em;text-transform:uppercase;transition:.2s;position:relative}
+.nb svg{width:22px;height:22px;stroke-width:2;transition:transform .2s;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .nb.active{color:var(--purple)}
-.nb.active svg{transform:translateY(-2px)}
+.nb.active svg{transform:translateY(-2px);stroke:var(--purple)}
 .nb.active::before{content:'';position:absolute;top:0;width:24px;height:2px;border-radius:2px;background:var(--purple)}
 
 /* PAGES */
@@ -64,7 +64,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
 .card-accent{position:absolute;top:0;left:0;right:0;height:2px}
 .cl{display:flex;align-items:center;gap:9px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text);margin-bottom:15px}
-.cl svg{width:16px;height:16px;stroke-width:2.2}
+.cl svg{width:17px;height:17px;stroke-width:2.4;stroke:#fff;fill:none;stroke-linecap:round;stroke-linejoin:round}
 
 /* HERO SCORE RING */
 .score-hero{background:linear-gradient(135deg,var(--s2),var(--s1));border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:12px;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden}
@@ -432,6 +432,25 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .fit-bar{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin-top:8px}
 .fit-bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
 .fit-desc{font-size:.64rem;color:var(--text2);margin-top:5px;line-height:1.4}
+
+/* EXPANDED FITNESS DETAIL */
+.fit-detail-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.fit-dc-head{display:flex;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid var(--border)}
+.fit-dc-ic{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.fit-dc-ic svg{width:18px;height:18px;stroke-width:2.3;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.fit-dc-title{flex:1}
+.fit-dc-name{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:1px}
+.fit-dc-sub{font-size:.64rem;color:var(--text3);font-family:var(--fm)}
+.fit-dc-score{font-family:var(--fh);font-size:1.5rem;font-weight:700;line-height:1}
+.fit-dc-grade{font-size:.58rem;padding:2px 8px;border-radius:100px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:3px;display:inline-block}
+.fit-dc-body{padding:12px 15px;display:flex;flex-direction:column;gap:9px}
+.fit-sub{display:flex;align-items:center;gap:10px}
+.fit-sub-name{font-size:.72rem;color:var(--text2);width:90px;flex-shrink:0}
+.fit-sub-bar{flex:1;height:7px;background:var(--s3);border-radius:4px;overflow:hidden}
+.fit-sub-fill{height:100%;border-radius:4px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.fit-sub-val{font-family:var(--fm);font-size:.68rem;font-weight:700;width:28px;text-align:right;flex-shrink:0}
+.fit-radar-wrap{padding:0 15px 14px}
+.fit-radar-svg{width:100%;max-width:220px;display:block;margin:0 auto}
 </style>
 </head>
 <body>
@@ -640,9 +659,12 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
   <div class="sec-head"><div><div class="sec-title">Stats</div><div class="sec-sub">90-day breakdown</div></div></div>
   <div class="card" style="margin-bottom:12px">
     <div class="card-accent" style="background:linear-gradient(90deg,var(--purple),var(--swim),var(--bike),var(--run))"></div>
-    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-gauge"/></svg>Fitness Scores</div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-gauge"/></svg>Fitness Breakdown</div>
+    <!-- Summary rings row -->
     <div class="fit-grid" id="fitnessScores"></div>
-    <div style="font-size:.68rem;color:var(--text3);line-height:1.5">Scores calculated from training load, pace trends, consistency and intensity balance over the last 28 days. 100 = race-ready peak for your event.</div>
+    <!-- Detailed per-discipline cards -->
+    <div id="fitnessDetail"></div>
+    <div style="font-size:.66rem;color:var(--text3);line-height:1.5;margin-top:4px">Scores built from Volume, Endurance, Speed Trend, HR Discipline &amp; Consistency over the last 28 days. 100 = peak IM readiness for your event.</div>
   </div>
   <div class="km-grid" id="keyMetrics"></div>
   <div class="card">
@@ -1220,6 +1242,7 @@ function updatePrediction(){
 
 // ── ANALYTICS ──
 function renderAnalytics(){renderFitnessScores();renderKeyMetrics();renderHRZones();renderRunPace();renderSwimTable();renderCadence();renderVolume();}
+
 function renderKeyMetrics(){
   const runs=activities.filter(isRun),swims=activities.filter(isSwim),bikes=activities.filter(isBike),now=new Date();
   const longRun=runs.reduce((b,a)=>km(a.distance||0)>km(b.distance||0)?a:b,runs[0]||{});
@@ -1377,24 +1400,164 @@ function computeFitnessScore(filter, opts={}){
   const total=Math.round(volScore+consScore+paceScore+hrScore);
   return Math.min(100,total);
 }
+
+// Compute granular sub-scores for a discipline (returns object with named scores 0–100)
+function computeDetailedFitnessScores(filter, opts={}){
+  const now=new Date();
+  const acts=activities.filter(filter);
+  const last28=acts.filter(a=>(now-aDate(a))/86400000<=28);
+  const last90=acts.filter(a=>(now-aDate(a))/86400000<=90);
+
+  // 1. Volume (0–100): last 28d km vs IM target
+  const totalKm28=last28.reduce((s,a)=>s+km(a.distance||0),0);
+  const volume=Math.min(100,Math.round(totalKm28/(opts.volTarget||100)*100));
+
+  // 2. Endurance (0–100): longest single session vs IM leg target
+  const longest=last90.length?Math.max(...last90.map(a=>km(a.distance||0))):0;
+  const endurance=Math.min(100,Math.round(longest/(opts.longTarget||50)*100));
+
+  // 3. Speed Trend (0–100): are recent sessions faster than older ones?
+  let speed=50;
+  const withSpeed=last28.filter(a=>a.average_speed>0);
+  if(withSpeed.length>=4){
+    const half=Math.floor(withSpeed.length/2);
+    const older=withSpeed.slice(half).reduce((s,a)=>s+a.average_speed,0)/Math.max(1,withSpeed.length-half);
+    const newer=withSpeed.slice(0,half).reduce((s,a)=>s+a.average_speed,0)/Math.max(1,half);
+    const ratio=older>0?(newer-older)/older:0;
+    speed=Math.min(100,Math.max(0,Math.round(50+ratio*500)));
+  } else if(withSpeed.length>0) speed=40;
+
+  // 4. Consistency (0–100): sessions per week vs target
+  const sessPerWk=last28.length/4;
+  const consistency=Math.min(100,Math.round(sessPerWk/(opts.sessTarget||3)*100));
+
+  // 5. HR Discipline (0–100, runs only): % of sessions in Z1–Z3 (<160bpm)
+  let hrDiscipline=75; // default neutral if no HR data
+  if(opts.hrCheck){
+    const withHR=last28.filter(a=>a.average_heartrate);
+    if(withHR.length){
+      const inZone=withHR.filter(a=>a.average_heartrate<=160).length;
+      hrDiscipline=Math.round(inZone/withHR.length*100);
+    }
+  }
+
+  // Overall = weighted average
+  const weights=opts.hrCheck?[0.20,0.20,0.20,0.20,0.20]:[0.25,0.25,0.25,0.25,0];
+  const overall=opts.hrCheck
+    ?Math.round(volume*weights[0]+endurance*weights[1]+speed*weights[2]+consistency*weights[3]+hrDiscipline*weights[4])
+    :Math.round(volume*0.30+endurance*0.30+speed*0.25+consistency*0.15);
+
+  return{overall:Math.min(100,overall),volume,endurance,speed,consistency,hrDiscipline};
+}
+
+function gradeFor(s){
+  if(s>=85)return{t:'Race Ready',c:'var(--green)',bg:'rgba(52,211,153,.18)'};
+  if(s>=70)return{t:'Strong',c:'var(--swim)',bg:'rgba(34,211,238,.18)'};
+  if(s>=55)return{t:'Building',c:'var(--bike)',bg:'rgba(251,191,36,.18)'};
+  if(s>=38)return{t:'Developing',c:'var(--run)',bg:'rgba(251,113,133,.18)'};
+  return{t:'Early',c:'var(--text3)',bg:'var(--s3)'};
+}
+
 function renderFitnessScores(){
-  const swimScore=computeFitnessScore(isSwim,{volTarget:20,sessTarget:2,paceCheck:true,hrCheck:false});
-  const bikeScore=computeFitnessScore(isBike,{volTarget:200,sessTarget:2.5,paceCheck:true,hrCheck:false});
-  const runScore=computeFitnessScore(isRun,{volTarget:50,sessTarget:3,paceCheck:true,hrCheck:true});
-  const overall=Math.round((swimScore*0.25+bikeScore*0.4+runScore*0.35));
-  const scoreLabel=s=>s>=80?'Race Ready':s>=65?'Strong':s>=50?'Building':s>=35?'Developing':'Early';
+  const swimD=computeDetailedFitnessScores(isSwim,{volTarget:20,sessTarget:2,longTarget:3,paceCheck:true,hrCheck:false});
+  const bikeD=computeDetailedFitnessScores(isBike,{volTarget:200,sessTarget:2.5,longTarget:100,paceCheck:true,hrCheck:false});
+  const runD=computeDetailedFitnessScores(isRun,{volTarget:50,sessTarget:3,longTarget:25,paceCheck:true,hrCheck:true});
+  const overall=Math.round(swimD.overall*0.25+bikeD.overall*0.40+runD.overall*0.35);
+  const overallGrade=gradeFor(overall);
+
+  // Summary 4-card grid
   const el=document.getElementById('fitnessScores');
   el.innerHTML=[
-    {s:swimScore,c:'sw',l:'Swim',col:'var(--swim)'},
-    {s:bikeScore,c:'bk',l:'Bike',col:'var(--bike)'},
-    {s:runScore,c:'rn',l:'Run',col:'var(--run)'},
+    {s:swimD.overall,c:'sw',l:'Swim',col:'var(--swim)'},
+    {s:bikeD.overall,c:'bk',l:'Bike',col:'var(--bike)'},
+    {s:runD.overall,c:'rn',l:'Run',col:'var(--run)'},
     {s:overall,c:'ov',l:'Overall',col:'var(--purple)'},
-  ].map(d=>`<div class="fit-card ${d.c}">
+  ].map(d=>{const g=gradeFor(d.s);return`<div class="fit-card ${d.c}">
     <div class="fit-score ${d.c}">${d.s}</div>
     <div class="fit-label">${d.l} Fitness</div>
     <div class="fit-bar"><div class="fit-bar-fill" style="width:${d.s}%;background:${d.col}"></div></div>
-    <div class="fit-desc">${scoreLabel(d.s)}</div>
-  </div>`).join('');
+    <div class="fit-desc" style="color:${g.c}">${g.t}</div>
+  </div>`;}).join('');
+
+  // Overall pentagon radar SVG
+  const radarSvg=buildRadarSvg([
+    {label:'Volume',val:(swimD.volume+bikeD.volume+runD.volume)/3},
+    {label:'Endurance',val:(swimD.endurance+bikeD.endurance+runD.endurance)/3},
+    {label:'Speed',val:(swimD.speed+bikeD.speed+runD.speed)/3},
+    {label:'Consistency',val:(swimD.consistency+bikeD.consistency+runD.consistency)/3},
+    {label:'HR Disc.',val:runD.hrDiscipline},
+  ]);
+
+  // Detailed cards per discipline
+  const disciplines=[
+    {d:swimD,c:'sw',ic:'i-waves',n:'Swim',col:'var(--swim)',col2:'var(--swim2)',bg:'rgba(34,211,238,0.22)',
+     subs:[['Volume',swimD.volume,'var(--swim)'],['Endurance',swimD.endurance,'var(--swim)'],['Speed Trend',swimD.speed,'var(--swim)'],['Consistency',swimD.consistency,'var(--swim)']]},
+    {d:bikeD,c:'bk',ic:'i-bike',n:'Bike',col:'var(--bike)',col2:'var(--bike2)',bg:'rgba(251,191,36,0.22)',
+     subs:[['Volume',bikeD.volume,'var(--bike)'],['Endurance',bikeD.endurance,'var(--bike)'],['Speed Trend',bikeD.speed,'var(--bike)'],['Consistency',bikeD.consistency,'var(--bike)']]},
+    {d:runD,c:'rn',ic:'i-run',n:'Run',col:'var(--run)',col2:'var(--run2)',bg:'rgba(251,113,133,0.22)',
+     subs:[['Volume',runD.volume,'var(--run)'],['Endurance',runD.endurance,'var(--run)'],['Speed Trend',runD.speed,'var(--run)'],['HR Discipline',runD.hrDiscipline,'var(--green)'],['Consistency',runD.consistency,'var(--run)']]},
+  ];
+
+  document.getElementById('fitnessDetail').innerHTML=`
+    <div class="fit-detail-card" style="margin-top:12px">
+      <div class="fit-dc-head" style="justify-content:center;flex-direction:column;gap:6px;padding-bottom:6px;border-bottom:none">
+        <div style="font-size:.66rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;text-align:center">Attribute Radar — 28 Day</div>
+        ${radarSvg}
+      </div>
+    </div>
+    ${disciplines.map(disc=>{
+      const g=gradeFor(disc.d.overall);
+      return`<div class="fit-detail-card">
+        <div class="fit-dc-head">
+          <div class="fit-dc-ic" style="background:${disc.bg};color:${disc.col2}"><svg viewBox="0 0 24 24"><use href="#${disc.ic}"/></svg></div>
+          <div class="fit-dc-title">
+            <div class="fit-dc-name">${disc.n} Fitness</div>
+            <div class="fit-dc-sub">Last 28 days · ${disc.subs.length} metrics</div>
+          </div>
+          <div style="text-align:right">
+            <div class="fit-dc-score" style="color:${disc.col}">${disc.d.overall}</div>
+            <div class="fit-dc-grade" style="background:${g.bg};color:${g.c}">${g.t}</div>
+          </div>
+        </div>
+        <div class="fit-dc-body">
+          ${disc.subs.map(([name,val,col])=>`<div class="fit-sub">
+            <div class="fit-sub-name">${name}</div>
+            <div class="fit-sub-bar"><div class="fit-sub-fill" style="width:${val}%;background:${col}"></div></div>
+            <div class="fit-sub-val" style="color:${col}">${val}</div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }).join('')}`;
+}
+
+// Pentagon radar chart SVG
+function buildRadarSvg(attrs){
+  const n=attrs.length,cx=110,cy=110,R=80,pad=24;
+  const angle=i=>(i/n)*Math.PI*2-Math.PI/2;
+  const pt=(i,r)=>[cx+Math.cos(angle(i))*r,cy+Math.sin(angle(i))*r];
+  // grid rings
+  let rings='';
+  for(let r=0.25;r<=1;r+=0.25){
+    const pts=Array.from({length:n},(_,i)=>pt(i,R*r).join(',')).join(' ');
+    rings+=`<polygon points="${pts}" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
+  }
+  // spokes
+  let spokes=Array.from({length:n},(_,i)=>`<line x1="${cx}" y1="${cy}" x2="${pt(i,R)[0]}" y2="${pt(i,R)[1]}" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>`).join('');
+  // data polygon
+  const dataPts=attrs.map((a,i)=>pt(i,R*Math.min(1,a.val/100)).join(',')).join(' ');
+  // labels
+  const labels=attrs.map((a,i)=>{
+    const [lx,ly]=pt(i,R+pad);
+    return`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="rgba(255,255,255,0.55)" font-family="Inter,sans-serif">${a.label}</text>
+<text x="${lx}" y="${ly+12}" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="rgba(255,255,255,0.85)" font-family="JetBrains Mono,monospace" font-weight="600">${Math.round(a.val)}</text>`;
+  }).join('');
+  return`<svg class="fit-radar-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="rgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a5b4fc" stop-opacity="0.55"/><stop offset="100%" stop-color="#22d3ee" stop-opacity="0.4"/></linearGradient></defs>
+    ${rings}${spokes}
+    <polygon points="${dataPts}" fill="url(#rgrad)" stroke="#818cf8" stroke-width="2" stroke-linejoin="round"/>
+    ${attrs.map((a,i)=>{const[px,py]=pt(i,R*Math.min(1,a.val/100));return`<circle cx="${px}" cy="${py}" r="3.5" fill="#a5b4fc" stroke="var(--bg)" stroke-width="1.5"/>`;}).join('')}
+    ${labels}
+  </svg>`;
 }
 
 // ── SAVED DEBRIEF ──
