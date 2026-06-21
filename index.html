@@ -510,7 +510,7 @@
     <div class="section-head">
       <div>
         <div class="section-title">Settings</div>
-        <div class="section-sub">API keys &amp; connections</div>
+        <div class="section-sub">Connections &amp; config</div>
       </div>
     </div>
 
@@ -521,26 +521,15 @@
         <span class="status-badge" id="stravaStatus">Checking…</span>
       </div>
       <div class="status-row">
-        <span>Claude AI (for Debrief)</span>
-        <span class="status-badge" id="claudeStatus">Not set</span>
+        <span>Claude AI (via Worker)</span>
+        <span class="status-badge ok" id="claudeStatus">Configured</span>
       </div>
     </div>
 
     <div class="setup-card">
       <div class="setup-label">Strava Client ID</div>
       <input class="setup-input" id="inputClientId" placeholder="e.g. 123456" />
-      <div class="setup-note">From your Strava API application at strava.com/settings/api</div>
-    </div>
-
-    <div class="setup-card">
-      <div class="setup-label">Strava Client Secret</div>
-      <input class="setup-input" id="inputClientSecret" type="password" placeholder="Your client secret" />
-    </div>
-
-    <div class="setup-card">
-      <div class="setup-label">Claude API Key</div>
-      <input class="setup-input" id="inputClaudeKey" type="password" placeholder="sk-ant-…" />
-      <div class="setup-note">Used only for the AI weekly debrief. Get yours at console.anthropic.com</div>
+      <div class="setup-note">From strava.com/settings/api — this is public and safe to store here. Your Client Secret lives securely in the Cloudflare Worker.</div>
     </div>
 
     <button class="save-btn" onclick="saveSettings()">Save Settings</button>
@@ -548,10 +537,18 @@
     <div style="margin-top:20px"></div>
 
     <div class="card">
+      <div class="card-title">Security Model</div>
+      <div style="font-size:0.75rem; color:var(--muted); line-height:1.7">
+        <strong style="color:var(--text)">What's in the browser:</strong> Strava access token (short-lived), refresh token, Client ID. These are standard OAuth artifacts — nothing billable.<br><br>
+        <strong style="color:var(--text)">What's in Cloudflare Workers:</strong> Strava Client Secret, Claude API key. These never leave the server. The Workers are free-tier and handle &lt;10 req/day easily.<br><br>
+        <strong style="color:var(--text)">This URL is safe to make public.</strong>
+      </div>
+    </div>
+
+    <div class="card">
       <div class="card-title">About</div>
       <div style="font-size:0.75rem; color:var(--muted); line-height:1.7">
-        TriCoach PWA — built for Ironman Barcelona 2026.<br>
-        All data stays on your device. Strava OAuth tokens stored in localStorage.<br><br>
+        TriCoach PWA — built for Ironman Barcelona 2026.<br><br>
         <strong style="color:var(--text)">To install on Android:</strong><br>
         Open in Chrome → tap ⋮ menu → "Add to Home screen"
       </div>
@@ -589,12 +586,20 @@
 
 <script>
 // ─────────────────────────────────────────────
-// CONFIG — fill these in Settings or hardcode for dev
+// CONFIG
+// Secrets live in Cloudflare Workers — nothing sensitive here.
 // ─────────────────────────────────────────────
+
+// !! UPDATE THESE after deploying your two Cloudflare Workers !!
+const STRAVA_WORKER_URL  = 'https://tricoach-strava-proxy.tricoach.workers.dev';
+const CLAUDE_WORKER_URL  = 'https://tricoach-claude-proxy.tricoach.workers.dev';
+
+// Strava Client ID is public (it appears in the OAuth URL anyway)
+// Set it once in Settings — stored in localStorage is fine.
 const STRAVA_REDIRECT = window.location.origin + window.location.pathname;
-const BCN_DATE = new Date('2026-10-04');
-const AMD_DATE = new Date('2026-10-18');
-const PLAN_START = new Date('2026-06-16'); // Week 1 start (post-Bolton)
+const BCN_DATE   = new Date('2026-10-04');
+const AMD_DATE   = new Date('2026-10-18');
+const PLAN_START = new Date('2026-06-16');
 const PLAN_WEEKS = 19;
 
 // HR Zones (from Strava — manual, max 200bpm)
@@ -633,12 +638,13 @@ window.addEventListener('load', async () => {
 });
 
 // ─────────────────────────────────────────────
-// STRAVA OAUTH
+// STRAVA OAUTH  (secrets handled by Worker)
 // ─────────────────────────────────────────────
 function stravaAuth() {
-  const clientId = settings.clientId || localStorage.getItem('strava_client_id');
+  const clientId = localStorage.getItem('strava_client_id');
   if (!clientId) {
     alert('Please set your Strava Client ID in Settings first.');
+    showPage('Settings');
     return;
   }
   const scope = 'read,activity:read_all';
@@ -646,34 +652,21 @@ function stravaAuth() {
   window.location.href = url;
 }
 
-function handleOAuthCallback() {
+async function handleOAuthCallback() {
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code');
   if (!code) return;
 
-  // Clean URL
   window.history.replaceState({}, document.title, window.location.pathname);
 
-  const clientId = localStorage.getItem('strava_client_id');
-  const clientSecret = localStorage.getItem('strava_client_secret');
-
-  if (!clientId || !clientSecret) {
-    alert('Strava Client ID and Secret needed. Please set them in Settings, then reconnect.');
-    return;
-  }
-
-  fetch('https://www.strava.com/oauth/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      client_id: clientId,
-      client_secret: clientSecret,
-      code: code,
-      grant_type: 'authorization_code'
-    })
-  })
-  .then(r => r.json())
-  .then(data => {
+  try {
+    // Client Secret stays in the Worker — we just send the code
+    const resp = await fetch(`${STRAVA_WORKER_URL}/exchange`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    });
+    const data = await resp.json();
     if (data.access_token) {
       localStorage.setItem('strava_token', data.access_token);
       localStorage.setItem('strava_refresh', data.refresh_token);
@@ -683,28 +676,34 @@ function handleOAuthCallback() {
       document.getElementById('app').style.display = 'block';
       updateCountdowns();
       loadStravaData();
+    } else {
+      alert('Strava auth failed: ' + (data.error || 'unknown error'));
     }
-  })
-  .catch(e => console.error('OAuth error', e));
+  } catch(e) {
+    console.error('OAuth error', e);
+    alert('Could not reach the auth worker. Check STRAVA_WORKER_URL in the app config.');
+  }
 }
 
 async function refreshIfNeeded() {
   const exp = parseInt(localStorage.getItem('strava_expires') || '0');
-  if (Date.now() / 1000 < exp - 300) return;
-  const clientId = localStorage.getItem('strava_client_id');
-  const clientSecret = localStorage.getItem('strava_client_secret');
+  if (Date.now() / 1000 < exp - 300) return; // still valid
   const refresh = localStorage.getItem('strava_refresh');
-  if (!clientId || !clientSecret || !refresh) return;
-  const r = await fetch('https://www.strava.com/oauth/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, refresh_token: refresh, grant_type: 'refresh_token' })
-  }).then(r => r.json());
-  if (r.access_token) {
-    localStorage.setItem('strava_token', r.access_token);
-    localStorage.setItem('strava_refresh', r.refresh_token);
-    localStorage.setItem('strava_expires', r.expires_at);
-    stravaToken = r.access_token;
+  if (!refresh) return;
+  try {
+    const r = await fetch(`${STRAVA_WORKER_URL}/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: refresh }),
+    }).then(r => r.json());
+    if (r.access_token) {
+      localStorage.setItem('strava_token', r.access_token);
+      localStorage.setItem('strava_refresh', r.refresh_token);
+      localStorage.setItem('strava_expires', r.expires_at);
+      stravaToken = r.access_token;
+    }
+  } catch(e) {
+    console.error('Token refresh failed', e);
   }
 }
 
@@ -939,28 +938,19 @@ function renderBikeTrend() {
 }
 
 // ─────────────────────────────────────────────
-// AI DEBRIEF
+// AI DEBRIEF  (Claude API key handled by Worker)
 // ─────────────────────────────────────────────
 async function generateDebrief() {
-  const apiKey = localStorage.getItem('claude_api_key');
-  if (!apiKey) {
-    alert('Add your Claude API key in Settings to use the AI debrief.');
-    return;
-  }
-
   const btn = document.getElementById('debriefBtn');
   const output = document.getElementById('debriefOutput');
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> Analysing your week…';
   output.style.display = 'none';
 
-  // Build week summary for Claude
   const now = new Date();
-  const weekActs = allActivities.filter(a => isSameWeek(new Date(a.start_date_local || a.start_local || a.start_date), now));
   const prev7 = allActivities.filter(a => {
     const d = new Date(a.start_date_local || a.start_local || a.start_date);
-    const diff = (now - d) / 86400000;
-    return diff <= 7;
+    return (now - d) / 86400000 <= 7;
   });
 
   const actSummary = prev7.map(a => {
@@ -1005,29 +995,26 @@ Provide a structured weekly debrief with these sections:
 Format each section with a header like "### Section Name". Be direct. Maximum 350 words.`;
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    // Call our Worker — no API key in the browser
+    const resp = await fetch(`${CLAUDE_WORKER_URL}/chat`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 1000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
-
     const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || `Worker error ${resp.status}`);
     const text = data.content?.[0]?.text || 'No response received.';
     output.innerHTML = formatDebrief(text);
     output.style.display = 'block';
     updateStatusBadge('claudeStatus', true);
   } catch(e) {
-    output.innerHTML = `<span style="color:var(--danger)">Error: ${e.message}. Check your API key in Settings.</span>`;
+    output.innerHTML = `<span style="color:var(--danger)">Error: ${e.message}<br><small>Check CLAUDE_WORKER_URL is set correctly in index.html</small></span>`;
     output.style.display = 'block';
+    updateStatusBadge('claudeStatus', false);
   }
 
   btn.disabled = false;
@@ -1054,29 +1041,23 @@ function showPage(name) {
 }
 
 // ─────────────────────────────────────────────
-// SETTINGS
+// SETTINGS  (only Client ID stored — no secrets)
 // ─────────────────────────────────────────────
 function loadSettings() {
   settings.clientId = localStorage.getItem('strava_client_id') || '';
-  settings.claudeKey = localStorage.getItem('claude_api_key') || '';
   const ci = document.getElementById('inputClientId');
-  const cc = document.getElementById('inputClaudeKey');
   if (ci) ci.value = settings.clientId;
-  if (cc) cc.value = settings.claudeKey ? '••••••••' : '';
+  updateStatusBadge('stravaStatus', !!localStorage.getItem('strava_token'));
+  updateStatusBadge('claudeStatus', true); // Worker handles key — always "configured"
 }
 
 function saveSettings() {
   const clientId = document.getElementById('inputClientId').value.trim();
-  const clientSecret = document.getElementById('inputClientSecret').value.trim();
-  const claudeKey = document.getElementById('inputClaudeKey').value.trim();
   if (clientId) localStorage.setItem('strava_client_id', clientId);
-  if (clientSecret) localStorage.setItem('strava_client_secret', clientSecret);
-  if (claudeKey && !claudeKey.startsWith('••')) localStorage.setItem('claude_api_key', claudeKey);
 
   const btn = document.querySelector('.save-btn');
   btn.textContent = 'Saved ✓';
   setTimeout(() => btn.textContent = 'Save Settings', 1500);
-  updateStatusBadge('claudeStatus', !!localStorage.getItem('claude_api_key'));
 }
 
 function updateStatusBadge(id, ok) {
