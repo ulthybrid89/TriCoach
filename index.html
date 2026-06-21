@@ -287,6 +287,12 @@
 <div id="authScreen" class="auth-screen" style="display:none">
   <div class="auth-logo">Tri<span>Coach</span></div>
   <div class="auth-sub">Your personal Ironman Barcelona training dashboard. Connect Strava to get started.</div>
+  <div style="width:100%;max-width:300px">
+    <div style="font-size:0.7rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em">Strava Client ID</div>
+    <input id="authClientId" class="setup-input" placeholder="e.g. 221518" style="margin-bottom:12px;width:100%"
+      oninput="localStorage.setItem('strava_client_id', this.value.trim())" />
+    <div style="font-size:0.68rem;color:var(--muted);margin-bottom:16px">From strava.com/settings/api — public, not a secret.</div>
+  </div>
   <button class="auth-btn" onclick="stravaAuth()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
     Connect with Strava
@@ -591,8 +597,8 @@
 // ─────────────────────────────────────────────
 
 // !! UPDATE THESE after deploying your two Cloudflare Workers !!
-const STRAVA_WORKER_URL  = 'https://tricoach-strava-proxy.tricoach.workers.dev';
-const CLAUDE_WORKER_URL  = 'https://tricoach-claude-proxy.tricoach.workers.dev';
+const STRAVA_WORKER_URL  = 'https://tricoach-strava-proxy.YOUR-SUBDOMAIN.workers.dev';
+const CLAUDE_WORKER_URL  = 'https://tricoach-claude-proxy.YOUR-SUBDOMAIN.workers.dev';
 
 // Strava Client ID is public (it appears in the OAuth URL anyway)
 // Set it once in Settings — stored in localStorage is fine.
@@ -623,7 +629,11 @@ let settings = {};
 // ─────────────────────────────────────────────
 window.addEventListener('load', async () => {
   loadSettings();
-  handleOAuthCallback();
+  // Pre-fill auth screen Client ID if already saved
+  const savedId = localStorage.getItem('strava_client_id');
+  const authInput = document.getElementById('authClientId');
+  if (savedId && authInput) authInput.value = savedId;
+  await handleOAuthCallback();
   stravaToken = localStorage.getItem('strava_token');
 
   if (!stravaToken) {
