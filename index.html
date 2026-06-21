@@ -13,22 +13,22 @@
 <title>TriCoach</title>
 <style>
 :root{
-  --bg:#070b14;--s1:#0e1422;--s2:#141d30;--s3:#1b2740;--s4:#243352;
-  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
-  --swim:#06b6d4;--swim2:#22d3ee;--swim-d:rgba(6,182,212,0.13);
-  --bike:#f59e0b;--bike2:#fbbf24;--bike-d:rgba(245,158,11,0.13);
-  --run:#f43f5e;--run2:#fb7185;--run-d:rgba(244,63,94,0.13);
-  --green:#10b981;--green-d:rgba(16,185,129,0.13);
-  --gold:#fbbf24;--gold-d:rgba(251,191,36,0.13);
-  --purple:#818cf8;--purple2:#a5b4fc;--purple-d:rgba(129,140,248,0.13);
-  --text:#f1f5f9;--text2:#94a3b8;--text3:#5b6b85;
-  --warn:#f59e0b;--danger:#f43f5e;
+  --bg:#070b14;--s1:#0f1728;--s2:#172240;--s3:#1f2e54;--s4:#283a66;
+  --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
+  --swim:#22d3ee;--swim2:#67e8f9;--swim-d:rgba(34,211,238,0.16);
+  --bike:#fbbf24;--bike2:#fcd34d;--bike-d:rgba(251,191,36,0.16);
+  --run:#fb7185;--run2:#fda4af;--run-d:rgba(251,113,133,0.16);
+  --green:#34d399;--green-d:rgba(52,211,153,0.16);
+  --gold:#fbbf24;--gold-d:rgba(251,191,36,0.16);
+  --purple:#a5b4fc;--purple2:#c7d2fe;--purple-d:rgba(165,180,252,0.16);
+  --text:#f8fafc;--text2:#e2e8f0;--text3:#94a3b8;
+  --warn:#fbbf24;--danger:#fb7185;
   --r:16px;--r-sm:10px;--r-xs:7px;
   --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
   --fb:'Inter',system-ui,sans-serif;--fh:'Space Grotesk',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-tap-highlight-color:transparent;font-size:15px}
+html{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-tap-highlight-color:transparent;font-size:16px;-webkit-font-smoothing:antialiased}
 body{min-height:100dvh;padding-top:var(--st);padding-bottom:calc(70px + var(--sb));overflow-x:hidden}
 ::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
 svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
@@ -47,7 +47,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-
 /* NAV */
 nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding-bottom:var(--sb)}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 4px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:.57rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;transition:.2s;position:relative}
-.nb svg{width:20px;height:20px;transition:transform .2s}
+.nb svg{width:22px;height:22px;transition:transform .2s}
 .nb.active{color:var(--purple)}
 .nb.active svg{transform:translateY(-2px)}
 .nb.active::before{content:'';position:absolute;top:0;width:24px;height:2px;border-radius:2px;background:var(--purple)}
@@ -57,14 +57,14 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .page.active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .sec-head{margin-bottom:18px;display:flex;align-items:flex-end;justify-content:space-between}
-.sec-title{font-family:var(--fh);font-size:1.5rem;font-weight:700;letter-spacing:-0.025em;line-height:1}
+.sec-title{font-family:var(--fh);font-size:1.6rem;font-weight:700;letter-spacing:-0.025em;line-height:1}
 .sec-sub{font-size:.74rem;color:var(--text2);margin-top:4px}
 
 /* CARDS */
 .card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
 .card-accent{position:absolute;top:0;left:0;right:0;height:2px}
-.cl{display:flex;align-items:center;gap:7px;font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:13px}
-.cl svg{width:14px;height:14px}
+.cl{display:flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text2);margin-bottom:14px}
+.cl svg{width:16px;height:16px;stroke-width:2.2}
 
 /* HERO SCORE RING */
 .score-hero{background:linear-gradient(135deg,var(--s2),var(--s1));border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:12px;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden}
@@ -72,8 +72,8 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .ring-wrap{position:relative;width:104px;height:104px;flex-shrink:0}
 .ring-wrap svg{transform:rotate(-90deg)}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-score{font-family:var(--fh);font-size:1.9rem;font-weight:700;line-height:1;letter-spacing:-0.03em}
-.ring-max{font-size:.58rem;color:var(--text3);font-family:var(--fm);margin-top:1px}
+.ring-score{font-family:var(--fh);font-size:2rem;font-weight:700;line-height:1;letter-spacing:-0.03em}
+.ring-max{font-size:.64rem;color:var(--text3);font-family:var(--fm);margin-top:2px}
 .score-info{flex:1}
 .score-rank{font-family:var(--fh);font-size:1.15rem;font-weight:700;margin-bottom:3px;display:flex;align-items:center;gap:7px}
 .score-rank .tier-badge{font-size:.6rem;padding:2px 8px;border-radius:100px;background:var(--gold-d);color:var(--gold);font-weight:600;letter-spacing:.04em}
@@ -85,8 +85,8 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .qstat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .qstat{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px 10px;text-align:center;position:relative;cursor:pointer;transition:.18s}
 .qstat:active{transform:scale(.97);background:var(--s2)}
-.qstat-ic{width:30px;height:30px;border-radius:8px;margin:0 auto 7px;display:flex;align-items:center;justify-content:center}
-.qstat-ic svg{width:16px;height:16px;stroke-width:2}
+.qstat-ic{width:36px;height:36px;border-radius:10px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+.qstat-ic svg{width:19px;height:19px;stroke-width:2.2}
 .qstat-val{font-family:var(--fh);font-size:1.25rem;font-weight:700;line-height:1}
 .qstat-lbl{font-size:.58rem;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
 
@@ -116,9 +116,9 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .ws:active{transform:scale(.97)}
 .ws::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
 .ws.sw::after{background:var(--swim)}.ws.bk::after{background:var(--bike)}.ws.rn::after{background:var(--run)}
-.ws-ic{width:32px;height:32px;border-radius:9px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+.ws-ic{width:38px;height:38px;border-radius:11px;margin:0 auto 9px;display:flex;align-items:center;justify-content:center}
 .ws.sw .ws-ic{background:var(--swim-d);color:var(--swim)}.ws.bk .ws-ic{background:var(--bike-d);color:var(--bike)}.ws.rn .ws-ic{background:var(--run-d);color:var(--run)}
-.ws-ic svg{width:18px;height:18px;stroke-width:2}
+.ws-ic svg{width:21px;height:21px;stroke-width:2.2}
 .ws-v{font-family:var(--fh);font-size:1.4rem;font-weight:700;line-height:1}
 .ws.sw .ws-v{color:var(--swim)}.ws.bk .ws-v{color:var(--bike)}.ws.rn .ws-v{color:var(--run)}
 .ws-u{font-size:.58rem;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
@@ -127,10 +127,10 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 /* INSIGHTS */
 .ins-row{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
 .ins{display:flex;align-items:center;gap:11px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 13px}
-.ins-ic{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.ins-ic svg{width:16px;height:16px;stroke-width:2}
-.ins-tx{font-size:.73rem;color:var(--text2);line-height:1.45}
-.ins-tx strong{color:var(--text);font-weight:600;display:block;font-size:.78rem;margin-bottom:1px}
+.ins-ic{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.ins-ic svg{width:19px;height:19px;stroke-width:2.2}
+.ins-tx{font-size:.78rem;color:var(--text2);line-height:1.5}
+.ins-tx strong{color:var(--text);font-weight:700;display:block;font-size:.84rem;margin-bottom:2px}
 .ins.warn{border-color:rgba(244,63,94,.22)}.ins.warn .ins-ic{background:var(--run-d);color:var(--run)}
 .ins.good{border-color:rgba(16,185,129,.22)}.ins.good .ins-ic{background:var(--green-d);color:var(--green)}
 .ins.info .ins-ic{background:var(--purple-d);color:var(--purple)}
@@ -152,14 +152,14 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 /* ACTIVITY */
 .act{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
 .act:last-child{border-bottom:none}
-.act-b{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.act-b{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
 .act-b.sw{background:var(--swim-d);color:var(--swim)}.act-b.bk{background:var(--bike-d);color:var(--bike)}.act-b.rn{background:var(--run-d);color:var(--run)}.act-b.ot{background:var(--purple-d);color:var(--purple)}
-.act-b svg{width:19px;height:19px;stroke-width:2}
+.act-b svg{width:22px;height:22px;stroke-width:2.2}
 .act-i{flex:1;min-width:0}
-.act-n{font-size:.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.act-m{font-size:.67rem;color:var(--text2);font-family:var(--fm)}
+.act-n{font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.act-m{font-size:.72rem;color:var(--text2);font-family:var(--fm)}
 .act-r{text-align:right;flex-shrink:0}
-.act-d{font-family:var(--fm);font-size:.85rem;font-weight:600}
+.act-d{font-family:var(--fm);font-size:.9rem;font-weight:700}
 .act-d.sw{color:var(--swim)}.act-d.bk{color:var(--bike)}.act-d.rn{color:var(--run)}
 .act-pts{font-size:.6rem;color:var(--gold);font-family:var(--fm);margin-top:2px}
 
@@ -172,8 +172,8 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .sess-check{width:24px;height:24px;border-radius:7px;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.2s}
 .sess-check svg{width:14px;height:14px;stroke:white;stroke-width:3;opacity:0}
 .session.done .sess-check svg{opacity:1}
-.sess-ic{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.sess-ic svg{width:17px;height:17px;stroke-width:2}
+.sess-ic{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.sess-ic svg{width:20px;height:20px;stroke-width:2.2}
 .sess-info{flex:1;min-width:0}
 .sess-title{font-size:.82rem;font-weight:600;margin-bottom:2px}
 .sess-detail{font-size:.67rem;color:var(--text2);font-family:var(--fm)}
@@ -208,17 +208,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .xp-fill.bk{background:linear-gradient(90deg,var(--bike),var(--bike2))}
 .xp-fill.rn{background:linear-gradient(90deg,var(--run),var(--run2))}
 
-/* BADGES */
-.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.badge{aspect-ratio:1;background:var(--s1);border:1px solid var(--border);border-radius:var(--r-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px;text-align:center;position:relative;transition:.2s;cursor:pointer}
-.badge:active{transform:scale(.95)}
-.badge.locked{opacity:.32}
-.badge-ic{width:30px;height:30px;display:flex;align-items:center;justify-content:center}
-.badge-ic svg{width:24px;height:24px;stroke-width:1.7}
-.badge.unlocked .badge-ic{color:var(--gold)}
-.badge.locked .badge-ic{color:var(--text3)}
-.badge-name{font-size:.52rem;color:var(--text3);line-height:1.2;font-weight:500}
-.badge.unlocked .badge-name{color:var(--text2)}
+
 
 /* PREDICTOR */
 .pred-total{background:linear-gradient(135deg,var(--s2),var(--s1));border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:12px;text-align:center;position:relative;overflow:hidden}
@@ -230,7 +220,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .split-row:last-child{border-bottom:none}
 .split-ic{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .split-ic.sw{background:var(--swim-d);color:var(--swim)}.split-ic.bk{background:var(--bike-d);color:var(--bike)}.split-ic.rn{background:var(--run-d);color:var(--run)}.split-ic.t{background:var(--s3);color:var(--text2)}
-.split-ic svg{width:18px;height:18px;stroke-width:2}
+.split-ic svg{width:21px;height:21px;stroke-width:2.2}
 .split-info{flex:1}
 .split-name{font-size:.8rem;font-weight:600}
 .split-detail{font-size:.65rem;color:var(--text2);font-family:var(--fm);margin-top:1px}
@@ -258,11 +248,11 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 /* HR ZONES */
 .zr{display:flex;align-items:center;gap:8px;margin-bottom:9px}
 .zr:last-child{margin-bottom:0}
-.zn{font-family:var(--fm);font-size:.65rem;color:var(--text2);width:20px;flex-shrink:0}
-.zrng{font-size:.58rem;color:var(--text3);width:62px;flex-shrink:0;font-family:var(--fm)}
-.zt{flex:1;height:9px;background:var(--s3);border-radius:5px;overflow:hidden}
+.zn{font-family:var(--fm);font-size:.72rem;font-weight:600;color:var(--text);width:22px;flex-shrink:0}
+.zrng{font-size:.64rem;color:var(--text2);width:66px;flex-shrink:0;font-family:var(--fm)}
+.zt{flex:1;height:10px;background:var(--s3);border-radius:5px;overflow:hidden}
 .zf{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.4,0,.2,1)}
-.zp{font-family:var(--fm);font-size:.65rem;color:var(--text2);width:28px;text-align:right;flex-shrink:0}
+.zp{font-family:var(--fm);font-size:.72rem;font-weight:600;color:var(--text);width:30px;text-align:right;flex-shrink:0}
 
 /* CHARTS */
 .chart-wrap{position:relative;height:110px;margin:6px 0}
@@ -289,12 +279,24 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .db-btn svg{width:18px;height:18px;stroke-width:2}
 .db-out{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px;font-size:.8rem;line-height:1.75;color:var(--text2);display:none}
 .db-out.show{display:block}
+.saved-debrief{background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.saved-debrief-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.saved-debrief-date{font-size:.68rem;color:var(--text3);font-family:var(--fm)}
+.saved-debrief-clear{font-size:.65rem;color:var(--text3);background:var(--s3);border:none;padding:3px 9px;border-radius:100px;cursor:pointer;font-family:var(--fb)}
+.saved-debrief-body{font-size:.78rem;line-height:1.7;color:var(--text2)}
+.saved-debrief-body h3{font-family:var(--fh);font-size:.84rem;font-weight:600;color:var(--purple);margin:12px 0 5px}
+.saved-debrief-body h3:first-child{margin-top:0}
 .db-out h3{font-family:var(--fh);font-size:.86rem;font-weight:600;color:var(--purple);margin:16px 0 6px;letter-spacing:-0.01em}
 .db-out h3:first-child{margin-top:0}
 .db-out strong{color:var(--text);font-weight:600}
 .db-out .flag{color:var(--danger)}.db-out .good{color:var(--green)}
 .plink{display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:14px 16px;color:var(--purple);font-size:.82rem;font-weight:500;text-decoration:none;margin-bottom:12px;transition:.2s}
 .plink:active{background:var(--s3)}
+.coach-banner{display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
+.coach-banner-ic{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#4f46e5,#7c3aed);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:white}
+.coach-banner-ic svg{width:20px;height:20px;stroke-width:2.2}
+.coach-banner-title{font-size:.84rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.coach-banner-sub{font-size:.72rem;color:var(--text2);line-height:1.45}
 .plink svg{width:16px;height:16px;stroke-width:2}
 
 /* RACE LEG */
@@ -361,6 +363,16 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .vol-head span:last-child{font-family:var(--fm);font-size:.7rem}
 .vol-track{height:8px;background:var(--s3);border-radius:4px;overflow:hidden}
 .vol-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.fit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:10px}
+.fit-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px;text-align:center;position:relative;overflow:hidden}
+.fit-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.fit-card.sw::after{background:var(--swim)}.fit-card.bk::after{background:var(--bike)}.fit-card.rn::after{background:var(--run)}.fit-card.ov::after{background:linear-gradient(90deg,var(--purple),var(--swim))}
+.fit-score{font-family:var(--fh);font-size:2rem;font-weight:700;line-height:1;letter-spacing:-0.03em}
+.fit-score.sw{color:var(--swim)}.fit-score.bk{color:var(--bike)}.fit-score.rn{color:var(--run)}.fit-score.ov{background:linear-gradient(135deg,var(--purple),var(--swim));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.fit-label{font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-top:4px}
+.fit-bar{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin-top:8px}
+.fit-bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.fit-desc{font-size:.64rem;color:var(--text2);margin-top:5px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -551,16 +563,18 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
     <div id="xpBars"></div>
   </div>
 
-  <!-- Badges -->
-  <div class="card">
-    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-award"/></svg>Achievements</div>
-    <div class="badge-grid" id="badgeGrid"></div>
-  </div>
+
 </div>
 
 <!-- STATS -->
 <div id="pageAnalytics" class="page">
   <div class="sec-head"><div><div class="sec-title">Stats</div><div class="sec-sub">90-day breakdown</div></div></div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-accent" style="background:linear-gradient(90deg,var(--purple),var(--swim),var(--bike),var(--run))"></div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-gauge"/></svg>Fitness Scores</div>
+    <div class="fit-grid" id="fitnessScores"></div>
+    <div style="font-size:.68rem;color:var(--text3);line-height:1.5">Scores calculated from training load, pace trends, consistency and intensity balance over the last 28 days. 100 = race-ready peak for your event.</div>
+  </div>
   <div class="km-grid" id="keyMetrics"></div>
   <div class="card">
     <div class="card-accent" style="background:linear-gradient(90deg,var(--green),var(--bike),var(--run))"></div>
@@ -592,14 +606,15 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 <!-- COACH -->
 <div id="pageDebrief" class="page">
   <div class="sec-head"><div><div class="sec-title">Coach</div><div class="sec-sub">AI weekly analysis</div></div></div>
-  <a href="https://claude.ai/projects" target="_blank" class="plink">
-    <span>Open Triathlon Coach Project</span>
-    <svg viewBox="0 0 24 24"><use href="#i-link"/></svg>
-  </a>
+  <div class="coach-banner">
+    <div class="coach-banner-ic"><svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg></div>
+    <div><div class="coach-banner-title">AI Coaching powered by Claude</div><div class="coach-banner-sub">Your full athlete profile, Bolton race data and Barcelona targets are built into every debrief.</div></div>
+  </div>
   <div class="card" style="margin-bottom:12px">
     <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>Last 7 Days</div>
     <div id="debriefPreview"></div>
   </div>
+  <div id="savedDebriefWrap"></div>
   <button class="db-btn" id="debriefBtn" onclick="generateDebrief()">
     <svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg> Generate Weekly Debrief
   </button>
@@ -747,7 +762,7 @@ async function refreshIfNeeded(){const exp=parseInt(localStorage.getItem('strava
 
 // ── DATA ──
 async function loadData(){await refreshIfNeeded();try{const after=Math.floor(Date.now()/1000)-90*86400;const r=await fetch(`https://www.strava.com/api/v3/athlete/activities?per_page=100&after=${after}`,{headers:{Authorization:`Bearer ${stravaToken}`}});if(!r.ok)throw new Error('Strava API');activities=await r.json();renderAll();setBadge('stStatus',true);}catch(e){console.error(e);setBadge('stStatus',false);}}
-function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();}
+function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();loadSavedDebrief();}
 
 // ── HELPERS ──
 const sp=a=>(a.sport_type||'').toLowerCase();
@@ -852,10 +867,15 @@ function renderDash(){
   setText('qCompliance',weekCompliance().pct+'%');
   setText('qPoints',weekPoints().toLocaleString());
   renderInsights(thisWk,now);renderLoadChart();
-  const recent=activities.slice(0,10),el=document.getElementById('recentList');
-  if(!recent.length){el.innerHTML='<div class="empty">No activities found</div>';return;}
+  const now2=new Date();
+  const recent=[...activities]
+    .sort((a,b)=>aDate(b)-aDate(a))
+    .filter(a=>(now2-aDate(a))/86400000<=21)
+    .slice(0,10);
+  const el=document.getElementById('recentList');
+  if(!recent.length){el.innerHTML='<div class="empty">No recent sessions in the last 21 days</div>';return;}
   el.innerHTML=recent.map(a=>{const c=clsOf(a),hr=a.average_heartrate?`· ${Math.round(a.average_heartrate)}bpm`:'';
-    return `<div class="act"><div class="act-b ${c}"><svg viewBox="0 0 24 24"><use href="#${useIcon(a)}"/></svg></div><div class="act-i"><div class="act-n">${a.name||a.sport_type}</div><div class="act-m">${fmtDate(aDate(a))} ${hr}</div></div><div class="act-r"><div class="act-d ${c}">${fmtKm(a.distance||0)} km</div><div class="act-pts">+${sessionPoints(a)} pts</div></div></div>`;}).join('');
+    return `<div class="act" onclick="openActivity(${a.id})" style="cursor:pointer"><div class="act-b ${c}"><svg viewBox="0 0 24 24"><use href="#${useIcon(a)}"/></svg></div><div class="act-i"><div class="act-n">${a.name||a.sport_type}</div><div class="act-m">${fmtDate(aDate(a))} ${hr}</div></div><div class="act-r"><div class="act-d ${c}">${fmtKm(a.distance||0)} km</div><div class="act-pts">+${sessionPoints(a)} pts</div></div></div>`;}).join('');
 }
 function computeStreak(){
   // consecutive weeks (incl this) with >=3 sessions
@@ -917,9 +937,9 @@ function renderPlan(){
     const colorBg=s.type==='swim'?'var(--swim-d)':s.type==='bike'?'var(--bike-d)':'var(--run-d)';
     const colorFg=s.type==='swim'?'var(--swim)':s.type==='bike'?'var(--bike)':'var(--run)';
     const actInfo=done&&s.act?` · ${fmtKm(s.act.distance||0)}km done`:'';
-    return `<div class="session ${done?'done':''}"><div class="sess-check"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><div class="sess-ic" style="background:${colorBg};color:${colorFg}"><svg viewBox="0 0 24 24"><use href="#${icn}"/></svg></div><div class="sess-info"><div class="sess-title">${s.title}</div><div class="sess-detail">${s.detail}${actInfo}</div><span class="sess-status ${stCls}">${stTxt}</span></div><div class="sess-pts">+${s.pts}</div></div>`;
+    return `<div class="session ${done?'done':''}" onclick="openSession(${JSON.stringify({...s,act:s.act?{name:s.act.name,distance:s.act.distance,moving_time:s.act.moving_time,average_heartrate:s.act.average_heartrate,max_heartrate:s.act.max_heartrate,avg_cadence:s.act.avg_cadence,total_calories:s.act.total_calories}:null}).replace(/"/g,'&quot;')})"><div class="sess-check"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><div class="sess-ic" style="background:${colorBg};color:${colorFg}"><svg viewBox="0 0 24 24"><use href="#${icn}"/></svg></div><div class="sess-info"><div class="sess-title">${s.title}</div><div class="sess-detail">${s.detail}${actInfo}</div><span class="sess-status ${stCls}">${stTxt}</span></div><div class="sess-pts">+${s.pts}</div></div>`;
   }).join('');
-  renderXP();renderBadges();
+  renderXP();
 }
 function ringSet(id,frac,circ){const r=document.getElementById(id);if(!r)return;setTimeout(()=>r.style.transition='stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)',50);setTimeout(()=>r.style.strokeDashoffset=circ-frac*circ,100);}
 
@@ -934,27 +954,7 @@ function renderXP(){
   }).join('');
 }
 
-// ── BADGES ──
-function renderBadges(){
-  const now=new Date();
-  const totalSwim=activities.filter(isSwim).length;
-  const longBike=Math.max(0,...activities.filter(isBike).map(a=>km(a.distance||0)));
-  const longRun=Math.max(0,...activities.filter(isRun).map(a=>km(a.distance||0)));
-  const weekBigKm=(()=>{let max=0;for(let i=0;i<10;i++){const d=new Date(now);d.setDate(d.getDate()-i*7);const ws=wkOf(d),we=new Date(ws);we.setDate(we.getDate()+6);const k=activities.filter(a=>isBike(a)&&aDate(a)>=ws&&aDate(a)<=we).reduce((s,a)=>s+km(a.distance||0),0);max=Math.max(max,k);}return max;})();
-  const streak=computeStreak();
-  const totalPts=activities.reduce((s,a)=>s+sessionPoints(a),0);
-  const badges=[
-    {ic:'i-waves',n:'10 Swims',got:totalSwim>=10},
-    {ic:'i-mountain',n:'100k Bike Wk',got:weekBigKm>=100},
-    {ic:'i-run',n:'15k Run',got:longRun>=15},
-    {ic:'i-flame',n:'4wk Streak',got:streak>=4},
-    {ic:'i-bike',n:'100k Ride',got:longBike>=100},
-    {ic:'i-zap',n:'10k Points',got:totalPts>=10000},
-    {ic:'i-trophy',n:'70.3 Done',got:true},
-    {ic:'i-medal',n:'IM Finisher',got:false},
-  ];
-  document.getElementById('badgeGrid').innerHTML=badges.map(b=>`<div class="badge ${b.got?'unlocked':'locked'}"><div class="badge-ic"><svg viewBox="0 0 24 24"><use href="#${b.ic}"/></svg></div><div class="badge-name">${b.n}</div></div>`).join('');
-}
+
 
 // ── PREDICTOR ──
 let baseSplits={swim:0,bike:0,run:0,t1:300,t2:300};
@@ -997,7 +997,7 @@ function updatePrediction(){
 }
 
 // ── ANALYTICS ──
-function renderAnalytics(){renderKeyMetrics();renderHRZones();renderRunPace();renderSwimTable();renderCadence();renderVolume();}
+function renderAnalytics(){renderFitnessScores();renderKeyMetrics();renderHRZones();renderRunPace();renderSwimTable();renderCadence();renderVolume();}
 function renderKeyMetrics(){
   const runs=activities.filter(isRun),swims=activities.filter(isSwim),bikes=activities.filter(isBike),now=new Date();
   const longRun=runs.reduce((b,a)=>km(a.distance||0)>km(b.distance||0)?a:b,runs[0]||{});
@@ -1078,9 +1078,125 @@ Structured debrief:
 ### Next Week Focus (max 3 points)
 
 Max 400 words.`;
-  try{const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})}),d=await r.json();if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);const t=d.content?.[0]?.text||'No response.';out.innerHTML=t.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/\n/g,'<br>');out.classList.add('show');}catch(e){out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;out.classList.add('show');}
+  try{const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})}),d=await r.json();if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);const t=d.content?.[0]?.text||'No response.';const rendered=t.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/\n/g,'<br>');out.innerHTML=rendered;out.classList.add('show');saveDebrief(rendered);loadSavedDebrief();}catch(e){out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;out.classList.add('show');}
   btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg> Regenerate Debrief';
 }
+
+// ── ACTIVITY MODAL ──
+function openActivity(id){
+  const a=activities.find(x=>x.id==id||x.id==String(id));
+  if(!a)return;
+  const t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
+  const c=clsOf(a);const col=c==='sw'?'var(--swim)':c==='bk'?'var(--bike)':c==='rn'?'var(--run)':'var(--purple)';
+  t.innerHTML=`<svg class="ic" style="color:${col}" viewBox="0 0 24 24"><use href="#${useIcon(a)}"/></svg> ${a.name||a.sport_type}`;
+  const rows=[
+    ['Date', fmtDate(aDate(a))],
+    ['Distance', fmtKm(a.distance||0)+' km'],
+    ['Moving Time', fmtT(a.moving_time||0)],
+    ['Avg HR', a.average_heartrate?Math.round(a.average_heartrate)+' bpm':'—'],
+    ['Max HR', a.max_heartrate?Math.round(a.max_heartrate)+' bpm':'—'],
+    ['Avg Pace', isRun(a)?fmtPace(a.average_speed||a.avg_speed)+'  /km':isSwim(a)?swim100(a.average_speed||a.avg_speed)+' /100m':'—'],
+    ['Cadence', a.avg_cadence?Math.round(a.avg_cadence*2)+' spm':'—'],
+    ['Elevation', a.total_elevation_gain?Math.round(a.total_elevation_gain)+'m':'—'],
+    ['Calories', a.total_calories?a.total_calories.toLocaleString()+' kcal':'—'],
+    ['Relative Effort', a.suffer_score||a.relative_effort||'—'],
+    ['Points Earned', '+'+sessionPoints(a)+' pts'],
+  ];
+  b.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:10px;overflow:hidden">${rows.map(([l,v])=>`<div style="background:var(--s2);padding:10px 12px"><div style="font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">${l}</div><div style="font-family:var(--fm);font-size:.82rem;font-weight:600;color:var(--text)">${v}</div></div>`).join('')}</div>`;
+  document.getElementById('modal').classList.add('show');
+}
+
+function openSession(s){
+  const t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
+  const c=s.type==='swim'?'var(--swim)':s.type==='bike'?'var(--bike)':'var(--run)';
+  const ic=s.type==='swim'?'i-waves':s.type==='bike'?'i-bike':'i-run';
+  t.innerHTML=`<svg class="ic" style="color:${c}" viewBox="0 0 24 24"><use href="#${ic}"/></svg> ${s.title}`;
+  let body=`<div style="font-size:.82rem;color:var(--text2);line-height:1.7;margin-bottom:14px">${s.detail}</div>`;
+  body+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+    <div style="background:var(--s2);border-radius:9px;padding:11px;text-align:center"><div style="font-family:var(--fm);font-size:1rem;font-weight:700;color:${c}">+${s.pts}</div><div style="font-size:.6rem;color:var(--text3);margin-top:2px;text-transform:uppercase">Plan Points</div></div>
+    <div style="background:var(--s2);border-radius:9px;padding:11px;text-align:center"><div style="font-family:var(--fm);font-size:1rem;font-weight:700;color:${s.status==='matched'?'var(--green)':'var(--text3)'}">${s.status==='matched'?'Done':'Pending'}</div><div style="font-size:.6rem;color:var(--text3);margin-top:2px;text-transform:uppercase">Status</div></div>
+  </div>`;
+  if(s.act){
+    const a=s.act;
+    body+=`<div style="background:var(--green-d);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:12px"><div style="font-size:.7rem;font-weight:700;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Matched Activity</div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:6px">${a.name||'Activity'}</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">${[['Dist',fmtKm(a.distance||0)+'km'],['Time',fmtT(a.moving_time||0)],['HR',a.average_heartrate?Math.round(a.average_heartrate)+'bpm':'—']].map(([l,v])=>`<div style="text-align:center"><div style="font-family:var(--fm);font-size:.82rem;font-weight:600;color:var(--text)">${v}</div><div style="font-size:.58rem;color:var(--text3);margin-top:1px">${l}</div></div>`).join('')}</div>
+    </div>`;
+  } else {
+    body+=`<div style="background:var(--s2);border-radius:10px;padding:12px;font-size:.78rem;color:var(--text2)">No matching Strava activity found yet for this session. Complete it and sync to earn your points.</div>`;
+  }
+  b.innerHTML=body;
+  document.getElementById('modal').classList.add('show');
+}
+
+// ── FITNESS SCORES ──
+function computeFitnessScore(filter, opts={}){
+  const now=new Date();
+  const acts=activities.filter(filter);
+  const last28=acts.filter(a=>(now-aDate(a))/86400000<=28);
+  // Volume score: how much relative to IM target
+  const totalKm=last28.reduce((s,a)=>s+km(a.distance||0),0);
+  const volTarget=opts.volTarget||100;
+  const volScore=Math.min(40,totalKm/volTarget*40);
+  // Consistency: sessions per week
+  const sessPerWk=last28.length/4;
+  const consScore=Math.min(25,sessPerWk/opts.sessTarget*25);
+  // Pace/speed trend (if applicable)
+  let paceScore=0;
+  if(opts.paceCheck&&last28.length>=2){
+    const speeds=last28.filter(a=>a.average_speed>0).map(a=>a.average_speed);
+    if(speeds.length>=2){const first=speeds.slice(-3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length),last3=speeds.slice(0,3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length);paceScore=Math.min(20,Math.max(0,(last3-first)/first*200+10));}
+    else paceScore=10;
+  } else paceScore=opts.paceCheck?10:20;
+  // HR discipline (runs only)
+  let hrScore=0;
+  if(opts.hrCheck){const runs=last28.filter(a=>a.average_heartrate);const z12=runs.filter(a=>a.average_heartrate<=160).length;hrScore=runs.length?Math.min(15,(z12/runs.length)*15):7;}
+  else hrScore=15;
+  const total=Math.round(volScore+consScore+paceScore+hrScore);
+  return Math.min(100,total);
+}
+function renderFitnessScores(){
+  const swimScore=computeFitnessScore(isSwim,{volTarget:20,sessTarget:2,paceCheck:true,hrCheck:false});
+  const bikeScore=computeFitnessScore(isBike,{volTarget:200,sessTarget:2.5,paceCheck:true,hrCheck:false});
+  const runScore=computeFitnessScore(isRun,{volTarget:50,sessTarget:3,paceCheck:true,hrCheck:true});
+  const overall=Math.round((swimScore*0.25+bikeScore*0.4+runScore*0.35));
+  const scoreLabel=s=>s>=80?'Race Ready':s>=65?'Strong':s>=50?'Building':s>=35?'Developing':'Early';
+  const el=document.getElementById('fitnessScores');
+  el.innerHTML=[
+    {s:swimScore,c:'sw',l:'Swim',col:'var(--swim)'},
+    {s:bikeScore,c:'bk',l:'Bike',col:'var(--bike)'},
+    {s:runScore,c:'rn',l:'Run',col:'var(--run)'},
+    {s:overall,c:'ov',l:'Overall',col:'var(--purple)'},
+  ].map(d=>`<div class="fit-card ${d.c}">
+    <div class="fit-score ${d.c}">${d.s}</div>
+    <div class="fit-label">${d.l} Fitness</div>
+    <div class="fit-bar"><div class="fit-bar-fill" style="width:${d.s}%;background:${d.col}"></div></div>
+    <div class="fit-desc">${scoreLabel(d.s)}</div>
+  </div>`).join('');
+}
+
+// ── SAVED DEBRIEF ──
+function loadSavedDebrief(){
+  const saved=localStorage.getItem('tricoach_debrief');
+  if(!saved)return;
+  const d=JSON.parse(saved);
+  document.getElementById('savedDebriefWrap').innerHTML=`
+    <div class="saved-debrief">
+      <div class="saved-debrief-head">
+        <span style="font-size:.78rem;font-weight:600;color:var(--text)">Last Debrief</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="saved-debrief-date">${d.date}</span>
+          <button class="saved-debrief-clear" onclick="clearSavedDebrief()">Clear</button>
+        </div>
+      </div>
+      <div class="saved-debrief-body">${d.html}</div>
+    </div>`;
+}
+function saveDebrief(html){
+  const now=new Date();
+  localStorage.setItem('tricoach_debrief',JSON.stringify({html,date:now.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}));
+}
+function clearSavedDebrief(){localStorage.removeItem('tricoach_debrief');document.getElementById('savedDebriefWrap').innerHTML='';}
 
 // ── MODAL ──
 function openStat(type){
