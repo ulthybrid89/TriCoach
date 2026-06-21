@@ -3,1178 +3,1103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#080d18">
+<meta name="theme-color" content="#070b14">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TriCoach">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<title>TriCoach — Shawn</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>TriCoach</title>
 <style>
-:root {
-  --bg:       #080d18;
-  --s1:       #0f1624;
-  --s2:       #162035;
-  --s3:       #1c2a42;
-  --border:   rgba(255,255,255,0.07);
-  --border2:  rgba(255,255,255,0.12);
-  --swim:     #06b6d4;
-  --swim-dim: rgba(6,182,212,0.12);
-  --bike:     #f59e0b;
-  --bike-dim: rgba(245,158,11,0.12);
-  --run:      #f43f5e;
-  --run-dim:  rgba(244,63,94,0.12);
-  --green:    #22c55e;
-  --green-dim:rgba(34,197,94,0.12);
-  --purple:   #818cf8;
-  --purple-dim:rgba(129,140,248,0.12);
-  --text:     #f1f5f9;
-  --text2:    #94a3b8;
-  --text3:    #475569;
-  --warn:     #f59e0b;
-  --danger:   #f43f5e;
-  --r:        14px;
-  --r-sm:     8px;
-  --safe-top: env(safe-area-inset-top,0px);
-  --safe-bot: env(safe-area-inset-bottom,0px);
-  --font:     'Inter', system-ui, sans-serif;
-  --font-head:'Space Grotesk', system-ui, sans-serif;
-  --font-mono:'JetBrains Mono', monospace;
+:root{
+  --bg:#070b14;--s1:#0e1422;--s2:#141d30;--s3:#1b2740;--s4:#243352;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --swim:#06b6d4;--swim2:#22d3ee;--swim-d:rgba(6,182,212,0.13);
+  --bike:#f59e0b;--bike2:#fbbf24;--bike-d:rgba(245,158,11,0.13);
+  --run:#f43f5e;--run2:#fb7185;--run-d:rgba(244,63,94,0.13);
+  --green:#10b981;--green-d:rgba(16,185,129,0.13);
+  --gold:#fbbf24;--gold-d:rgba(251,191,36,0.13);
+  --purple:#818cf8;--purple2:#a5b4fc;--purple-d:rgba(129,140,248,0.13);
+  --text:#f1f5f9;--text2:#94a3b8;--text3:#5b6b85;
+  --warn:#f59e0b;--danger:#f43f5e;
+  --r:16px;--r-sm:10px;--r-xs:7px;
+  --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
+  --fb:'Inter',system-ui,sans-serif;--fh:'Space Grotesk',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;
 }
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-tap-highlight-color:transparent;font-size:15px}
-body{min-height:100dvh;padding-top:var(--safe-top);padding-bottom:calc(68px + var(--safe-bot));overflow-x:hidden}
+html{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-tap-highlight-color:transparent;font-size:15px}
+body{min-height:100dvh;padding-top:var(--st);padding-bottom:calc(70px + var(--sb));overflow-x:hidden}
+::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
+svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-thumb{background:var(--s3);border-radius:2px}
-
-/* ── HEADER ── */
-header{
-  position:sticky;top:0;z-index:100;
-  background:rgba(8,13,24,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  padding:12px 18px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding-top:calc(12px + var(--safe-top));
-}
-.logo{font-family:var(--font-head);font-size:1.15rem;font-weight:700;letter-spacing:-0.02em;color:var(--text)}
+/* HEADER */
+header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:13px 18px;padding-top:calc(13px + var(--st));display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--fh);font-size:1.18rem;font-weight:700;letter-spacing:-0.025em;display:flex;align-items:center;gap:7px}
+.logo .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--purple),var(--swim));display:flex;align-items:center;justify-content:center}
+.logo .mark svg{width:15px;height:15px;stroke:white;stroke-width:2.3}
 .logo em{color:var(--purple);font-style:normal}
-.header-right{display:flex;align-items:center;gap:8px}
-.bcn-chip{
-  font-family:var(--font-mono);font-size:0.65rem;font-weight:500;
-  background:var(--purple-dim);border:1px solid rgba(129,140,248,0.25);
-  color:var(--purple);border-radius:100px;padding:4px 10px;
-  display:flex;align-items:center;gap:5px;
-}
-.bcn-chip .pulse{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+.hdr-r{display:flex;align-items:center;gap:10px}
+.hdr-btn{width:34px;height:34px;border-radius:9px;background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);cursor:pointer;transition:.2s}
+.hdr-btn:active{background:var(--s3)}
+.hdr-btn svg{width:17px;height:17px}
 
-/* ── NAV ── */
-nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:100;
-  background:rgba(8,13,24,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-top:1px solid var(--border);
-  display:flex;padding-bottom:var(--safe-bot);
-}
-.nb{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:10px 4px;background:none;border:none;cursor:pointer;
-  color:var(--text3);font-size:0.58rem;font-family:var(--font);font-weight:500;
-  letter-spacing:0.04em;text-transform:uppercase;transition:color 0.2s;
-}
-.nb svg{width:19px;height:19px;stroke-width:1.7;transition:transform 0.2s}
+/* NAV */
+nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding-bottom:var(--sb)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 4px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:.57rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;transition:.2s;position:relative}
+.nb svg{width:20px;height:20px;transition:transform .2s}
 .nb.active{color:var(--purple)}
-.nb.active svg{transform:translateY(-1px)}
+.nb.active svg{transform:translateY(-2px)}
+.nb.active::before{content:'';position:absolute;top:0;width:24px;height:2px;border-radius:2px;background:var(--purple)}
 
-/* ── PAGES ── */
-.page{display:none;padding:16px 16px 8px}
+/* PAGES */
+.page{display:none;padding:18px 16px 8px;animation:fade .35s ease}
 .page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-head{margin-bottom:18px;display:flex;align-items:flex-end;justify-content:space-between}
+.sec-title{font-family:var(--fh);font-size:1.5rem;font-weight:700;letter-spacing:-0.025em;line-height:1}
+.sec-sub{font-size:.74rem;color:var(--text2);margin-top:4px}
 
-/* ── SECTION HEADER ── */
-.sec-head{margin-bottom:18px}
-.sec-title{font-family:var(--font-head);font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:2px}
-.sec-sub{font-size:0.75rem;color:var(--text2)}
-
-/* ── CARDS ── */
+/* CARDS */
 .card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
-.card-label{font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
 .card-accent{position:absolute;top:0;left:0;right:0;height:2px}
+.cl{display:flex;align-items:center;gap:7px;font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:13px}
+.cl svg{width:14px;height:14px}
 
-/* ── COUNTDOWN HERO ── */
-.countdown-hero{
-  background:linear-gradient(135deg,var(--s2) 0%,var(--s1) 100%);
-  border:1px solid var(--border);border-radius:var(--r);
-  padding:20px 16px;margin-bottom:12px;
-  display:grid;grid-template-columns:1fr 1fr;gap:1px;
-  position:relative;overflow:hidden;
-}
-.countdown-hero::before{
-  content:'';position:absolute;top:-40px;right:-40px;
-  width:160px;height:160px;border-radius:50%;
-  background:radial-gradient(circle,rgba(129,140,248,0.08) 0%,transparent 70%);
-}
-.cd-item{padding:12px;text-align:center}
-.cd-item:first-child{border-right:1px solid var(--border)}
-.cd-num{font-family:var(--font-head);font-size:2.8rem;font-weight:700;line-height:1;letter-spacing:-0.04em}
-.cd-num.bcn{background:linear-gradient(135deg,var(--purple),var(--swim));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.cd-num.amd{background:linear-gradient(135deg,var(--run),var(--bike));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.cd-label{font-size:0.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px}
-.cd-race{font-size:0.72rem;font-weight:500;color:var(--text2);margin-top:2px}
+/* HERO SCORE RING */
+.score-hero{background:linear-gradient(135deg,var(--s2),var(--s1));border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:12px;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden}
+.score-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(129,140,248,.1),transparent 70%)}
+.ring-wrap{position:relative;width:104px;height:104px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-score{font-family:var(--fh);font-size:1.9rem;font-weight:700;line-height:1;letter-spacing:-0.03em}
+.ring-max{font-size:.58rem;color:var(--text3);font-family:var(--fm);margin-top:1px}
+.score-info{flex:1}
+.score-rank{font-family:var(--fh);font-size:1.15rem;font-weight:700;margin-bottom:3px;display:flex;align-items:center;gap:7px}
+.score-rank .tier-badge{font-size:.6rem;padding:2px 8px;border-radius:100px;background:var(--gold-d);color:var(--gold);font-weight:600;letter-spacing:.04em}
+.score-desc{font-size:.72rem;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.score-delta{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-family:var(--fm);color:var(--green);background:var(--green-d);padding:3px 9px;border-radius:100px}
+.score-delta svg{width:11px;height:11px}
 
-/* ── PLAN PROGRESS ── */
-.plan-progress{padding:14px 16px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px}
-.plan-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
-.plan-week{font-family:var(--font-head);font-size:1rem;font-weight:600}
-.plan-pct{font-family:var(--font-mono);font-size:0.72rem;color:var(--text2)}
-.prog-track{height:6px;background:var(--s3);border-radius:3px;overflow:hidden;margin-bottom:6px}
-.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--swim));transition:width 1s cubic-bezier(0.4,0,0.2,1)}
-.prog-labels{display:flex;justify-content:space-between;font-size:0.6rem;color:var(--text3);font-family:var(--font-mono)}
+/* STREAK + STATS BAR */
+.qstat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.qstat{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px 10px;text-align:center;position:relative;cursor:pointer;transition:.18s}
+.qstat:active{transform:scale(.97);background:var(--s2)}
+.qstat-ic{width:30px;height:30px;border-radius:8px;margin:0 auto 7px;display:flex;align-items:center;justify-content:center}
+.qstat-ic svg{width:16px;height:16px;stroke-width:2}
+.qstat-val{font-family:var(--fh);font-size:1.25rem;font-weight:700;line-height:1}
+.qstat-lbl{font-size:.58rem;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
 
-/* ── WEEK STATS ── */
-.week-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.week-stat{
-  background:var(--s1);border:1px solid var(--border);border-radius:var(--r);
-  padding:14px 12px;text-align:center;position:relative;overflow:hidden;
-  transition:border-color 0.2s;
-}
-.week-stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
-.week-stat.swim::after{background:var(--swim)}
-.week-stat.bike::after{background:var(--bike)}
-.week-stat.run::after{background:var(--run)}
-.ws-icon{font-size:1.2rem;margin-bottom:6px}
-.ws-val{font-family:var(--font-head);font-size:1.4rem;font-weight:700;line-height:1}
-.ws-val.swim{color:var(--swim)}
-.ws-val.bike{color:var(--bike)}
-.ws-val.run{color:var(--run)}
-.ws-unit{font-size:0.6rem;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:0.06em}
-.ws-time{font-size:0.65rem;color:var(--text2);font-family:var(--font-mono);margin-top:2px}
+/* COUNTDOWN */
+.cd-hero{background:linear-gradient(135deg,var(--s2),var(--s1));border:1px solid var(--border);border-radius:var(--r);padding:18px 16px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+.cd-hero::before{content:'';position:absolute;bottom:-40px;left:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(6,182,212,.07),transparent 70%)}
+.cd-i{padding:8px 12px;text-align:center}
+.cd-i:first-child{border-right:1px solid var(--border)}
+.cd-n{font-family:var(--fh);font-size:2.6rem;font-weight:700;line-height:1;letter-spacing:-0.04em}
+.cd-n.bcn{background:linear-gradient(135deg,var(--purple2),var(--swim2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.cd-n.amd{background:linear-gradient(135deg,var(--run2),var(--bike2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.cd-l{font-size:.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.cd-r{font-size:.7rem;color:var(--text2);margin-top:3px;font-weight:500}
 
-/* ── ACTIVITY LIST ── */
-.act-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
-.act-item:last-child{border-bottom:none}
-.act-badge{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
-.act-badge.swim{background:var(--swim-dim)}
-.act-badge.bike{background:var(--bike-dim)}
-.act-badge.run{background:var(--run-dim)}
-.act-badge.other{background:var(--purple-dim)}
-.act-info{flex:1;min-width:0}
-.act-name{font-size:0.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.act-meta{font-size:0.68rem;color:var(--text2);font-family:var(--font-mono)}
-.act-right{text-align:right;flex-shrink:0}
-.act-dist{font-family:var(--font-mono);font-size:0.85rem;font-weight:500}
-.act-dist.swim{color:var(--swim)}
-.act-dist.bike{color:var(--bike)}
-.act-dist.run{color:var(--run)}
-.act-time{font-size:0.63rem;color:var(--text3);margin-top:2px;font-family:var(--font-mono)}
+/* PLAN PROGRESS */
+.pp{padding:15px 16px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px}
+.pp-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.pp-wk{font-family:var(--fh);font-size:1rem;font-weight:600}
+.pp-phase{font-size:.6rem;padding:3px 9px;border-radius:100px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.track{height:7px;background:var(--s3);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.track-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--purple),var(--swim));transition:width 1s cubic-bezier(.4,0,.2,1)}
+.track-lbl{display:flex;justify-content:space-between;font-size:.6rem;color:var(--text3);font-family:var(--fm)}
 
-/* ── INSIGHT CHIPS ── */
-.insight-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.insight{
-  display:flex;align-items:center;gap:6px;
-  background:var(--s1);border:1px solid var(--border);
-  border-radius:var(--r-sm);padding:8px 12px;flex:1;min-width:140px;
-}
-.insight-icon{font-size:1rem;flex-shrink:0}
-.insight-text{font-size:0.72rem;color:var(--text2);line-height:1.4}
-.insight-text strong{color:var(--text);font-weight:600;display:block;font-size:0.78rem}
-.insight.warn{border-color:rgba(244,63,94,0.25);background:rgba(244,63,94,0.05)}
-.insight.good{border-color:rgba(34,197,94,0.25);background:rgba(34,197,94,0.05)}
-.insight.info{border-color:rgba(129,140,248,0.25);background:rgba(129,140,248,0.05)}
+/* WEEK STATS */
+.wg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.ws{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px 12px;text-align:center;position:relative;overflow:hidden;cursor:pointer;transition:.18s}
+.ws:active{transform:scale(.97)}
+.ws::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.ws.sw::after{background:var(--swim)}.ws.bk::after{background:var(--bike)}.ws.rn::after{background:var(--run)}
+.ws-ic{width:32px;height:32px;border-radius:9px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+.ws.sw .ws-ic{background:var(--swim-d);color:var(--swim)}.ws.bk .ws-ic{background:var(--bike-d);color:var(--bike)}.ws.rn .ws-ic{background:var(--run-d);color:var(--run)}
+.ws-ic svg{width:18px;height:18px;stroke-width:2}
+.ws-v{font-family:var(--fh);font-size:1.4rem;font-weight:700;line-height:1}
+.ws.sw .ws-v{color:var(--swim)}.ws.bk .ws-v{color:var(--bike)}.ws.rn .ws-v{color:var(--run)}
+.ws-u{font-size:.58rem;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
+.ws-t{font-size:.64rem;color:var(--text2);font-family:var(--fm);margin-top:2px}
 
-/* ── CHARTS ── */
-.chart-wrap{position:relative;height:120px;margin:8px 0}
-.chart-svg{width:100%;height:100%}
+/* INSIGHTS */
+.ins-row{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.ins{display:flex;align-items:center;gap:11px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 13px}
+.ins-ic{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.ins-ic svg{width:16px;height:16px;stroke-width:2}
+.ins-tx{font-size:.73rem;color:var(--text2);line-height:1.45}
+.ins-tx strong{color:var(--text);font-weight:600;display:block;font-size:.78rem;margin-bottom:1px}
+.ins.warn{border-color:rgba(244,63,94,.22)}.ins.warn .ins-ic{background:var(--run-d);color:var(--run)}
+.ins.good{border-color:rgba(16,185,129,.22)}.ins.good .ins-ic{background:var(--green-d);color:var(--green)}
+.ins.info .ins-ic{background:var(--purple-d);color:var(--purple)}
+.ins.gold{border-color:rgba(251,191,36,.25)}.ins.gold .ins-ic{background:var(--gold-d);color:var(--gold)}
+
+/* LOAD CHART */
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:11px}
+.lg-i{display:flex;align-items:center;gap:5px;font-size:.65rem;color:var(--text2)}
+.lg-d{width:8px;height:8px;border-radius:3px}
+.load{display:flex;align-items:flex-end;gap:4px;height:84px;margin:6px 0}
+.lc{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;cursor:pointer}
+.li{flex:1;width:100%;display:flex;flex-direction:column-reverse;border-radius:4px 4px 0 0;overflow:hidden}
+.lb{width:100%;min-height:0;transition:height .7s cubic-bezier(.4,0,.2,1)}
+.lb.sw{background:var(--swim)}.lb.bk{background:var(--bike)}.lb.rn{background:var(--run)}
+.ll{font-size:.54rem;color:var(--text3);font-family:var(--fm)}
 .chart-labels{display:flex;justify-content:space-between;margin-top:4px}
-.chart-label{font-size:0.58rem;color:var(--text3);font-family:var(--font-mono);text-align:center;flex:1}
+.chart-labels span{font-size:.55rem;color:var(--text3);font-family:var(--fm);flex:1;text-align:center}
 
-/* ── HR ZONES ── */
-.zone-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
-.zone-row:last-child{margin-bottom:0}
-.zone-name{font-family:var(--font-mono);font-size:0.65rem;color:var(--text2);width:22px;flex-shrink:0}
-.zone-range{font-size:0.6rem;color:var(--text3);width:70px;flex-shrink:0;font-family:var(--font-mono)}
-.zone-track{flex:1;height:8px;background:var(--s3);border-radius:4px;overflow:hidden}
-.zone-fill{height:100%;border-radius:4px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
-.zone-pct{font-family:var(--font-mono);font-size:0.65rem;color:var(--text2);width:30px;text-align:right;flex-shrink:0}
-.zone-count{font-family:var(--font-mono);font-size:0.6rem;color:var(--text3);width:28px;text-align:right;flex-shrink:0}
+/* ACTIVITY */
+.act{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.act:last-child{border-bottom:none}
+.act-b{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.act-b.sw{background:var(--swim-d);color:var(--swim)}.act-b.bk{background:var(--bike-d);color:var(--bike)}.act-b.rn{background:var(--run-d);color:var(--run)}.act-b.ot{background:var(--purple-d);color:var(--purple)}
+.act-b svg{width:19px;height:19px;stroke-width:2}
+.act-i{flex:1;min-width:0}
+.act-n{font-size:.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.act-m{font-size:.67rem;color:var(--text2);font-family:var(--fm)}
+.act-r{text-align:right;flex-shrink:0}
+.act-d{font-family:var(--fm);font-size:.85rem;font-weight:600}
+.act-d.sw{color:var(--swim)}.act-d.bk{color:var(--bike)}.act-d.rn{color:var(--run)}
+.act-pts{font-size:.6rem;color:var(--gold);font-family:var(--fm);margin-top:2px}
 
-/* ── PACE TREND ── */
-.pace-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
-.pace-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px}
-.pace-val{font-family:var(--font-head);font-size:1.5rem;font-weight:700;margin-bottom:2px}
-.pace-lbl{font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em}
-.pace-delta{font-size:0.68rem;margin-top:4px;font-family:var(--font-mono)}
-.pace-delta.up{color:var(--green)}
-.pace-delta.down{color:var(--danger)}
+/* PLAN PAGE */
+.session{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px 14px;margin-bottom:9px;display:flex;align-items:center;gap:12px;transition:.2s;cursor:pointer}
+.session:active{background:var(--s2)}
+.session.done{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.04)}
+.session.done .sess-check{background:var(--green);border-color:var(--green)}
+.session.bonus{border-color:rgba(251,191,36,.3)}
+.sess-check{width:24px;height:24px;border-radius:7px;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.2s}
+.sess-check svg{width:14px;height:14px;stroke:white;stroke-width:3;opacity:0}
+.session.done .sess-check svg{opacity:1}
+.sess-ic{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.sess-ic svg{width:17px;height:17px;stroke-width:2}
+.sess-info{flex:1;min-width:0}
+.sess-title{font-size:.82rem;font-weight:600;margin-bottom:2px}
+.sess-detail{font-size:.67rem;color:var(--text2);font-family:var(--fm)}
+.sess-pts{font-size:.65rem;font-family:var(--fm);color:var(--gold);flex-shrink:0;text-align:right}
+.sess-status{font-size:.58rem;padding:2px 7px;border-radius:100px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:3px;display:inline-block}
+.st-matched{background:var(--green-d);color:var(--green)}
+.st-alt{background:var(--gold-d);color:var(--gold)}
+.st-pending{background:var(--s3);color:var(--text3)}
 
-/* ── SWIM PACE TABLE ── */
-.swim-table{width:100%;border-collapse:collapse}
-.swim-table th{font-size:0.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;font-weight:500;padding:4px 0;text-align:left;border-bottom:1px solid var(--border)}
-.swim-table td{font-family:var(--font-mono);font-size:0.72rem;padding:7px 0;border-bottom:1px solid var(--border);color:var(--text2)}
-.swim-table td:first-child{color:var(--text)}
-.swim-table tr:last-child td{border-bottom:none}
-.pace-bar-cell{width:90px}
-.pace-mini-bar{height:4px;border-radius:2px;background:var(--swim)}
+/* COMPLIANCE RING SMALL */
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.comp-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:15px;display:flex;align-items:center;gap:14px}
+.comp-ring{position:relative;width:62px;height:62px;flex-shrink:0}
+.comp-ring svg{transform:rotate(-90deg)}
+.comp-ring-c{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:1.05rem;font-weight:700}
+.comp-info-t{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.comp-info-v{font-size:.78rem;color:var(--text2);font-family:var(--fm)}
 
-/* ── TRAINING LOAD ── */
-.load-bars{display:flex;align-items:flex-end;gap:4px;height:80px;margin:10px 0}
-.load-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%}
-.load-inner{flex:1;width:100%;display:flex;align-items:flex-end;gap:2px}
-.load-bar{flex:1;border-radius:3px 3px 0 0;min-height:2px;transition:height 0.8s ease}
-.load-bar.swim{background:var(--swim)}
-.load-bar.bike{background:var(--bike)}
-.load-bar.run{background:var(--run)}
-.load-lbl{font-size:0.55rem;color:var(--text3);font-family:var(--font-mono)}
+/* XP BARS */
+.xp{margin-bottom:12px}
+.xp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.xp-name{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600}
+.xp-name .xp-ic{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.xp-name .xp-ic svg{width:14px;height:14px;stroke-width:2}
+.xp-name.sw .xp-ic{background:var(--swim-d);color:var(--swim)}
+.xp-name.bk .xp-ic{background:var(--bike-d);color:var(--bike)}
+.xp-name.rn .xp-ic{background:var(--run-d);color:var(--run)}
+.xp-lvl{font-size:.65rem;font-family:var(--fm);color:var(--text2)}
+.xp-track{height:9px;background:var(--s3);border-radius:5px;overflow:hidden;position:relative}
+.xp-fill{height:100%;border-radius:5px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.xp-fill.sw{background:linear-gradient(90deg,var(--swim),var(--swim2))}
+.xp-fill.bk{background:linear-gradient(90deg,var(--bike),var(--bike2))}
+.xp-fill.rn{background:linear-gradient(90deg,var(--run),var(--run2))}
 
-/* ── CADENCE & EFFICIENCY ── */
-.metric-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
-.metric-row:last-child{border-bottom:none}
-.metric-name{font-size:0.75rem;color:var(--text2)}
-.metric-val{font-family:var(--font-mono);font-size:0.8rem;font-weight:500;color:var(--text)}
-.metric-badge{font-size:0.6rem;padding:2px 7px;border-radius:100px;font-weight:500;margin-left:6px}
-.mb-good{background:var(--green-dim);color:var(--green)}
-.mb-warn{background:var(--bike-dim);color:var(--bike)}
-.mb-bad{background:var(--run-dim);color:var(--danger)}
+/* BADGES */
+.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.badge{aspect-ratio:1;background:var(--s1);border:1px solid var(--border);border-radius:var(--r-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px;text-align:center;position:relative;transition:.2s;cursor:pointer}
+.badge:active{transform:scale(.95)}
+.badge.locked{opacity:.32}
+.badge-ic{width:30px;height:30px;display:flex;align-items:center;justify-content:center}
+.badge-ic svg{width:24px;height:24px;stroke-width:1.7}
+.badge.unlocked .badge-ic{color:var(--gold)}
+.badge.locked .badge-ic{color:var(--text3)}
+.badge-name{font-size:.52rem;color:var(--text3);line-height:1.2;font-weight:500}
+.badge.unlocked .badge-name{color:var(--text2)}
 
-/* ── DEBRIEF ── */
-.debrief-btn{
-  width:100%;padding:15px;border-radius:var(--r);
-  background:linear-gradient(135deg,#4f46e5,#7c3aed);
-  border:none;color:white;font-family:var(--font-head);
-  font-size:0.95rem;font-weight:600;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:opacity 0.2s,transform 0.1s;margin-bottom:12px;
-  letter-spacing:-0.01em;
-}
-.debrief-btn:active{opacity:0.85;transform:scale(0.99)}
-.debrief-btn:disabled{opacity:0.5;cursor:default}
-.debrief-out{
-  background:var(--s1);border:1px solid var(--border);
-  border-radius:var(--r);padding:18px;
-  font-size:0.8rem;line-height:1.75;color:var(--text2);
-  display:none;
-}
-.debrief-out.show{display:block}
-.debrief-out h3{font-family:var(--font-head);font-size:0.88rem;font-weight:600;color:var(--purple);margin:16px 0 6px;letter-spacing:-0.01em}
-.debrief-out h3:first-child{margin-top:0}
-.debrief-out strong{color:var(--text);font-weight:600}
-.debrief-out .flag{color:var(--danger)}
-.debrief-out .good{color:var(--green)}
-.project-link{
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--s2);border:1px solid var(--border2);
-  border-radius:var(--r);padding:14px 16px;
-  color:var(--purple);font-size:0.82rem;font-weight:500;
-  text-decoration:none;margin-bottom:12px;transition:background 0.2s;
-}
-.project-link:active{background:var(--s3)}
+/* PREDICTOR */
+.pred-total{background:linear-gradient(135deg,var(--s2),var(--s1));border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:12px;text-align:center;position:relative;overflow:hidden}
+.pred-total::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(129,140,248,.1),transparent 70%)}
+.pred-lbl{font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.pred-time{font-family:var(--fh);font-size:2.8rem;font-weight:700;line-height:1;letter-spacing:-0.03em;background:linear-gradient(135deg,var(--purple2),var(--swim2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.pred-range{font-size:.7rem;color:var(--text2);font-family:var(--fm);margin-top:6px}
+.split-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.split-row:last-child{border-bottom:none}
+.split-ic{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.split-ic.sw{background:var(--swim-d);color:var(--swim)}.split-ic.bk{background:var(--bike-d);color:var(--bike)}.split-ic.rn{background:var(--run-d);color:var(--run)}.split-ic.t{background:var(--s3);color:var(--text2)}
+.split-ic svg{width:18px;height:18px;stroke-width:2}
+.split-info{flex:1}
+.split-name{font-size:.8rem;font-weight:600}
+.split-detail{font-size:.65rem;color:var(--text2);font-family:var(--fm);margin-top:1px}
+.split-time{font-family:var(--fm);font-size:.95rem;font-weight:600}
+.slider-group{margin-bottom:16px}
+.slider-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.slider-name{font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:8px}
+.slider-name .sn-ic{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.slider-name .sn-ic svg{width:13px;height:13px;stroke-width:2}
+.slider-name.sw .sn-ic{background:var(--swim-d);color:var(--swim)}
+.slider-name.bk .sn-ic{background:var(--bike-d);color:var(--bike)}
+.slider-name.rn .sn-ic{background:var(--run-d);color:var(--run)}
+.slider-val{font-family:var(--fm);font-size:.72rem;color:var(--purple);background:var(--purple-d);padding:2px 9px;border-radius:100px}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:var(--s3);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--purple);cursor:pointer;border:3px solid var(--bg);box-shadow:0 0 0 1px var(--purple)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--purple);cursor:pointer;border:3px solid var(--bg)}
 
-/* ── RACE PLAN ── */
-.race-leg{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
-.race-leg:last-child{border-bottom:none}
-.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.leg-title{font-size:0.85rem;font-weight:600;font-family:var(--font-head);margin-bottom:4px}
-.leg-detail{font-size:0.72rem;color:var(--text2);line-height:1.6;font-family:var(--font-mono)}
-.leg-tag{display:inline-block;font-size:0.6rem;padding:2px 8px;border-radius:100px;font-weight:500;margin-top:6px}
-.lt-warn{background:var(--bike-dim);color:var(--bike)}
-.lt-ok{background:var(--green-dim);color:var(--green)}
-.lt-danger{background:var(--run-dim);color:var(--danger)}
-.nutr-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);gap:10px}
-.nutr-row:last-child{border-bottom:none}
-.nutr-name{font-size:0.78rem;font-weight:500;margin-bottom:2px}
-.nutr-detail{font-size:0.65rem;color:var(--text2);font-family:var(--font-mono)}
-.nutr-pill{font-size:0.6rem;padding:3px 9px;border-radius:100px;font-weight:600;white-space:nowrap;flex-shrink:0}
-.np-m{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(129,140,248,0.3)}
-.np-x{background:var(--run-dim);color:var(--danger);border:1px solid rgba(244,63,94,0.3)}
+/* KEY METRICS */
+.km-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.km-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:15px}
+.km-v{font-family:var(--fh);font-size:1.5rem;font-weight:700;margin-bottom:2px}
+.km-l{font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.km-d{font-size:.66rem;color:var(--text2);margin-top:4px;font-family:var(--fm)}
 
-/* ── SETTINGS ── */
-.setting-group{margin-bottom:16px}
-.setting-label{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.09em;color:var(--text3);margin-bottom:6px}
-.setting-input{
-  width:100%;background:var(--s2);border:1px solid var(--border2);
-  border-radius:var(--r-sm);padding:11px 14px;color:var(--text);
-  font-family:var(--font-mono);font-size:0.8rem;outline:none;
-  transition:border-color 0.2s;
-}
-.setting-input:focus{border-color:var(--purple)}
-.setting-hint{font-size:0.65rem;color:var(--text3);margin-top:5px;line-height:1.5}
-.btn-primary{
-  width:100%;padding:13px;border-radius:var(--r-sm);
-  background:var(--purple);border:none;color:white;
-  font-family:var(--font-head);font-size:0.9rem;font-weight:600;
-  cursor:pointer;transition:opacity 0.2s;letter-spacing:-0.01em;
-}
-.btn-primary:active{opacity:0.85}
-.btn-danger{background:rgba(244,63,94,0.1);color:var(--danger);border:1px solid rgba(244,63,94,0.2)}
-.status-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
-.status-row:last-child{border-bottom:none}
-.status-row span:first-child{font-size:0.78rem;color:var(--text2)}
-.s-badge{font-size:0.62rem;padding:2px 9px;border-radius:100px;font-weight:600}
-.sb-ok{background:var(--green-dim);color:var(--green)}
-.sb-no{background:var(--run-dim);color:var(--danger)}
+/* HR ZONES */
+.zr{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.zr:last-child{margin-bottom:0}
+.zn{font-family:var(--fm);font-size:.65rem;color:var(--text2);width:20px;flex-shrink:0}
+.zrng{font-size:.58rem;color:var(--text3);width:62px;flex-shrink:0;font-family:var(--fm)}
+.zt{flex:1;height:9px;background:var(--s3);border-radius:5px;overflow:hidden}
+.zf{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.zp{font-family:var(--fm);font-size:.65rem;color:var(--text2);width:28px;text-align:right;flex-shrink:0}
 
-/* ── AUTH ── */
-.auth-wrap{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100dvh;padding:40px 24px;gap:18px;text-align:center;
-}
-.auth-logo{font-family:var(--font-head);font-size:2.4rem;font-weight:700;letter-spacing:-0.03em}
+/* CHARTS */
+.chart-wrap{position:relative;height:110px;margin:6px 0}
+.chart-svg{width:100%;height:100%}
+
+/* SWIM TABLE */
+.st-tbl{width:100%;border-collapse:collapse}
+.st-tbl th{font-size:.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:600;padding:5px 0;text-align:left;border-bottom:1px solid var(--border)}
+.st-tbl td{font-family:var(--fm);font-size:.71rem;padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2)}
+.st-tbl td:first-child{color:var(--text)}
+.st-tbl tr:last-child td{border-bottom:none}
+
+/* METRIC ROWS */
+.mr{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.mr:last-child{border-bottom:none}
+.mr-n{font-size:.75rem;color:var(--text2)}
+.mr-v{font-family:var(--fm);font-size:.8rem;font-weight:500;color:var(--text);display:flex;align-items:center;gap:6px}
+.mb{font-size:.58rem;padding:2px 7px;border-radius:100px;font-weight:600}
+.mb-g{background:var(--green-d);color:var(--green)}.mb-w{background:var(--bike-d);color:var(--bike)}.mb-b{background:var(--run-d);color:var(--danger)}
+
+/* DEBRIEF */
+.db-btn{width:100%;padding:15px;border-radius:var(--r);background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-family:var(--fh);font-size:.95rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:.15s;margin-bottom:12px;letter-spacing:-0.01em}
+.db-btn:active{opacity:.88;transform:scale(.99)}.db-btn:disabled{opacity:.5}
+.db-btn svg{width:18px;height:18px;stroke-width:2}
+.db-out{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px;font-size:.8rem;line-height:1.75;color:var(--text2);display:none}
+.db-out.show{display:block}
+.db-out h3{font-family:var(--fh);font-size:.86rem;font-weight:600;color:var(--purple);margin:16px 0 6px;letter-spacing:-0.01em}
+.db-out h3:first-child{margin-top:0}
+.db-out strong{color:var(--text);font-weight:600}
+.db-out .flag{color:var(--danger)}.db-out .good{color:var(--green)}
+.plink{display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:14px 16px;color:var(--purple);font-size:.82rem;font-weight:500;text-decoration:none;margin-bottom:12px;transition:.2s}
+.plink:active{background:var(--s3)}
+.plink svg{width:16px;height:16px;stroke-width:2}
+
+/* RACE LEG */
+.leg{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.leg:last-child{border-bottom:none}
+.leg-d{width:11px;height:11px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.leg-t{font-size:.86rem;font-weight:600;font-family:var(--fh);margin-bottom:4px}
+.leg-x{font-size:.71rem;color:var(--text2);line-height:1.6;font-family:var(--fm)}
+.leg-tag{display:inline-block;font-size:.6rem;padding:3px 9px;border-radius:100px;font-weight:600;margin-top:7px}
+.lt-w{background:var(--bike-d);color:var(--bike)}.lt-o{background:var(--green-d);color:var(--green)}.lt-d{background:var(--run-d);color:var(--danger)}
+.nr{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);gap:10px}
+.nr:last-child{border-bottom:none}
+.nr-n{font-size:.78rem;font-weight:500;margin-bottom:2px}
+.nr-d{font-size:.64rem;color:var(--text2);font-family:var(--fm)}
+.np{font-size:.6rem;padding:3px 9px;border-radius:100px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.np-m{background:var(--purple-d);color:var(--purple);border:1px solid rgba(129,140,248,.3)}
+.np-x{background:var(--run-d);color:var(--danger);border:1px solid rgba(244,63,94,.3)}
+
+/* SETTINGS */
+.sg{margin-bottom:14px}
+.sl{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:7px}
+.si{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:12px 14px;color:var(--text);font-family:var(--fm);font-size:.8rem;outline:none;transition:.2s}
+.si:focus{border-color:var(--purple)}
+.sh{font-size:.65rem;color:var(--text3);margin-top:6px;line-height:1.5}
+.bp{width:100%;padding:13px;border-radius:var(--r-sm);background:var(--purple);border:none;color:white;font-family:var(--fh);font-size:.9rem;font-weight:600;cursor:pointer;transition:.2s;letter-spacing:-0.01em}
+.bp:active{opacity:.85}
+.bd{background:rgba(244,63,94,.1);color:var(--danger);border:1px solid rgba(244,63,94,.2)}
+.sr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border)}
+.sr:last-child{border-bottom:none}
+.sr span:first-child{font-size:.78rem;color:var(--text2)}
+.sbadge{font-size:.62rem;padding:3px 10px;border-radius:100px;font-weight:600}
+.sb-ok{background:var(--green-d);color:var(--green)}.sb-no{background:var(--run-d);color:var(--danger)}
+
+/* AUTH */
+.auth{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:40px 24px;gap:18px;text-align:center}
+.auth-logo{font-family:var(--fh);font-size:2.5rem;font-weight:700;letter-spacing:-0.03em;display:flex;align-items:center;gap:10px}
+.auth-logo .mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--swim));display:flex;align-items:center;justify-content:center}
+.auth-logo .mark svg{width:26px;height:26px;stroke:white;stroke-width:2.3}
 .auth-logo em{color:var(--purple);font-style:normal}
-.auth-sub{font-size:0.88rem;color:var(--text2);max-width:280px;line-height:1.6}
-.auth-field{width:100%;max-width:320px;text-align:left}
-.auth-field label{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.09em;color:var(--text3);display:block;margin-bottom:6px}
-.auth-btn{
-  padding:14px 28px;border-radius:var(--r);
-  background:#fc4c02;border:none;color:white;
-  font-family:var(--font-head);font-size:1rem;font-weight:600;
-  cursor:pointer;display:flex;align-items:center;gap:10px;
-  transition:opacity 0.2s,transform 0.1s;letter-spacing:-0.01em;
-}
-.auth-btn:active{opacity:0.85;transform:scale(0.98)}
-.auth-note{font-size:0.68rem;color:var(--text3);max-width:260px;line-height:1.6}
+.auth-sub{font-size:.88rem;color:var(--text2);max-width:290px;line-height:1.6}
+.auth-f{width:100%;max-width:320px;text-align:left}
+.auth-f label{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);display:block;margin-bottom:6px}
+.auth-btn{padding:15px 30px;border-radius:var(--r);background:#fc4c02;border:none;color:white;font-family:var(--fh);font-size:1rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:10px;transition:.15s}
+.auth-btn:active{opacity:.85;transform:scale(.98)}
+.auth-note{font-size:.68rem;color:var(--text3);max-width:270px;line-height:1.6}
 
-/* ── SPINNER ── */
-.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,0.25);border-top-color:white;border-radius:50%;animation:spinner 0.7s linear infinite}
-@keyframes spinner{to{transform:rotate(360deg)}}
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:200;background:rgba(7,11,20,.7);backdrop-filter:blur(8px);display:none;align-items:flex-end;animation:fade .25s}
+.modal.show{display:flex}
+.modal-card{width:100%;background:var(--s1);border-top:1px solid var(--border2);border-radius:24px 24px 0 0;padding:24px 20px;padding-bottom:calc(24px + var(--sb));animation:slideup .3s cubic-bezier(.4,0,.2,1)}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:none}}
+.modal-grip{width:36px;height:4px;border-radius:2px;background:var(--s4);margin:0 auto 18px}
+.modal-title{font-family:var(--fh);font-size:1.2rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.modal-body{font-size:.82rem;color:var(--text2);line-height:1.6}
 
-/* ── DIVIDER ── */
-.divider{height:1px;background:var(--border);margin:4px 0 12px}
-
-/* ── TOOLTIP LEGEND ── */
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px}
-.legend-item{display:flex;align-items:center;gap:5px;font-size:0.65rem;color:var(--text2)}
-.legend-dot{width:8px;height:8px;border-radius:50%}
-
-/* ── EMPTY STATE ── */
-.empty{text-align:center;padding:32px 16px;color:var(--text3);font-size:0.78rem}
-.loading{display:flex;align-items:center;justify-content:center;padding:32px;color:var(--text3);font-size:0.78rem;gap:10px}
+/* MISC */
+.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.25);border-top-color:white;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:30px 16px;color:var(--text3);font-size:.78rem}
+.loading{display:flex;align-items:center;justify-content:center;padding:30px;color:var(--text3);font-size:.78rem;gap:10px}
+.vol-bar{margin-bottom:11px}
+.vol-head{display:flex;justify-content:space-between;margin-bottom:4px}
+.vol-head span:first-child{font-size:.74rem;color:var(--text2)}
+.vol-head span:last-child{font-family:var(--fm);font-size:.7rem}
+.vol-track{height:8px;background:var(--s3);border-radius:4px;overflow:hidden}
+.vol-fill{height:100%;border-radius:4px;transition:width .8s ease}
 </style>
 </head>
 <body>
 
+<!-- ICONS (hidden defs) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<g id="i-swim"><path d="M2 16c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1"/><path d="M2 20c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1"/><circle cx="16" cy="6" r="2"/><path d="M6 14l4-3 3 2 3-4"/></g>
+<g id="i-bike"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 100-2 1 1 0 000 2zm0 0l-3 5h6l-3-5zm-3 5l-2-4H8m4 4l-6.5 6.5"/></g>
+<g id="i-run"><circle cx="17" cy="5" r="2"/><path d="M14 8l-3 2 1 4 3 2v4m-4-8l-3 1-2 4m6-1l3 1 2 3"/></g>
+<g id="i-trophy"><path d="M6 9H4.5a2.5 2.5 0 010-5H6m12 5h1.5a2.5 2.5 0 000-5H18M6 4h12v5a6 6 0 01-12 0V4zm6 11v3m-3 3h6"/></g>
+<g id="i-flame"><path d="M12 2c1 3 4 5 4 9a4 4 0 01-8 0c0-1 .5-2 1-3-2 1-4 3-4 6a7 7 0 0014 0c0-5-4-8-7-12z"/></g>
+<g id="i-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></g>
+<g id="i-target"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></g>
+<g id="i-trend"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></g>
+<g id="i-heart"><path d="M19 14c1.5-1.5 3-3.5 3-5.5A5.5 5.5 0 0012 5 5.5 5.5 0 002 8.5c0 2 1.5 4 3 5.5l7 7 7-7z"/></g>
+<g id="i-check"><polyline points="20 6 9 17 4 12"/></g>
+<g id="i-clock"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></g>
+<g id="i-calendar"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></g>
+<g id="i-medal"><circle cx="12" cy="15" r="6"/><path d="M12 12v3l2 1m-5-12L7 9m10-6l2 6"/></g>
+<g id="i-star"><polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"/></g>
+<g id="i-mountain"><path d="M3 20l6-12 4 7 3-5 5 10z"/></g>
+<g id="i-droplet"><path d="M12 2.5l5.5 6.5a7 7 0 11-11 0z"/></g>
+<g id="i-gauge"><path d="M12 14a3 3 0 100-6 3 3 0 000 6zm0 0l4-4M3 18a9 9 0 1118 0"/></g>
+<g id="i-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></g>
+<g id="i-grid"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></g>
+<g id="i-list"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/></g>
+<g id="i-msg"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></g>
+<g id="i-cog"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></g>
+<g id="i-bolt-mark"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></g>
+<g id="i-link"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></g>
+<g id="i-arrow-up"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></g>
+<g id="i-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4 12H2m20 0h-2m-2.5-5.5l1.4-1.4M5.1 18.9l1.4-1.4m0-11L5.1 5.1m12.4 13.8l1.4 1.4"/></g>
+<g id="i-shield"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></g>
+<g id="i-sparkle"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></g>
+<g id="i-award"><circle cx="12" cy="9" r="6"/><path d="M9 14l-1 7 4-2 4 2-1-7"/></g>
+<g id="i-waves"><path d="M2 8c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 14c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 20c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></g>
+</defs></svg>
+
 <!-- AUTH -->
-<div id="authScreen" class="auth-wrap" style="display:none">
-  <div class="auth-logo">Tri<em>Coach</em></div>
-  <div class="auth-sub">Your Ironman Barcelona 2026 training dashboard. Connect Strava to begin.</div>
-  <div class="auth-field">
+<div id="authScreen" class="auth" style="display:none">
+  <div class="auth-logo"><span class="mark"><svg viewBox="0 0 24 24"><use href="#i-bolt-mark"/></svg></span>Tri<em>Coach</em></div>
+  <div class="auth-sub">Your Ironman Barcelona 2026 command centre. Connect Strava to begin.</div>
+  <div class="auth-f">
     <label>Strava Client ID</label>
-    <input id="authClientId" class="setting-input" placeholder="e.g. 221518"
-      oninput="localStorage.setItem('strava_client_id',this.value.trim())"/>
-    <div class="setting-hint">From strava.com/settings/api — this is public, not a secret.</div>
+    <input id="authClientId" class="si" placeholder="e.g. 221518" oninput="localStorage.setItem('strava_client_id',this.value.trim())"/>
+    <div class="sh">From strava.com/settings/api — public, not a secret.</div>
   </div>
   <button class="auth-btn" onclick="stravaAuth()">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
     Connect with Strava
   </button>
-  <div class="auth-note">Activity data powers the dashboard and AI coaching debrief. Nothing is stored externally.</div>
+  <div class="auth-note">Activity data powers your dashboard, scores and AI coaching. Nothing stored externally.</div>
 </div>
 
 <!-- APP -->
 <div id="app" style="display:none">
 <header>
-  <div class="logo">Tri<em>Coach</em></div>
-  <div class="header-right">
-    <div class="bcn-chip"><div class="pulse"></div><span id="hdrBcn">— d</span></div>
+  <div class="logo"><span class="mark"><svg viewBox="0 0 24 24"><use href="#i-bolt-mark"/></svg></span>Tri<em>Coach</em></div>
+  <div class="hdr-r">
+    <div class="bcn-chip" style="font-family:var(--fm);font-size:.65rem;background:var(--purple-d);border:1px solid rgba(129,140,248,.25);color:var(--purple);border-radius:100px;padding:5px 11px;display:flex;align-items:center;gap:6px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span><span id="hdrBcn">—</span></div>
+    <button class="hdr-btn" onclick="showPage('Settings')"><svg viewBox="0 0 24 24"><use href="#i-cog"/></svg></button>
   </div>
 </header>
 
-<!-- ══ DASHBOARD ══ -->
+<!-- HOME -->
 <div id="pageDash" class="page active">
-  <div class="sec-head">
-    <div class="sec-title">Dashboard</div>
-    <div class="sec-sub" id="dashSub">Loading…</div>
+  <div class="sec-head"><div><div class="sec-title">Home</div><div class="sec-sub" id="dashSub">Loading…</div></div></div>
+
+  <!-- TriScore hero -->
+  <div class="score-hero">
+    <div class="ring-wrap">
+      <svg width="104" height="104" viewBox="0 0 104 104">
+        <circle cx="52" cy="52" r="46" fill="none" stroke="var(--s3)" stroke-width="9"/>
+        <circle id="scoreRing" cx="52" cy="52" r="46" fill="none" stroke="url(#sg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="289"/>
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient></defs>
+      </svg>
+      <div class="ring-center"><div class="ring-score" id="triScore">—</div><div class="ring-max">/ 1000</div></div>
+    </div>
+    <div class="score-info">
+      <div class="score-rank"><span id="rankName">—</span><span class="tier-badge" id="rankTier">—</span></div>
+      <div class="score-desc" id="rankDesc">Building your TriScore…</div>
+      <div class="score-delta" id="scoreDelta"><svg viewBox="0 0 24 24"><use href="#i-arrow-up"/></svg><span>Live from Strava</span></div>
+    </div>
+  </div>
+
+  <!-- Quick stats -->
+  <div class="qstat-row">
+    <div class="qstat" onclick="openStat('streak')">
+      <div class="qstat-ic" style="background:var(--bike-d);color:var(--bike)"><svg viewBox="0 0 24 24"><use href="#i-flame"/></svg></div>
+      <div class="qstat-val" id="qStreak">—</div><div class="qstat-lbl">Week Streak</div>
+    </div>
+    <div class="qstat" onclick="openStat('compliance')">
+      <div class="qstat-ic" style="background:var(--green-d);color:var(--green)"><svg viewBox="0 0 24 24"><use href="#i-target"/></svg></div>
+      <div class="qstat-val" id="qCompliance">—</div><div class="qstat-lbl">Compliance</div>
+    </div>
+    <div class="qstat" onclick="openStat('points')">
+      <div class="qstat-ic" style="background:var(--purple-d);color:var(--purple)"><svg viewBox="0 0 24 24"><use href="#i-zap"/></svg></div>
+      <div class="qstat-val" id="qPoints">—</div><div class="qstat-lbl">Week Points</div>
+    </div>
   </div>
 
   <!-- Countdown -->
-  <div class="countdown-hero">
-    <div class="cd-item">
-      <div class="cd-num bcn" id="cdBcn">—</div>
-      <div class="cd-label">days to go</div>
-      <div class="cd-race">🏊🚴🏃 Ironman Barcelona</div>
-    </div>
-    <div class="cd-item">
-      <div class="cd-num amd" id="cdAmd">—</div>
-      <div class="cd-label">days to go</div>
-      <div class="cd-race">🏃 Amsterdam Marathon</div>
-    </div>
+  <div class="cd-hero">
+    <div class="cd-i"><div class="cd-n bcn" id="cdBcn">—</div><div class="cd-l">days to go</div><div class="cd-r">Ironman Barcelona</div></div>
+    <div class="cd-i"><div class="cd-n amd" id="cdAmd">—</div><div class="cd-l">days to go</div><div class="cd-r">Amsterdam Marathon</div></div>
   </div>
 
   <!-- Plan progress -->
-  <div class="plan-progress">
-    <div class="plan-meta">
-      <div class="plan-week" id="planWeek">Week — of 19</div>
-      <div class="plan-pct" id="planPct">0%</div>
-    </div>
-    <div class="prog-track"><div class="prog-fill" id="planBar" style="width:0%"></div></div>
-    <div class="prog-labels"><span>Wk 1 · 16 Jun</span><span>Race · 4 Oct</span></div>
+  <div class="pp">
+    <div class="pp-meta"><div class="pp-wk" id="planWeek">Week — of 19</div><div class="pp-phase" id="planPhase">—</div></div>
+    <div class="track"><div class="track-fill" id="planBar" style="width:0%"></div></div>
+    <div class="track-lbl"><span>Wk 1 · 16 Jun</span><span id="planPct">0%</span><span>Race · 4 Oct</span></div>
   </div>
 
-  <!-- This week -->
+  <!-- Week vol -->
   <div class="card">
     <div class="card-accent" style="background:linear-gradient(90deg,var(--swim),var(--bike),var(--run))"></div>
-    <div class="card-label">This Week</div>
-    <div class="week-grid" id="weekStats">
-      <div class="week-stat swim"><div class="ws-icon">🏊</div><div class="ws-val swim" id="wSwimKm">—</div><div class="ws-unit">km swim</div><div class="ws-time" id="wSwimT">—</div></div>
-      <div class="week-stat bike"><div class="ws-icon">🚴</div><div class="ws-val bike" id="wBikeKm">—</div><div class="ws-unit">km bike</div><div class="ws-time" id="wBikeT">—</div></div>
-      <div class="week-stat run"><div class="ws-icon">🏃</div><div class="ws-val run" id="wRunKm">—</div><div class="ws-unit">km run</div><div class="ws-time" id="wRunT">—</div></div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>This Week</div>
+    <div class="wg">
+      <div class="ws sw"><div class="ws-ic"><svg viewBox="0 0 24 24"><use href="#i-waves"/></svg></div><div class="ws-v" id="wSwimKm">—</div><div class="ws-u">km swim</div><div class="ws-t" id="wSwimT">—</div></div>
+      <div class="ws bk"><div class="ws-ic"><svg viewBox="0 0 24 24"><use href="#i-bike"/></svg></div><div class="ws-v" id="wBikeKm">—</div><div class="ws-u">km bike</div><div class="ws-t" id="wBikeT">—</div></div>
+      <div class="ws rn"><div class="ws-ic"><svg viewBox="0 0 24 24"><use href="#i-run"/></svg></div><div class="ws-v" id="wRunKm">—</div><div class="ws-u">km run</div><div class="ws-t" id="wRunT">—</div></div>
     </div>
   </div>
 
-  <!-- Smart insights -->
-  <div id="insightRow" class="insight-row"></div>
+  <!-- Insights -->
+  <div id="insightRow" class="ins-row"></div>
 
-  <!-- Weekly training load chart -->
+  <!-- Load chart -->
   <div class="card">
-    <div class="card-label">Weekly Training Load — Last 10 Weeks</div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-activity"/></svg>Training Load — 10 Weeks</div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--swim)"></div>Swim</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--bike)"></div>Bike</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--run)"></div>Run</div>
+      <div class="lg-i"><div class="lg-d" style="background:var(--swim)"></div>Swim</div>
+      <div class="lg-i"><div class="lg-d" style="background:var(--bike)"></div>Bike</div>
+      <div class="lg-i"><div class="lg-d" style="background:var(--run)"></div>Run</div>
     </div>
-    <div class="load-bars" id="loadChart"></div>
+    <div class="load" id="loadChart"></div>
     <div class="chart-labels" id="loadLabels"></div>
   </div>
 
-  <!-- Recent sessions -->
+  <!-- Recent -->
   <div class="card">
-    <div class="card-label">Recent Sessions</div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg>Recent Sessions</div>
     <div id="recentList"><div class="loading"><div class="spin"></div>Fetching Strava…</div></div>
   </div>
 </div>
 
-<!-- ══ ANALYTICS ══ -->
-<div id="pageAnalytics" class="page">
-  <div class="sec-head">
-    <div class="sec-title">Analytics</div>
-    <div class="sec-sub">90-day training breakdown</div>
+<!-- PLAN -->
+<div id="pagePlan" class="page">
+  <div class="sec-head"><div><div class="sec-title">Plan</div><div class="sec-sub" id="planSub">This week's sessions</div></div></div>
+
+  <!-- Compliance + load score -->
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="comp-ring">
+        <svg width="62" height="62" viewBox="0 0 62 62">
+          <circle cx="31" cy="31" r="26" fill="none" stroke="var(--s3)" stroke-width="6"/>
+          <circle id="compRing" cx="31" cy="31" r="26" fill="none" stroke="var(--green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="163" stroke-dashoffset="163"/>
+        </svg>
+        <div class="comp-ring-c" id="compRingVal">—</div>
+      </div>
+      <div><div class="comp-info-t">Compliance</div><div class="comp-info-v" id="compDetail">— of — done</div></div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-ring">
+        <svg width="62" height="62" viewBox="0 0 62 62">
+          <circle cx="31" cy="31" r="26" fill="none" stroke="var(--s3)" stroke-width="6"/>
+          <circle id="loadRing" cx="31" cy="31" r="26" fill="none" stroke="var(--purple)" stroke-width="6" stroke-linecap="round" stroke-dasharray="163" stroke-dashoffset="163"/>
+        </svg>
+        <div class="comp-ring-c" id="loadRingVal">—</div>
+      </div>
+      <div><div class="comp-info-t">Load Target</div><div class="comp-info-v" id="loadDetail">—</div></div>
+    </div>
   </div>
 
-  <!-- Key metrics -->
-  <div class="pace-grid" id="keyMetrics"></div>
+  <!-- Bonus banner -->
+  <div id="bonusBanner"></div>
 
-  <!-- HR Zone dist -->
+  <!-- Sessions -->
   <div class="card">
-    <div class="card-accent" style="background:linear-gradient(90deg,#22c55e,#f59e0b,#f43f5e)"></div>
-    <div class="card-label">Heart Rate Zone Distribution — Runs</div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-list"/></svg>This Week's Sessions</div>
+    <div id="sessionList"><div class="loading"><div class="spin"></div></div></div>
+  </div>
+
+  <!-- XP -->
+  <div class="card">
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-trend"/></svg>Discipline Levels</div>
+    <div id="xpBars"></div>
+  </div>
+
+  <!-- Badges -->
+  <div class="card">
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-award"/></svg>Achievements</div>
+    <div class="badge-grid" id="badgeGrid"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="pageAnalytics" class="page">
+  <div class="sec-head"><div><div class="sec-title">Stats</div><div class="sec-sub">90-day breakdown</div></div></div>
+  <div class="km-grid" id="keyMetrics"></div>
+  <div class="card">
+    <div class="card-accent" style="background:linear-gradient(90deg,var(--green),var(--bike),var(--run))"></div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>HR Zone Distribution — Runs</div>
     <div id="hrZoneChart"><div class="loading"><div class="spin"></div></div></div>
     <div id="hrZoneInsight" style="margin-top:10px"></div>
   </div>
-
-  <!-- Run pace trend -->
   <div class="card">
     <div class="card-accent" style="background:var(--run)"></div>
-    <div class="card-label">Run Pace Trend — min/km</div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-run"/></svg>Run Pace Trend — min/km</div>
     <div class="chart-wrap"><svg id="runPaceChart" class="chart-svg"></svg></div>
     <div class="chart-labels" id="runPaceLabels"></div>
   </div>
-
-  <!-- Swim pace table -->
   <div class="card">
     <div class="card-accent" style="background:var(--swim)"></div>
-    <div class="card-label">Swim Sessions — Pace per 100m</div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-waves"/></svg>Swim Pace — per 100m</div>
     <div id="swimTable"><div class="loading"><div class="spin"></div></div></div>
   </div>
-
-  <!-- Cadence & efficiency -->
   <div class="card">
-    <div class="card-label">Running Cadence & Efficiency</div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-gauge"/></svg>Running Cadence & Efficiency</div>
     <div id="cadenceStats"><div class="loading"><div class="spin"></div></div></div>
   </div>
-
-  <!-- Volume by discipline -->
   <div class="card">
-    <div class="card-label">90-Day Volume Split</div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-activity"/></svg>90-Day Volume Split</div>
     <div id="volumeSplit"></div>
   </div>
 </div>
 
-<!-- ══ DEBRIEF ══ -->
+<!-- COACH -->
 <div id="pageDebrief" class="page">
-  <div class="sec-head">
-    <div class="sec-title">AI Debrief</div>
-    <div class="sec-sub">Weekly coaching analysis</div>
-  </div>
-
-  <a href="https://claude.ai/projects" target="_blank" class="project-link">
-    <span>Open Triathlon Coach Project in Claude →</span>
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+  <div class="sec-head"><div><div class="sec-title">Coach</div><div class="sec-sub">AI weekly analysis</div></div></div>
+  <a href="https://claude.ai/projects" target="_blank" class="plink">
+    <span>Open Triathlon Coach Project</span>
+    <svg viewBox="0 0 24 24"><use href="#i-link"/></svg>
   </a>
-
   <div class="card" style="margin-bottom:12px">
-    <div class="card-label">Last 7 Days Summary</div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>Last 7 Days</div>
     <div id="debriefPreview"></div>
   </div>
-
-  <button class="debrief-btn" id="debriefBtn" onclick="generateDebrief()">
-    <span>✦</span> Generate Weekly Debrief
+  <button class="db-btn" id="debriefBtn" onclick="generateDebrief()">
+    <svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg> Generate Weekly Debrief
   </button>
-  <div class="debrief-out" id="debriefOut"></div>
+  <div class="db-out" id="debriefOut"></div>
 </div>
 
-<!-- ══ RACE PLAN ══ -->
+<!-- RACE (Predictor + Plan) -->
 <div id="pageRace" class="page">
-  <div class="sec-head">
-    <div class="sec-title">Race Plan</div>
-    <div class="sec-sub">Ironman Barcelona · 4 October 2026</div>
+  <div class="sec-head"><div><div class="sec-title">Race Day</div><div class="sec-sub">Predicted finish & strategy</div></div></div>
+
+  <!-- Predictor -->
+  <div class="pred-total">
+    <div class="pred-lbl">Projected Ironman Barcelona Finish</div>
+    <div class="pred-time" id="predTime">—</div>
+    <div class="pred-range" id="predRange">Adjust the sliders below</div>
   </div>
 
+  <div class="card">
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg>Predicted Splits</div>
+    <div id="predSplits"></div>
+  </div>
+
+  <!-- Sliders -->
+  <div class="card">
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>What If You Improve?</div>
+    <div class="slider-group">
+      <div class="slider-head"><div class="slider-name sw"><span class="sn-ic"><svg viewBox="0 0 24 24"><use href="#i-waves"/></svg></span>Swim fitness</div><div class="slider-val" id="swimSliderVal">Current</div></div>
+      <input type="range" id="swimSlider" min="0" max="20" value="0" oninput="updatePrediction()"/>
+    </div>
+    <div class="slider-group">
+      <div class="slider-head"><div class="slider-name bk"><span class="sn-ic"><svg viewBox="0 0 24 24"><use href="#i-bike"/></svg></span>Bike fitness (FTP)</div><div class="slider-val" id="bikeSliderVal">Current</div></div>
+      <input type="range" id="bikeSlider" min="0" max="20" value="0" oninput="updatePrediction()"/>
+    </div>
+    <div class="slider-group" style="margin-bottom:0">
+      <div class="slider-head"><div class="slider-name rn"><span class="sn-ic"><svg viewBox="0 0 24 24"><use href="#i-run"/></svg></span>Run fitness</div><div class="slider-val" id="runSliderVal">Current</div></div>
+      <input type="range" id="runSlider" min="0" max="20" value="0" oninput="updatePrediction()"/>
+    </div>
+  </div>
+
+  <!-- Execution -->
   <div class="card">
     <div class="card-accent" style="background:linear-gradient(90deg,var(--swim),var(--bike),var(--run))"></div>
-    <div class="card-label">Execution Strategy</div>
-    <div class="race-leg">
-      <div class="leg-dot" style="background:var(--swim)"></div>
-      <div>
-        <div class="leg-title">Swim — 3.8km Open Water</div>
-        <div class="leg-detail">Seed conservatively · sight every 6–8 strokes<br>No sprint start · drafting legal, use it<br>Exit calm, don't rush T1</div>
-        <div class="leg-tag lt-ok">Target: sub 1:30:00</div>
-      </div>
-    </div>
-    <div class="race-leg">
-      <div class="leg-dot" style="background:var(--bike)"></div>
-      <div>
-        <div class="leg-title">Bike — 180km</div>
-        <div class="leg-detail">HR cap: 155–158bpm absolute maximum<br>First 90km: deliberately hold back<br>No surges, no chasing, no ego<br>Target avg power: ~190–200W<br>Bolton: HR 183–187bpm destroyed the run</div>
-        <div class="leg-tag lt-danger">⚠ Pacing is your #1 risk factor</div>
-      </div>
-    </div>
-    <div class="race-leg">
-      <div class="leg-dot" style="background:var(--run)"></div>
-      <div>
-        <div class="leg-title">Run — 42.2km</div>
-        <div class="leg-detail">Start HR: 150–155bpm · don't chase pace<br>Barcelona heat 22–26°C · slow first 10km<br>Walk every aid station · ice in kit<br>Pick up pace only after 30km if feeling good</div>
-        <div class="leg-tag lt-warn">⚠ Heat management is critical</div>
-      </div>
-    </div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-target"/></svg>Execution Strategy</div>
+    <div class="leg"><div class="leg-d" style="background:var(--swim)"></div><div><div class="leg-t">Swim — 3.8km Open Water</div><div class="leg-x">Seed conservatively · sight every 6–8 strokes<br>No sprint start · use legal drafting<br>Exit calm, don't rush T1</div><div class="leg-tag lt-o">Target sub 1:30</div></div></div>
+    <div class="leg"><div class="leg-d" style="background:var(--bike)"></div><div><div class="leg-t">Bike — 180km</div><div class="leg-x">HR cap 155–158bpm absolute max<br>First 90km deliberately held back<br>No surges, no ego · ~190–200W target<br>Bolton: HR 183–187 destroyed the run</div><div class="leg-tag lt-d">⚠ Pacing = #1 risk</div></div></div>
+    <div class="leg"><div class="leg-d" style="background:var(--run)"></div><div><div class="leg-t">Run — 42.2km</div><div class="leg-x">Start HR 150–155 · don't chase pace<br>Heat 22–26°C · slow first 10km<br>Walk aid stations · ice in kit</div><div class="leg-tag lt-w">⚠ Heat critical</div></div></div>
   </div>
 
+  <!-- Nutrition -->
   <div class="card">
     <div class="card-accent" style="background:var(--purple)"></div>
-    <div class="card-label">Nutrition — Maurten Only. No Exceptions.</div>
-    <div class="nutr-row">
-      <div><div class="nutr-name">Pre-race (T−3h)</div><div class="nutr-detail">Maurten Drink Mix 320 · small breakfast</div></div>
-      <span class="nutr-pill np-m">Maurten</span>
-    </div>
-    <div class="nutr-row">
-      <div><div class="nutr-name">Bike — every 30 min</div><div class="nutr-detail">Gel 100 · Gel 160 CAF at hrs 4–5 · Drink Mix</div></div>
-      <span class="nutr-pill np-m">Maurten</span>
-    </div>
-    <div class="nutr-row">
-      <div><div class="nutr-name">Run — every 20–25 min</div><div class="nutr-detail">Gel 100 + water at every aid station</div></div>
-      <span class="nutr-pill np-m">Maurten</span>
-    </div>
-    <div class="nutr-row">
-      <div><div class="nutr-name">❌ Never again</div><div class="nutr-detail">Bolton GI failure: dried mango + Maurten mixed fructose</div></div>
-      <span class="nutr-pill np-x">Banned</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Amsterdam Marathon · 18 Oct 2026</div>
-    <div style="font-size:0.78rem;color:var(--text2);line-height:1.7">
-      14 days post-Barcelona. Treat as a supported long training run — not a race — unless recovery is exceptional.<br><br>
-      <strong style="color:var(--text)">HR cap:</strong> 160bpm · walk aid stations · no ego<br>
-      <strong style="color:var(--text)">Hotel:</strong> Lion d'Or, Haarlem · 15–20 Oct · Expedia ref: 72075532964564
-    </div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-droplet"/></svg>Nutrition — Maurten Only</div>
+    <div class="nr"><div><div class="nr-n">Pre-race (T−3h)</div><div class="nr-d">Drink Mix 320 · small breakfast</div></div><span class="np np-m">Maurten</span></div>
+    <div class="nr"><div><div class="nr-n">Bike — every 30 min</div><div class="nr-d">Gel 100 · CAF hrs 4–5 · Drink Mix</div></div><span class="np np-m">Maurten</span></div>
+    <div class="nr"><div><div class="nr-n">Run — every 20–25 min</div><div class="nr-d">Gel 100 + water each aid station</div></div><span class="np np-m">Maurten</span></div>
+    <div class="nr"><div><div class="nr-n">Never again</div><div class="nr-d">Bolton GI: dried mango + Maurten</div></div><span class="np np-x">Banned</span></div>
   </div>
 </div>
 
-<!-- ══ SETTINGS ══ -->
+<!-- SETTINGS -->
 <div id="pageSettings" class="page">
-  <div class="sec-head">
-    <div class="sec-title">Settings</div>
-    <div class="sec-sub">Connections &amp; configuration</div>
-  </div>
-
+  <div class="sec-head"><div><div class="sec-title">Settings</div><div class="sec-sub">Connections</div></div></div>
   <div class="card">
-    <div class="card-label">Status</div>
-    <div class="status-row"><span>Strava</span><span class="s-badge" id="stStatus">Checking…</span></div>
-    <div class="status-row"><span>Claude AI (Worker)</span><span class="s-badge sb-ok" id="clStatus">Configured</span></div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg>Status</div>
+    <div class="sr"><span>Strava</span><span class="sbadge" id="stStatus">Checking…</span></div>
+    <div class="sr"><span>Claude AI</span><span class="sbadge sb-ok" id="clStatus">Connected</span></div>
   </div>
-
   <div class="card">
-    <div class="card-label">Strava Client ID</div>
-    <div class="setting-group">
-      <input class="setting-input" id="setClientId" placeholder="e.g. 221518"/>
-      <div class="setting-hint">Your public Strava API Client ID. The secret lives securely in the Cloudflare Worker.</div>
-    </div>
-    <button class="btn-primary" onclick="saveSettings()">Save</button>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-cog"/></svg>Strava Client ID</div>
+    <div class="sg"><input class="si" id="setClientId" placeholder="e.g. 221518"/><div class="sh">Public Strava API ID. Your secret lives in the Cloudflare Worker.</div></div>
+    <button class="bp" onclick="saveSettings()">Save</button>
   </div>
-
-  <div class="card">
-    <div class="card-label">Security</div>
-    <div style="font-size:0.75rem;color:var(--text2);line-height:1.7">
-      <strong style="color:var(--text)">In browser:</strong> Strava access token, refresh token, Client ID — standard OAuth, nothing billable.<br><br>
-      <strong style="color:var(--text)">In Cloudflare Workers:</strong> Strava Client Secret, Claude API key — never sent to the browser.<br><br>
-      <strong style="color:var(--green)">✓ Safe to share this URL publicly.</strong>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Install on Android</div>
-    <div style="font-size:0.75rem;color:var(--text2);line-height:1.7">
-      Open in Chrome → tap ⋮ menu → "Add to Home screen" → TriCoach appears as a full-screen app.
-    </div>
-  </div>
-
-  <button class="btn-primary btn-danger" style="margin-top:4px" onclick="logout()">Disconnect Strava</button>
+  <button class="bp bd" onclick="logout()">Disconnect Strava</button>
 </div>
 
 <!-- NAV -->
 <nav>
-  <button class="nb active" id="navDash" onclick="showPage('Dash')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-    Dash
-  </button>
-  <button class="nb" id="navAnalytics" onclick="showPage('Analytics')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    Stats
-  </button>
-  <button class="nb" id="navDebrief" onclick="showPage('Debrief')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-    Coach
-  </button>
-  <button class="nb" id="navRace" onclick="showPage('Race')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-    Race
-  </button>
-  <button class="nb" id="navSettings" onclick="showPage('Settings')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-    Settings
-  </button>
+  <button class="nb active" id="navDash" onclick="showPage('Dash')"><svg viewBox="0 0 24 24"><use href="#i-grid"/></svg>Home</button>
+  <button class="nb" id="navPlan" onclick="showPage('Plan')"><svg viewBox="0 0 24 24"><use href="#i-list"/></svg>Plan</button>
+  <button class="nb" id="navAnalytics" onclick="showPage('Analytics')"><svg viewBox="0 0 24 24"><use href="#i-activity"/></svg>Stats</button>
+  <button class="nb" id="navDebrief" onclick="showPage('Debrief')"><svg viewBox="0 0 24 24"><use href="#i-msg"/></svg>Coach</button>
+  <button class="nb" id="navRace" onclick="showPage('Race')"><svg viewBox="0 0 24 24"><use href="#i-trophy"/></svg>Race</button>
 </nav>
-</div><!-- /app -->
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div class="modal-grip"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────
-const STRAVA_WORKER_URL = 'https://tricoach-strava-proxy.tricoach.workers.dev';
-const CLAUDE_WORKER_URL = 'https://tricoach-claude-proxy.tricoach.workers.dev';
-const STRAVA_REDIRECT   = window.location.origin + window.location.pathname;
-const BCN_DATE   = new Date('2026-10-04');
-const AMD_DATE   = new Date('2026-10-18');
-const PLAN_START = new Date('2026-06-16');
-const PLAN_WEEKS = 19;
-const HR_ZONES = [
-  {name:'Z1', min:0,   max:119, color:'#22c55e', label:'Recovery'},
-  {name:'Z2', min:120, max:140, color:'#3b82f6', label:'Aerobic'},
-  {name:'Z3', min:141, max:160, color:'#f59e0b', label:'Tempo'},
-  {name:'Z4', min:161, max:180, color:'#f97316', label:'Threshold'},
-  {name:'Z5', min:181, max:999, color:'#f43f5e', label:'Max'},
-];
+// ── CONFIG ──
+const STRAVA_WORKER_URL='https://tricoach-strava-proxy.tricoach.workers.dev';
+const CLAUDE_WORKER_URL='https://tricoach-claude-proxy.tricoach.workers.dev';
+const STRAVA_REDIRECT=window.location.origin+window.location.pathname;
+const BCN_DATE=new Date('2026-10-04'), AMD_DATE=new Date('2026-10-18'), PLAN_START=new Date('2026-06-16'), PLAN_WEEKS=19;
+const FTP=220, WEIGHT=72, BEST_5K_SEC=1488; // from Strava zones
+const HR_ZONES=[
+  {name:'Z1',min:0,max:119,color:'#10b981'},{name:'Z2',min:120,max:140,color:'#3b82f6'},
+  {name:'Z3',min:141,max:160,color:'#f59e0b'},{name:'Z4',min:161,max:180,color:'#f97316'},
+  {name:'Z5',min:181,max:999,color:'#f43f5e'}];
 
-// ── STATE ───────────────────────────────────────
-let stravaToken = null;
-let activities  = [];
+// 19-week plan: weekly session templates by phase
+function phaseFor(wk){if(wk<=6)return'Base';if(wk<=12)return'Build';if(wk<=16)return'Peak';return'Taper';}
+function phaseColor(p){return{Base:'var(--swim-d)',Build:'var(--bike-d)',Peak:'var(--run-d)',Taper:'var(--green-d)'}[p];}
+function phaseTextColor(p){return{Base:'var(--swim)',Build:'var(--bike)',Peak:'var(--run)',Taper:'var(--green)'}[p];}
+// Returns planned sessions for a given week number
+function weekPlan(wk){
+  const ph=phaseFor(wk);
+  const scale=ph==='Base'?1:ph==='Build'?1.3:ph==='Peak'?1.5:0.6;
+  return [
+    {type:'swim',title:'Swim — Technique Drills',detail:'Tue · coach · front crawl focus',target:1.2*scale,pts:120,fixed:true},
+    {type:'swim',title:'Swim — Endurance',detail:`${(1.5*scale).toFixed(1)}km continuous`,target:1.5*scale,pts:130},
+    {type:'bike',title:'Bike — Zone 2 Endurance',detail:`${Math.round(40*scale)}km · HR <140`,target:40*scale,pts:200},
+    {type:'bike',title:ph==='Peak'?'Bike — Long Ride':'Bike — Tempo',detail:`${Math.round((ph==='Peak'?90:55)*scale)}km`,target:(ph==='Peak'?90:55)*scale,pts:ph==='Peak'?320:240},
+    {type:'run',title:'Run — Easy Aerobic',detail:`${(5*scale).toFixed(0)}km · Z2`,target:5*scale,pts:140},
+    {type:'run',title:'Run — Parkrun + Long',detail:'Sat · 5k + extend',target:8*scale,pts:160,fixed:true},
+    {type:'run',title:ph==='Peak'?'Run — Long':'Run — Tempo',detail:`${(ph==='Peak'?16:8)*scale}km`,target:(ph==='Peak'?16:8)*scale,pts:ph==='Peak'?300:180},
+  ];
+}
 
-// ── INIT ────────────────────────────────────────
-window.addEventListener('load', async () => {
-  const saved = localStorage.getItem('strava_client_id');
-  const authInput = document.getElementById('authClientId');
-  if (saved && authInput) authInput.value = saved;
+let stravaToken=null, activities=[], lastTriScore=0;
+
+// ── INIT ──
+window.addEventListener('load',async()=>{
+  const saved=localStorage.getItem('strava_client_id');
+  const ai=document.getElementById('authClientId'); if(saved&&ai)ai.value=saved;
   loadSettingsUI();
   await handleOAuthCallback();
-  stravaToken = localStorage.getItem('strava_token');
-  if (!stravaToken) {
-    show('authScreen'); hide('app');
-  } else {
-    hide('authScreen'); show('app');
-    updateCountdowns();
-    await loadData();
-  }
+  stravaToken=localStorage.getItem('strava_token');
+  if(!stravaToken){show('authScreen');hide('app');}
+  else{hide('authScreen');show('app');updateCountdowns();await loadData();}
 });
-
 function show(id){document.getElementById(id).style.display=''}
 function hide(id){document.getElementById(id).style.display='none'}
 
-// ── OAUTH ────────────────────────────────────────
-function stravaAuth() {
-  const cid = localStorage.getItem('strava_client_id');
-  if (!cid){alert('Please enter your Strava Client ID first.');return;}
-  const url = `https://www.strava.com/oauth/authorize?client_id=${cid}&redirect_uri=${encodeURIComponent(STRAVA_REDIRECT)}&response_type=code&scope=read,activity:read_all`;
-  window.location.href = url;
+// ── OAUTH ──
+function stravaAuth(){const c=localStorage.getItem('strava_client_id');if(!c){alert('Enter your Strava Client ID first.');return;}window.location.href=`https://www.strava.com/oauth/authorize?client_id=${c}&redirect_uri=${encodeURIComponent(STRAVA_REDIRECT)}&response_type=code&scope=read,activity:read_all`;}
+async function handleOAuthCallback(){const p=new URLSearchParams(window.location.search),code=p.get('code');if(!code)return;window.history.replaceState({},'',window.location.pathname);try{const r=await fetch(`${STRAVA_WORKER_URL}/exchange`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})}),d=await r.json();if(d.access_token){localStorage.setItem('strava_token',d.access_token);localStorage.setItem('strava_refresh',d.refresh_token);localStorage.setItem('strava_expires',d.expires_at);stravaToken=d.access_token;hide('authScreen');show('app');updateCountdowns();await loadData();}else alert('Auth failed: '+(d.error||'?'));}catch(e){alert('Worker error: '+e.message);}}
+async function refreshIfNeeded(){const exp=parseInt(localStorage.getItem('strava_expires')||'0');if(Date.now()/1000<exp-300)return;const rf=localStorage.getItem('strava_refresh');if(!rf)return;try{const r=await fetch(`${STRAVA_WORKER_URL}/refresh`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh_token:rf})}).then(r=>r.json());if(r.access_token){localStorage.setItem('strava_token',r.access_token);localStorage.setItem('strava_refresh',r.refresh_token);localStorage.setItem('strava_expires',r.expires_at);stravaToken=r.access_token;}}catch(e){}}
+
+// ── DATA ──
+async function loadData(){await refreshIfNeeded();try{const after=Math.floor(Date.now()/1000)-90*86400;const r=await fetch(`https://www.strava.com/api/v3/athlete/activities?per_page=100&after=${after}`,{headers:{Authorization:`Bearer ${stravaToken}`}});if(!r.ok)throw new Error('Strava API');activities=await r.json();renderAll();setBadge('stStatus',true);}catch(e){console.error(e);setBadge('stStatus',false);}}
+function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();}
+
+// ── HELPERS ──
+const sp=a=>(a.sport_type||'').toLowerCase();
+const isSwim=a=>sp(a).includes('swim'),isBike=a=>sp(a).includes('ride'),isRun=a=>sp(a).includes('run');
+const km=m=>m/1000, fmtKm=(m,d=1)=>km(m).toFixed(km(m)<10?d:0);
+const fmtT=s=>{const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h?`${h}h ${m}m`:`${m}m`;};
+const fmtHMS=s=>{const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return `${h}:${m.toString().padStart(2,'0')}`;};
+const fmtDate=iso=>new Date(iso).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+const aDate=a=>new Date(a.start_date_local||a.start_local||a.start_date);
+const wkOf=d=>{const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-x.getDay()+1);return x;};
+const sameWk=(a,b)=>wkOf(a).getTime()===wkOf(b).getTime();
+const useIcon=a=>isSwim(a)?'i-waves':isBike(a)?'i-bike':isRun(a)?'i-run':'i-zap';
+const clsOf=a=>isSwim(a)?'sw':isBike(a)?'bk':isRun(a)?'rn':'ot';
+const fmtPace=ms=>{if(!ms||ms<=0)return'—';const s=1000/ms,m=Math.floor(s/60);return `${m}:${Math.round(s%60).toString().padStart(2,'0')}`;};
+const swim100=ms=>{if(!ms||ms<=0)return'—';const s=100/ms,m=Math.floor(s/60);return `${m}:${Math.round(s%60).toString().padStart(2,'0')}`;};
+const curWeek=()=>Math.max(1,Math.min(PLAN_WEEKS,Math.ceil((new Date()-PLAN_START)/86400000/7)));
+
+// ── SESSION POINTS ENGINE ──
+// Every activity earns points. Key sessions more. Alt exercises partial credit.
+function sessionPoints(a){
+  const dist=km(a.distance||0), effort=a.relative_effort||0;
+  let base=0;
+  if(isSwim(a))base=dist*80+effort*1.5;
+  else if(isBike(a))base=dist*4+effort*1.2;
+  else if(isRun(a))base=dist*16+effort*1.8;
+  else base=effort*2+30; // alt exercise (strength, yoga, hike) — partial credit
+  return Math.round(base);
 }
+function weekPoints(){const now=new Date();return activities.filter(a=>sameWk(aDate(a),now)).reduce((s,a)=>s+sessionPoints(a),0);}
 
-async function handleOAuthCallback() {
-  const p = new URLSearchParams(window.location.search);
-  const code = p.get('code');
-  if (!code) return;
-  window.history.replaceState({}, '', window.location.pathname);
-  try {
-    const r = await fetch(`${STRAVA_WORKER_URL}/exchange`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
-    const d = await r.json();
-    if (d.access_token) {
-      localStorage.setItem('strava_token', d.access_token);
-      localStorage.setItem('strava_refresh', d.refresh_token);
-      localStorage.setItem('strava_expires', d.expires_at);
-      stravaToken = d.access_token;
-      hide('authScreen'); show('app');
-      updateCountdowns(); await loadData();
-    } else { alert('Strava auth failed: '+(d.error||'unknown')); }
-  } catch(e) { alert('Worker error: '+e.message); }
-}
-
-async function refreshIfNeeded() {
-  const exp = parseInt(localStorage.getItem('strava_expires')||'0');
-  if (Date.now()/1000 < exp-300) return;
-  const refresh = localStorage.getItem('strava_refresh');
-  if (!refresh) return;
-  try {
-    const r = await fetch(`${STRAVA_WORKER_URL}/refresh`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh_token:refresh})}).then(r=>r.json());
-    if (r.access_token){localStorage.setItem('strava_token',r.access_token);localStorage.setItem('strava_refresh',r.refresh_token);localStorage.setItem('strava_expires',r.expires_at);stravaToken=r.access_token;}
-  } catch(e){console.error('Refresh failed',e);}
-}
-
-// ── DATA ─────────────────────────────────────────
-async function loadData() {
-  await refreshIfNeeded();
-  try {
-    const after = Math.floor(Date.now()/1000) - 90*86400;
-    const url = `https://www.strava.com/api/v3/athlete/activities?per_page=100&after=${after}`;
-    const r = await fetch(url,{headers:{Authorization:`Bearer ${stravaToken}`}});
-    if (!r.ok) throw new Error('Strava API error');
-    activities = await r.json();
-    renderDash();
-    renderAnalytics();
-    renderDebriefPreview();
-    setBadge('stStatus', true);
-  } catch(e) {
-    console.error(e);
-    setBadge('stStatus', false);
-  }
-}
-
-// ── HELPERS ──────────────────────────────────────
-const sportOf = a => (a.sport_type||'').toLowerCase();
-const isSport = (a,s) => sportOf(a).includes(s);
-const isSwim  = a => isSport(a,'swim');
-const isBike  = a => isSport(a,'ride');
-const isRun   = a => isSport(a,'run');
-const km      = m  => (m/1000);
-const fmtKm   = (m,d=1) => km(m).toFixed(km(m)<10?d:0);
-const fmtT    = s  => { const h=Math.floor(s/3600),m=Math.floor((s%3600)/60); return h?`${h}h ${m}m`:`${m}m`; };
-const fmtDate = iso=> new Date(iso).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
-const actDate = a  => new Date(a.start_date_local||a.start_local||a.start_date);
-const weekOf  = d  => { const x=new Date(d); x.setHours(0,0,0,0); x.setDate(x.getDate()-x.getDay()+1); return x; };
-const sameWk  = (a,b) => weekOf(a).getTime()===weekOf(b).getTime();
-const emoji   = a  => isSwim(a)?'🏊':isBike(a)?'🚴':isRun(a)?'🏃':'⚡';
-const cls     = a  => isSwim(a)?'swim':isBike(a)?'bike':isRun(a)?'run':'other';
-const fmtPace = (ms,mpm) => { // metres/sec to min/km string
-  if (!ms||ms<=0) return '—';
-  const secPkm = 1000/ms;
-  const m=Math.floor(secPkm/60),s=Math.round(secPkm%60);
-  return `${m}:${s.toString().padStart(2,'0')}`;
-};
-const swim100 = ms => { // metres/sec to min:sec/100m
-  if (!ms||ms<=0) return '—';
-  const s100 = 100/ms;
-  const m=Math.floor(s100/60),s=Math.round(s100%60);
-  return `${m}:${s.toString().padStart(2,'0')}`;
-};
-
-function weeklyTotals(filter, weeks=10) {
-  const now = new Date();
-  return Array.from({length:weeks},(_,i)=>{
-    const d = new Date(now); d.setDate(d.getDate()-(weeks-1-i)*7);
-    const ws=weekOf(d), we=new Date(ws); we.setDate(we.getDate()+6);
-    const lbl = ws.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-    const total = activities.filter(a=>filter(a)&&actDate(a)>=ws&&actDate(a)<=we).reduce((s,a)=>s+km(a.distance||0),0);
-    const time  = activities.filter(a=>filter(a)&&actDate(a)>=ws&&actDate(a)<=we).reduce((s,a)=>s+(a.moving_time||0),0);
-    return {lbl, total, time};
-  });
-}
-
-// ── COUNTDOWNS ───────────────────────────────────
-function updateCountdowns() {
-  const now = new Date();
-  const bcn = Math.ceil((BCN_DATE-now)/86400000);
-  const amd = Math.ceil((AMD_DATE-now)/86400000);
-  const days = Math.floor((now-PLAN_START)/86400000);
-  const pct  = Math.min(100,Math.max(0,days/(PLAN_WEEKS*7)*100));
-  const wk   = Math.max(1,Math.min(PLAN_WEEKS,Math.ceil(days/7)));
-  setText('cdBcn', bcn);
-  setText('cdAmd', amd);
-  setText('hdrBcn', `${bcn}d BCN`);
-  setText('planWeek', `Week ${wk} of ${PLAN_WEEKS}`);
-  setText('planPct', Math.round(pct)+'%');
-  document.getElementById('planBar').style.width = pct+'%';
-  setText('dashSub', `${now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})} · Week ${wk}`);
+// ── COUNTDOWNS ──
+function updateCountdowns(){const now=new Date();const bcn=Math.ceil((BCN_DATE-now)/86400000),amd=Math.ceil((AMD_DATE-now)/86400000);const days=Math.floor((now-PLAN_START)/86400000),pct=Math.min(100,Math.max(0,days/(PLAN_WEEKS*7)*100)),wk=curWeek(),ph=phaseFor(wk);
+  setText('cdBcn',bcn);setText('cdAmd',amd);setText('hdrBcn',`BCN ${bcn}d`);
+  setText('planWeek',`Week ${wk} of ${PLAN_WEEKS}`);setText('planPct',Math.round(pct)+'%');
+  document.getElementById('planBar').style.width=pct+'%';
+  const pe=document.getElementById('planPhase');pe.textContent=ph;pe.style.background=phaseColor(ph);pe.style.color=phaseTextColor(ph);
+  setText('dashSub',`${now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})} · ${ph} phase`);
 }
 function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
 
-// ── DASHBOARD ─────────────────────────────────────
-function renderDash() {
-  const now = new Date();
-
-  // Week stats
-  const thisWk = activities.filter(a=>sameWk(actDate(a),now));
-  const swKm=thisWk.filter(isSwim).reduce((s,a)=>s+km(a.distance||0),0);
-  const bkKm=thisWk.filter(isBike).reduce((s,a)=>s+km(a.distance||0),0);
-  const rnKm=thisWk.filter(isRun).reduce((s,a)=>s+km(a.distance||0),0);
-  const swT =thisWk.filter(isSwim).reduce((s,a)=>s+(a.moving_time||0),0);
-  const bkT =thisWk.filter(isBike).reduce((s,a)=>s+(a.moving_time||0),0);
-  const rnT =thisWk.filter(isRun).reduce((s,a)=>s+(a.moving_time||0),0);
-  setText('wSwimKm',swKm.toFixed(1)); setText('wSwimT',fmtT(swT));
-  setText('wBikeKm',bkKm.toFixed(0)); setText('wBikeT',fmtT(bkT));
-  setText('wRunKm', rnKm.toFixed(1)); setText('wRunT', fmtT(rnT));
-
-  // Smart insights
-  renderInsights(thisWk, now);
-
-  // Load chart
-  renderLoadChart();
-
-  // Recent
-  const recent = activities.slice(0,10);
-  const el = document.getElementById('recentList');
-  if (!recent.length){el.innerHTML='<div class="empty">No activities found</div>';return;}
-  el.innerHTML = recent.map(a=>{
-    const c=cls(a),d=fmtKm(a.distance||0),t=fmtT(a.moving_time||a.elapsed_time||0);
-    const hr=a.average_heartrate?`· ${Math.round(a.average_heartrate)}bpm`:'';
-    return `<div class="act-item">
-      <div class="act-badge ${c}">${emoji(a)}</div>
-      <div class="act-info">
-        <div class="act-name">${a.name||a.sport_type}</div>
-        <div class="act-meta">${fmtDate(actDate(a))} ${hr}</div>
-      </div>
-      <div class="act-right">
-        <div class="act-dist ${c}">${d} km</div>
-        <div class="act-time">${t}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function renderInsights(thisWk, now) {
-  const insights = [];
-  const runs = activities.filter(isRun);
-  const recentRuns = runs.filter(a=>(now-actDate(a))/86400000<=14);
-  const highHRRuns = recentRuns.filter(a=>a.average_heartrate&&a.average_heartrate>160);
-  if (highHRRuns.length>0) {
-    insights.push({cls:'warn',icon:'❤️‍🔥',title:'HR Alert',text:`${highHRRuns.length} run${highHRRuns.length>1?'s':''} above Z3 in last 2 weeks. Bolton risk.`});
-  }
-  const swimSessions = activities.filter(isSwim).filter(a=>(now-actDate(a))/86400000<=14);
-  if (swimSessions.length<2) {
-    insights.push({cls:'warn',icon:'🏊',title:'Swim Gap',text:`Only ${swimSessions.length} swim session${swimSessions.length===1?'':''} in 2 weeks. Front crawl needs volume.`});
-  } else {
-    insights.push({cls:'good',icon:'🏊',title:'Swim Consistent',text:`${swimSessions.length} swim sessions in 2 weeks. Good habit.`});
-  }
-  const bcnDays = Math.ceil((BCN_DATE-now)/86400000);
-  if (bcnDays<60) {
-    insights.push({cls:'warn',icon:'🌡️',title:'Heat Block',text:'<60 days to BCN. Heat acclimatisation sessions needed now.'});
-  }
-  const thisWkRun = thisWk.filter(isRun).reduce((s,a)=>s+km(a.distance||0),0);
-  if (thisWkRun>0) {
-    const avgCad = thisWk.filter(isRun).filter(a=>a.avg_cadence).reduce((s,a,_,arr)=>s+a.avg_cadence/arr.length,0);
-    if (avgCad>0&&avgCad<80) insights.push({cls:'warn',icon:'👟',title:'Low Cadence',text:`Avg cadence ${Math.round(avgCad*2)} spm this week. Target 170–180 spm.`});
-  }
-  insights.push({cls:'info',icon:'📅',title:`${Math.ceil((BCN_DATE-now)/86400000)}d to Barcelona`,text:`${Math.ceil((AMD_DATE-now)/86400000)}d to Amsterdam. Stay the course.`});
-  const el = document.getElementById('insightRow');
-  el.innerHTML = insights.slice(0,3).map(i=>`
-    <div class="insight ${i.cls}">
-      <div class="insight-icon">${i.icon}</div>
-      <div class="insight-text"><strong>${i.title}</strong>${i.text}</div>
-    </div>`).join('');
-}
-
-function renderLoadChart() {
-  const weeks = 10;
-  const now = new Date();
-  const labels=[], swData=[], bkData=[], rnData=[];
-  for (let i=weeks-1;i>=0;i--){
-    const d=new Date(now); d.setDate(d.getDate()-i*7);
-    const ws=weekOf(d), we=new Date(ws); we.setDate(we.getDate()+6);
-    const lbl=ws.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-    labels.push(lbl);
-    swData.push(activities.filter(a=>isSwim(a)&&actDate(a)>=ws&&actDate(a)<=we).reduce((s,a)=>s+km(a.distance||0),0));
-    bkData.push(activities.filter(a=>isBike(a)&&actDate(a)>=ws&&actDate(a)<=we).reduce((s,a)=>s+km(a.distance||0),0));
-    rnData.push(activities.filter(a=>isRun(a)&&actDate(a)>=ws&&actDate(a)<=we).reduce((s,a)=>s+km(a.distance||0),0));
-  }
-  const maxTotal = Math.max(...labels.map((_,i)=>swData[i]+bkData[i]+rnData[i]),1);
-  const bar = document.getElementById('loadChart');
-  const lbl = document.getElementById('loadLabels');
-  bar.innerHTML = labels.map((_,i)=>{
-    const sw=swData[i],bk=bkData[i],rn=rnData[i],tot=sw+bk+rn;
-    const maxH=76;
-    const shSw=Math.round((sw/maxTotal)*maxH), shBk=Math.round((bk/maxTotal)*maxH), shRn=Math.round((rn/maxTotal)*maxH);
-    return `<div class="load-col">
-      <div class="load-inner">
-        <div class="load-bar swim" style="height:${shSw}px" title="Swim ${sw.toFixed(1)}km"></div>
-        <div class="load-bar bike" style="height:${shBk}px" title="Bike ${bk.toFixed(0)}km"></div>
-        <div class="load-bar run"  style="height:${shRn}px" title="Run ${rn.toFixed(1)}km"></div>
-      </div>
-      <div class="load-lbl">${labels[i].split(' ')[0]}</div>
-    </div>`;
-  }).join('');
-}
-
-// ── ANALYTICS ────────────────────────────────────
-function renderAnalytics() {
-  renderKeyMetrics();
-  renderHRZones();
-  renderRunPaceTrend();
-  renderSwimTable();
-  renderCadence();
-  renderVolumeSplit();
-}
-
-function renderKeyMetrics() {
-  const runs = activities.filter(isRun);
-  const swims= activities.filter(isSwim);
-  const bikes= activities.filter(isBike);
-  const now  = new Date();
-
-  // Longest run
-  const longRun = runs.reduce((b,a)=>km(a.distance||0)>km(b.distance||0)?a:b,runs[0]||{});
-  // Avg run pace recent 5
-  const rec5 = runs.slice(0,5).filter(a=>a.avg_speed&&a.avg_speed>0);
-  const avgPace = rec5.length?rec5.reduce((s,a)=>s+a.avg_speed,0)/rec5.length:0;
-  // Swim sessions this month
-  const swimMth = swims.filter(a=>(now-actDate(a))/86400000<=30).length;
-  // Total bike km
-  const bikeKmTotal = bikes.reduce((s,a)=>s+km(a.distance||0),0);
-
-  document.getElementById('keyMetrics').innerHTML = [
-    {label:'Longest Run',val:longRun.distance?fmtKm(longRun.distance,1)+' km':'—',delta:''},
-    {label:'Avg Run Pace',val:fmtPace(avgPace),delta:'last 5 runs'},
-    {label:'Swim Sessions',val:swimMth,delta:'last 30 days'},
-    {label:'Bike Volume',val:bikeKmTotal.toFixed(0)+' km',delta:'last 90 days'},
-  ].map(m=>`
-    <div class="pace-card">
-      <div class="pace-val">${m.val}</div>
-      <div class="pace-lbl">${m.label}</div>
-      ${m.delta?`<div class="pace-delta up">${m.delta}</div>`:''}
-    </div>`).join('');
-}
-
-function renderHRZones() {
-  const runs = activities.filter(isRun).filter(a=>a.average_heartrate);
-  const el = document.getElementById('hrZoneChart');
-  if (!runs.length){el.innerHTML='<div class="empty">No HR data. Ensure Garmin syncs HR to Strava.</div>';return;}
-  const counts=[0,0,0,0,0];
-  runs.forEach(a=>{
-    const hr=a.average_heartrate;
-    const zi=HR_ZONES.findIndex(z=>hr>=z.min&&hr<=z.max);
-    if(zi>=0) counts[zi]++;
-  });
-  const total=counts.reduce((a,b)=>a+b,1);
-  el.innerHTML = HR_ZONES.map((z,i)=>{
-    const pct=Math.round(counts[i]/total*100);
-    return `<div class="zone-row">
-      <div class="zone-name">${z.name}</div>
-      <div class="zone-range">${z.min}–${z.max===999?'200+':z.max}</div>
-      <div class="zone-track"><div class="zone-fill" style="width:${pct}%;background:${z.color}"></div></div>
-      <div class="zone-pct">${pct}%</div>
-      <div class="zone-count">${counts[i]}</div>
-    </div>`;
-  }).join('');
-  const z4z5 = Math.round((counts[3]+counts[4])/total*100);
-  const insEl = document.getElementById('hrZoneInsight');
-  if (z4z5>25) {
-    insEl.innerHTML=`<div class="insight warn"><div class="insight-icon">⚠️</div><div class="insight-text"><strong>Too much high intensity</strong>${z4z5}% of runs in Z4/Z5. For full IM prep, target 80% Z1/Z2. Bolton collapse started here.</div></div>`;
-  } else if (z4z5<10) {
-    insEl.innerHTML=`<div class="insight good"><div class="insight-icon">✅</div><div class="insight-text"><strong>Good aerobic base work</strong>Only ${z4z5}% in Z4/Z5. Aerobic base building on track.</div></div>`;
-  } else {
-    insEl.innerHTML=`<div class="insight info"><div class="insight-icon">💡</div><div class="insight-text"><strong>Zone balance OK</strong>${z4z5}% in Z4/Z5. Watch this doesn't creep up as volume increases.</div></div>`;
-  }
-}
-
-function renderRunPaceTrend() {
-  const runs = activities.filter(isRun).filter(a=>a.avg_speed>0&&km(a.distance||0)>2).slice(0,12).reverse();
-  const svg = document.getElementById('runPaceChart');
-  const lbl = document.getElementById('runPaceLabels');
-  if (!runs.length){svg.innerHTML='<text x="50%" y="50%" text-anchor="middle" fill="#475569" font-size="12">No run data</text>';return;}
-  // pace in sec/km
-  const paces = runs.map(a=>1000/a.avg_speed);
-  const minP=Math.min(...paces), maxP=Math.max(...paces);
-  const W=300,H=100,pad=10;
-  const xS=i=>(i/(runs.length-1||1))*(W-pad*2)+pad;
-  const yS=p=>H-pad-((p-minP)/(maxP-minP||1))*(H-pad*2);
-  const pts=runs.map((a,i)=>`${xS(i).toFixed(1)},${yS(1000/a.avg_speed).toFixed(1)}`).join(' ');
-  const fillPts=`${xS(0)},${H} ${pts} ${xS(runs.length-1)},${H}`;
-  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  svg.innerHTML=`
-    <defs><linearGradient id="rg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.3"/><stop offset="100%" stop-color="#f43f5e" stop-opacity="0"/></linearGradient></defs>
-    <polygon points="${fillPts}" fill="url(#rg)"/>
-    <polyline points="${pts}" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    ${runs.map((a,i)=>`<circle cx="${xS(i)}" cy="${yS(1000/a.avg_speed)}" r="3" fill="#f43f5e"/>`).join('')}
-    ${runs.map((a,i)=>{const p=1000/a.avg_speed,m=Math.floor(p/60),s=Math.round(p%60);return `<text x="${xS(i)}" y="${yS(p)-6}" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="JetBrains Mono,monospace">${m}:${s.toString().padStart(2,'0')}</text>`}).join('')}`;
-  lbl.innerHTML=runs.map(a=>`<span>${fmtDate(actDate(a)).split(' ').slice(0,2).join(' ')}</span>`).join('');
-}
-
-function renderSwimTable() {
-  const swims = activities.filter(isSwim).filter(a=>a.avg_speed>0&&km(a.distance||0)>0.2).slice(0,8);
-  const el = document.getElementById('swimTable');
-  if (!swims.length){el.innerHTML='<div class="empty">No swim data yet</div>';return;}
-  const paces = swims.map(a=>100/a.avg_speed);
-  const bestP = Math.min(...paces);
-  el.innerHTML=`<table class="swim-table">
-    <thead><tr><th>Date</th><th>Distance</th><th>Pace/100m</th><th>Time</th><th style="width:80px">vs best</th></tr></thead>
-    <tbody>${swims.map(a=>{
-      const p=100/a.avg_speed;
-      const pace=swim100(a.avg_speed);
-      const pct=Math.max(10,100-(p-bestP)/bestP*300);
-      const diff=p-bestP;
-      const diffStr=diff<1?'Best':'+'+diff.toFixed(0)+'s';
-      return `<tr>
-        <td>${fmtDate(actDate(a))}</td>
-        <td>${fmtKm(a.distance||0,1)}km</td>
-        <td style="color:var(--swim);font-weight:500">${pace}</td>
-        <td>${fmtT(a.moving_time||0)}</td>
-        <td class="pace-bar-cell"><div class="pace-mini-bar" style="width:${pct}%;opacity:${diff<1?1:0.5}"></div><div style="font-size:0.58rem;color:var(--text3);margin-top:2px">${diffStr}</div></td>
-      </tr>`;
-    }).join('')}</tbody></table>`;
-}
-
-function renderCadence() {
-  const runs = activities.filter(isRun).filter(a=>a.avg_cadence>0);
-  const el = document.getElementById('cadenceStats');
-  if (!runs.length){el.innerHTML='<div class="empty">No cadence data</div>';return;}
-  const cadSpm = runs.map(a=>a.avg_cadence*2);
-  const avgCad = cadSpm.reduce((s,v)=>s+v,0)/cadSpm.length;
-  const maxCad = Math.max(...cadSpm);
-  const minCad = Math.min(...cadSpm);
-  const target = avgCad>=170&&avgCad<=180;
-  const cadBadge = avgCad>=170?'mb-good':avgCad>=160?'mb-warn':'mb-bad';
-  const cadTxt   = avgCad>=170?'On target':avgCad>=160?'Getting there':'Below target';
-  const recentKm = runs.slice(0,5).reduce((s,a)=>s+km(a.distance||0),0);
-  const recentCal= runs.slice(0,5).reduce((s,a)=>s+(a.total_calories||0),0);
-  el.innerHTML = `
-    <div class="metric-row"><span class="metric-name">Avg cadence (spm)</span><span class="metric-val">${Math.round(avgCad)} <span class="metric-badge ${cadBadge}">${cadTxt}</span></span></div>
-    <div class="metric-row"><span class="metric-name">Target cadence</span><span class="metric-val">170–180 spm</span></div>
-    <div class="metric-row"><span class="metric-name">Best cadence</span><span class="metric-val">${Math.round(maxCad)} spm</span></div>
-    <div class="metric-row"><span class="metric-name">Lowest cadence</span><span class="metric-val">${Math.round(minCad)} spm</span></div>
-    <div class="metric-row"><span class="metric-name">Runs analysed</span><span class="metric-val">${runs.length}</span></div>
-    <div class="metric-row"><span class="metric-name">Calories (last 5 runs)</span><span class="metric-val">${recentCal.toLocaleString()} kcal</span></div>`;
-}
-
-function renderVolumeSplit() {
-  const swKm = activities.filter(isSwim).reduce((s,a)=>s+km(a.distance||0),0);
-  const bkKm = activities.filter(isBike).reduce((s,a)=>s+km(a.distance||0),0);
-  const rnKm = activities.filter(isRun).reduce((s,a)=>s+km(a.distance||0),0);
-  const tot  = swKm+bkKm+rnKm||1;
-  const el   = document.getElementById('volumeSplit');
-  el.innerHTML = [
-    {lbl:'Swim',val:swKm,c:'var(--swim)',cls:'swim'},
-    {lbl:'Bike',val:bkKm,c:'var(--bike)',cls:'bike'},
-    {lbl:'Run', val:rnKm,c:'var(--run)', cls:'run'},
-  ].map(d=>{
-    const pct=Math.round(d.val/tot*100);
-    return `<div style="margin-bottom:12px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:0.75rem;color:var(--text2)">${d.lbl}</span>
-        <span style="font-family:var(--font-mono);font-size:0.72rem;color:${d.c}">${d.val.toFixed(0)} km · ${pct}%</span>
-      </div>
-      <div style="height:8px;background:var(--s3);border-radius:4px;overflow:hidden">
-        <div style="width:${pct}%;height:100%;background:${d.c};border-radius:4px;transition:width 0.8s ease"></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ── DEBRIEF PREVIEW ──────────────────────────────
-function renderDebriefPreview() {
-  const now  = new Date();
-  const wk7  = activities.filter(a=>(now-actDate(a))/86400000<=7);
-  const swKm = wk7.filter(isSwim).reduce((s,a)=>s+km(a.distance||0),0);
-  const bkKm = wk7.filter(isBike).reduce((s,a)=>s+km(a.distance||0),0);
-  const rnKm = wk7.filter(isRun).reduce((s,a)=>s+km(a.distance||0),0);
-  const sess = wk7.length;
-  document.getElementById('debriefPreview').innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-      ${[['Sessions',sess,'var(--purple)'],['Swim',swKm.toFixed(1)+'km','var(--swim)'],['Bike',bkKm.toFixed(0)+'km','var(--bike)'],['Run',rnKm.toFixed(1)+'km','var(--run)']].map(([l,v,c])=>`
-        <div style="text-align:center;padding:10px 4px;background:var(--s2);border-radius:8px">
-          <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:${c}">${v}</div>
-          <div style="font-size:0.6rem;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em">${l}</div>
-        </div>`).join('')}
-    </div>`;
-}
-
-// ── AI DEBRIEF ────────────────────────────────────
-async function generateDebrief() {
-  const btn=document.getElementById('debriefBtn');
-  const out=document.getElementById('debriefOut');
-  btn.disabled=true;
-  btn.innerHTML='<div class="spin"></div> Analysing your week…';
-  out.classList.remove('show');
+// ── TRISCORE ──
+function computeTriScore(){
   const now=new Date();
-  const wk7=activities.filter(a=>(now-actDate(a))/86400000<=7);
-  const summary=wk7.map(a=>{
-    const hr=a.average_heartrate?` | HR avg ${Math.round(a.average_heartrate)}bpm max ${Math.round(a.max_heartrate||a.average_heartrate)}bpm`:'';
-    const cad=a.avg_cadence?` | cadence ${Math.round(a.avg_cadence*2)}spm`:'';
-    const effort=a.relative_effort?` | effort ${a.relative_effort}`:'';
-    return `- ${a.sport_type}: ${fmtKm(a.distance||0,1)}km in ${fmtT(a.moving_time||0)}${hr}${cad}${effort}`;
-  }).join('\n')||'- No activities this week';
-  const planDays=Math.floor((now-PLAN_START)/86400000);
-  const wk=Math.max(1,Math.ceil(planDays/7));
-  const bcnD=Math.ceil((BCN_DATE-now)/86400000);
-  const prompt=`You are a direct expert triathlon coach reviewing Shawn's training. No fluff, no generic advice.
+  // Components: consistency, volume, compliance, intensity balance
+  const last4wk=activities.filter(a=>(now-aDate(a))/86400000<=28);
+  const sessions=last4wk.length;
+  const consistency=Math.min(250,sessions*9); // ~28 sessions = max
+  const totalKm=last4wk.reduce((s,a)=>s+km(a.distance||0),0);
+  const volume=Math.min(250,totalKm*0.5);
+  const comp=weekCompliance().pct;
+  const compliance=comp*2.5; // max 250
+  const runs=last4wk.filter(isRun).filter(a=>a.average_heartrate);
+  const z12=runs.filter(a=>a.average_heartrate<=140).length;
+  const balance=runs.length?Math.min(250,(z12/runs.length)*250):150;
+  return Math.round(consistency+volume+compliance+balance);
+}
+function rankFor(score){
+  if(score>=850)return{name:'Elite',tier:'PRO',desc:'Race-ready fitness. Sharpen and taper.'};
+  if(score>=700)return{name:'Competitor',tier:'GOLD',desc:'Strong base. Build race-specific endurance.'};
+  if(score>=550)return{name:'Athlete',tier:'SILVER',desc:'Solid consistency. Push volume and key sessions.'};
+  if(score>=400)return{name:'Developing',tier:'BRONZE',desc:'Good momentum. Lock in weekly compliance.'};
+  return{name:'Building',tier:'BASE',desc:'Early days. Consistency is everything now.'};
+}
+function renderScore(){
+  const score=computeTriScore();lastTriScore=score;
+  const r=rankFor(score);
+  setText('triScore',score);setText('rankName',r.name);setText('rankTier',r.tier);setText('rankDesc',r.desc);
+  const ring=document.getElementById('scoreRing'),circ=289,off=circ-(score/1000)*circ;
+  setTimeout(()=>ring.style.transition='stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)',50);
+  setTimeout(()=>ring.style.strokeDashoffset=off,100);
+}
 
-ATHLETE:
-- Ironman Barcelona 4 Oct 2026 (${bcnD} days away), Amsterdam Marathon 18 Oct 2026
-- Week ${wk}/19. Max HR 200bpm. Zones: Z1<120 Z2 120-140 Z3 141-160 Z4 161-180 Z5 181+
-- Bolton 70.3: bike HR 183-187bpm caused run collapse. Pacing discipline = #1 priority.
-- Front crawl being built from scratch. Run limiter = CV capacity. No road power meter.
-- Maurten-only race nutrition (GI failure at Bolton from mixed fructose).
+// ── COMPLIANCE ──
+function weekCompliance(){
+  const wk=curWeek(),plan=weekPlan(wk),now=new Date();
+  const wkActs=activities.filter(a=>sameWk(aDate(a),now));
+  // Match each planned session to an activity of same discipline
+  let matched=0,alt=0;
+  const usedIds=new Set();
+  const statuses=plan.map(pl=>{
+    const cand=wkActs.find(a=>!usedIds.has(a.id)&&sp(a).includes(pl.type==='swim'?'swim':pl.type==='bike'?'ride':'run'));
+    if(cand){usedIds.add(cand.id);matched++;return{...pl,status:'matched',act:cand};}
+    return{...pl,status:'pending'};
+  });
+  // Alt credit: unused activities of any type (incl strength) count partially
+  const unused=wkActs.filter(a=>!usedIds.has(a.id));
+  alt=unused.length;
+  const pct=Math.round(matched/plan.length*100);
+  return{pct,matched,total:plan.length,statuses,alt,unused};
+}
+
+// ── DASHBOARD ──
+function renderDash(){
+  const now=new Date(),thisWk=activities.filter(a=>sameWk(aDate(a),now));
+  const agg=(f)=>({km:thisWk.filter(f).reduce((s,a)=>s+km(a.distance||0),0),t:thisWk.filter(f).reduce((s,a)=>s+(a.moving_time||0),0)});
+  const sw=agg(isSwim),bk=agg(isBike),rn=agg(isRun);
+  setText('wSwimKm',sw.km.toFixed(1));setText('wSwimT',fmtT(sw.t));
+  setText('wBikeKm',bk.km.toFixed(0));setText('wBikeT',fmtT(bk.t));
+  setText('wRunKm',rn.km.toFixed(1));setText('wRunT',fmtT(rn.t));
+  // quick stats
+  setText('qStreak',computeStreak());
+  setText('qCompliance',weekCompliance().pct+'%');
+  setText('qPoints',weekPoints().toLocaleString());
+  renderInsights(thisWk,now);renderLoadChart();
+  const recent=activities.slice(0,10),el=document.getElementById('recentList');
+  if(!recent.length){el.innerHTML='<div class="empty">No activities found</div>';return;}
+  el.innerHTML=recent.map(a=>{const c=clsOf(a),hr=a.average_heartrate?`· ${Math.round(a.average_heartrate)}bpm`:'';
+    return `<div class="act"><div class="act-b ${c}"><svg viewBox="0 0 24 24"><use href="#${useIcon(a)}"/></svg></div><div class="act-i"><div class="act-n">${a.name||a.sport_type}</div><div class="act-m">${fmtDate(aDate(a))} ${hr}</div></div><div class="act-r"><div class="act-d ${c}">${fmtKm(a.distance||0)} km</div><div class="act-pts">+${sessionPoints(a)} pts</div></div></div>`;}).join('');
+}
+function computeStreak(){
+  // consecutive weeks (incl this) with >=3 sessions
+  let streak=0;const now=new Date();
+  for(let i=0;i<12;i++){const d=new Date(now);d.setDate(d.getDate()-i*7);const ws=wkOf(d),we=new Date(ws);we.setDate(we.getDate()+6);const c=activities.filter(a=>aDate(a)>=ws&&aDate(a)<=we).length;if(c>=3)streak++;else if(i>0)break;else if(c<3&&i===0)continue;}
+  return streak;
+}
+function renderInsights(thisWk,now){
+  const ins=[];const runs=activities.filter(isRun),recRuns=runs.filter(a=>(now-aDate(a))/86400000<=14);
+  const highHR=recRuns.filter(a=>a.average_heartrate>160);
+  if(highHR.length)ins.push({c:'warn',ic:'i-heart',t:'HR Alert',x:`${highHR.length} run${highHR.length>1?'s':''} above Z3 in 2 weeks. Bolton risk.`});
+  const swims=activities.filter(isSwim).filter(a=>(now-aDate(a))/86400000<=14);
+  if(swims.length<2)ins.push({c:'warn',ic:'i-waves',t:'Swim Gap',x:`Only ${swims.length} swim in 2 weeks. Front crawl needs volume.`});
+  else ins.push({c:'good',ic:'i-waves',t:'Swim Consistent',x:`${swims.length} swims in 2 weeks. Good habit.`});
+  const bcnD=Math.ceil((BCN_DATE-now)/86400000);
+  if(bcnD<60)ins.push({c:'warn',ic:'i-sun',t:'Heat Block Due',x:'<60 days to BCN. Start heat acclimatisation.'});
+  const pts=weekPoints();
+  if(pts>1500)ins.push({c:'gold',ic:'i-trophy',t:'Big Week',x:`${pts.toLocaleString()} points earned. Strong work.`});
+  ins.push({c:'info',ic:'i-calendar',t:`${bcnD}d to Barcelona`,x:`${Math.ceil((AMD_DATE-now)/86400000)}d to Amsterdam.`});
+  document.getElementById('insightRow').innerHTML=ins.slice(0,3).map(i=>`<div class="ins ${i.c}"><div class="ins-ic"><svg viewBox="0 0 24 24"><use href="#${i.ic}"/></svg></div><div class="ins-tx"><strong>${i.t}</strong>${i.x}</div></div>`).join('');
+}
+function renderLoadChart(){
+  const weeks=10,now=new Date(),labels=[],sw=[],bk=[],rn=[];
+  for(let i=weeks-1;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i*7);const ws=wkOf(d),we=new Date(ws);we.setDate(we.getDate()+6);labels.push(ws.toLocaleDateString('en-GB',{day:'numeric',month:'short'}));
+    sw.push(activities.filter(a=>isSwim(a)&&aDate(a)>=ws&&aDate(a)<=we).reduce((s,a)=>s+km(a.distance||0),0));
+    bk.push(activities.filter(a=>isBike(a)&&aDate(a)>=ws&&aDate(a)<=we).reduce((s,a)=>s+km(a.distance||0),0));
+    rn.push(activities.filter(a=>isRun(a)&&aDate(a)>=ws&&aDate(a)<=we).reduce((s,a)=>s+km(a.distance||0),0));}
+  const maxT=Math.max(...labels.map((_,i)=>sw[i]+bk[i]+rn[i]),1),H=80;
+  document.getElementById('loadChart').innerHTML=labels.map((_,i)=>{
+    const f=v=>Math.round(v/maxT*H);
+    return `<div class="lc"><div class="li"><div class="lb sw" style="height:${f(sw[i])}px"></div><div class="lb bk" style="height:${f(bk[i])}px"></div><div class="lb rn" style="height:${f(rn[i])}px"></div></div></div>`;
+  }).join('');
+  document.getElementById('loadLabels').innerHTML=labels.map(l=>`<span>${l.split(' ')[0]}</span>`).join('');
+}
+
+// ── PLAN PAGE ──
+function renderPlan(){
+  const wk=curWeek(),ph=phaseFor(wk);
+  setText('planSub',`Week ${wk} · ${ph} phase`);
+  const comp=weekCompliance();
+  // compliance ring
+  ringSet('compRing',comp.pct/100,163);setText('compRingVal',comp.pct+'%');
+  setText('compDetail',`${comp.matched} of ${comp.total} sessions`);
+  // load ring
+  const now=new Date();const actualPts=weekPoints();const targetPts=weekPlan(wk).reduce((s,p)=>s+p.pts,0);
+  const loadPct=Math.min(100,Math.round(actualPts/targetPts*100));
+  ringSet('loadRing',loadPct/100,163);setText('loadRingVal',loadPct+'%');
+  setText('loadDetail',`${actualPts.toLocaleString()} / ${targetPts.toLocaleString()} pts`);
+  // bonus banner for alt sessions
+  const bb=document.getElementById('bonusBanner');
+  if(comp.alt>0){const altPts=comp.unused.reduce((s,a)=>s+sessionPoints(a),0);
+    bb.innerHTML=`<div class="ins gold" style="margin-bottom:12px"><div class="ins-ic"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></div><div class="ins-tx"><strong>+${comp.alt} Bonus Session${comp.alt>1?'s':''}</strong>Extra training beyond plan earned ${altPts.toLocaleString()} bonus points. Counts toward your score.</div></div>`;
+  }else bb.innerHTML='';
+  // session list
+  document.getElementById('sessionList').innerHTML=comp.statuses.map(s=>{
+    const done=s.status==='matched';const c=s.type==='swim'?'sw':s.type==='bike'?'bk':'rn';
+    const icn=s.type==='swim'?'i-waves':s.type==='bike'?'i-bike':'i-run';
+    const stTxt=done?'Matched':'Pending';const stCls=done?'st-matched':'st-pending';
+    const colorBg=s.type==='swim'?'var(--swim-d)':s.type==='bike'?'var(--bike-d)':'var(--run-d)';
+    const colorFg=s.type==='swim'?'var(--swim)':s.type==='bike'?'var(--bike)':'var(--run)';
+    const actInfo=done&&s.act?` · ${fmtKm(s.act.distance||0)}km done`:'';
+    return `<div class="session ${done?'done':''}"><div class="sess-check"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><div class="sess-ic" style="background:${colorBg};color:${colorFg}"><svg viewBox="0 0 24 24"><use href="#${icn}"/></svg></div><div class="sess-info"><div class="sess-title">${s.title}</div><div class="sess-detail">${s.detail}${actInfo}</div><span class="sess-status ${stCls}">${stTxt}</span></div><div class="sess-pts">+${s.pts}</div></div>`;
+  }).join('');
+  renderXP();renderBadges();
+}
+function ringSet(id,frac,circ){const r=document.getElementById(id);if(!r)return;setTimeout(()=>r.style.transition='stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)',50);setTimeout(()=>r.style.strokeDashoffset=circ-frac*circ,100);}
+
+// ── XP / LEVELS ──
+function disciplineXP(filter){return activities.filter(filter).reduce((s,a)=>s+sessionPoints(a),0);}
+function levelFor(xp){return Math.floor(Math.sqrt(xp/200))+1;}
+function xpInLevel(xp){const lvl=levelFor(xp),base=Math.pow(lvl-1,2)*200,next=Math.pow(lvl,2)*200;return{lvl,pct:Math.round((xp-base)/(next-base)*100),cur:Math.round(xp-base),need:Math.round(next-base)};}
+function renderXP(){
+  const data=[{f:isSwim,c:'sw',ic:'i-waves',n:'Swim'},{f:isBike,c:'bk',ic:'i-bike',n:'Bike'},{f:isRun,c:'rn',ic:'i-run',n:'Run'}];
+  document.getElementById('xpBars').innerHTML=data.map(d=>{const xp=disciplineXP(d.f),L=xpInLevel(xp);
+    return `<div class="xp"><div class="xp-head"><div class="xp-name ${d.c}"><span class="xp-ic"><svg viewBox="0 0 24 24"><use href="#${d.ic}"/></svg></span>${d.n} · Lv ${L.lvl}</div><div class="xp-lvl">${L.cur}/${L.need} XP</div></div><div class="xp-track"><div class="xp-fill ${d.c}" style="width:${L.pct}%"></div></div></div>`;
+  }).join('');
+}
+
+// ── BADGES ──
+function renderBadges(){
+  const now=new Date();
+  const totalSwim=activities.filter(isSwim).length;
+  const longBike=Math.max(0,...activities.filter(isBike).map(a=>km(a.distance||0)));
+  const longRun=Math.max(0,...activities.filter(isRun).map(a=>km(a.distance||0)));
+  const weekBigKm=(()=>{let max=0;for(let i=0;i<10;i++){const d=new Date(now);d.setDate(d.getDate()-i*7);const ws=wkOf(d),we=new Date(ws);we.setDate(we.getDate()+6);const k=activities.filter(a=>isBike(a)&&aDate(a)>=ws&&aDate(a)<=we).reduce((s,a)=>s+km(a.distance||0),0);max=Math.max(max,k);}return max;})();
+  const streak=computeStreak();
+  const totalPts=activities.reduce((s,a)=>s+sessionPoints(a),0);
+  const badges=[
+    {ic:'i-waves',n:'10 Swims',got:totalSwim>=10},
+    {ic:'i-mountain',n:'100k Bike Wk',got:weekBigKm>=100},
+    {ic:'i-run',n:'15k Run',got:longRun>=15},
+    {ic:'i-flame',n:'4wk Streak',got:streak>=4},
+    {ic:'i-bike',n:'100k Ride',got:longBike>=100},
+    {ic:'i-zap',n:'10k Points',got:totalPts>=10000},
+    {ic:'i-trophy',n:'70.3 Done',got:true},
+    {ic:'i-medal',n:'IM Finisher',got:false},
+  ];
+  document.getElementById('badgeGrid').innerHTML=badges.map(b=>`<div class="badge ${b.got?'unlocked':'locked'}"><div class="badge-ic"><svg viewBox="0 0 24 24"><use href="#${b.ic}"/></svg></div><div class="badge-name">${b.n}</div></div>`).join('');
+}
+
+// ── PREDICTOR ──
+let baseSplits={swim:0,bike:0,run:0,t1:300,t2:300};
+function renderPredictor(){
+  // SWIM: best recent pool front-crawl speed → OW adjusted
+  const swims=activities.filter(isSwim).filter(a=>a.avg_speed>0.4);
+  const bestSwimSpeed=swims.length?Math.max(...swims.map(a=>a.avg_speed)):0.72;
+  const owSpeed=bestSwimSpeed*0.92; // open water penalty
+  baseSplits.swim=3800/owSpeed;
+  // BIKE: power-based. IM intensity 0.70 of FTP. Estimate speed from recent rides scaled.
+  const rides=activities.filter(isBike).filter(a=>km(a.distance||0)>20&&a.average_speed>0);
+  const avgRideSpeed=rides.length?rides.reduce((s,a)=>s+a.average_speed,0)/rides.length:7.5;
+  const imBikeSpeed=avgRideSpeed*0.98; // controlled IM pace m/s
+  baseSplits.bike=180000/imBikeSpeed;
+  // RUN: Riegel from 5k, IM fatigue factor
+  const freshMarathon=BEST_5K_SEC*Math.pow(42195/5000,1.06);
+  baseSplits.run=freshMarathon*1.22; // IM run fatigue
+  updatePrediction();
+}
+function updatePrediction(){
+  const sw=parseInt(document.getElementById('swimSlider').value);
+  const bk=parseInt(document.getElementById('bikeSlider').value);
+  const rn=parseInt(document.getElementById('runSlider').value);
+  document.getElementById('swimSliderVal').textContent=sw?`+${sw}%`:'Current';
+  document.getElementById('bikeSliderVal').textContent=bk?`+${bk}%`:'Current';
+  document.getElementById('runSliderVal').textContent=rn?`+${rn}%`:'Current';
+  const swT=baseSplits.swim/(1+sw/100), bkT=baseSplits.bike/(1+bk/100), rnT=baseSplits.run/(1+rn/100);
+  const total=swT+baseSplits.t1+bkT+baseSplits.t2+rnT;
+  document.getElementById('predTime').textContent=fmtHMS(total);
+  const lo=total*0.96, hi=total*1.05;
+  document.getElementById('predRange').textContent=`Range: ${fmtHMS(lo)} – ${fmtHMS(hi)}`;
+  const splits=[
+    {ic:'i-waves',c:'sw',n:'Swim',d:'3.8km open water',t:swT},
+    {ic:'i-clock',c:'t',n:'T1',d:'Transition',t:baseSplits.t1},
+    {ic:'i-bike',c:'bk',n:'Bike',d:'180km',t:bkT},
+    {ic:'i-clock',c:'t',n:'T2',d:'Transition',t:baseSplits.t2},
+    {ic:'i-run',c:'rn',n:'Run',d:'42.2km marathon',t:rnT},
+  ];
+  document.getElementById('predSplits').innerHTML=splits.map(s=>`<div class="split-row"><div class="split-ic ${s.c}"><svg viewBox="0 0 24 24"><use href="#${s.ic}"/></svg></div><div class="split-info"><div class="split-name">${s.n}</div><div class="split-detail">${s.d}</div></div><div class="split-time">${fmtHMS(s.t)}</div></div>`).join('');
+}
+
+// ── ANALYTICS ──
+function renderAnalytics(){renderKeyMetrics();renderHRZones();renderRunPace();renderSwimTable();renderCadence();renderVolume();}
+function renderKeyMetrics(){
+  const runs=activities.filter(isRun),swims=activities.filter(isSwim),bikes=activities.filter(isBike),now=new Date();
+  const longRun=runs.reduce((b,a)=>km(a.distance||0)>km(b.distance||0)?a:b,runs[0]||{});
+  const rec5=runs.slice(0,5).filter(a=>a.avg_speed>0);
+  const avgPace=rec5.length?rec5.reduce((s,a)=>s+a.avg_speed,0)/rec5.length:0;
+  const swimMth=swims.filter(a=>(now-aDate(a))/86400000<=30).length;
+  const bikeTot=bikes.reduce((s,a)=>s+km(a.distance||0),0);
+  document.getElementById('keyMetrics').innerHTML=[
+    {v:longRun.distance?fmtKm(longRun.distance)+' km':'—',l:'Longest Run',d:''},
+    {v:fmtPace(avgPace),l:'Avg Run Pace',d:'last 5 runs'},
+    {v:swimMth,l:'Swim Sessions',d:'last 30 days'},
+    {v:bikeTot.toFixed(0)+' km',l:'Bike Volume',d:'last 90 days'},
+  ].map(m=>`<div class="km-card"><div class="km-v">${m.v}</div><div class="km-l">${m.l}</div>${m.d?`<div class="km-d">${m.d}</div>`:''}</div>`).join('');
+}
+function renderHRZones(){
+  const runs=activities.filter(isRun).filter(a=>a.average_heartrate),el=document.getElementById('hrZoneChart');
+  if(!runs.length){el.innerHTML='<div class="empty">No HR data. Check Garmin sync.</div>';document.getElementById('hrZoneInsight').innerHTML='';return;}
+  const counts=[0,0,0,0,0];runs.forEach(a=>{const z=HR_ZONES.findIndex(z=>a.average_heartrate>=z.min&&a.average_heartrate<=z.max);if(z>=0)counts[z]++;});
+  const tot=counts.reduce((a,b)=>a+b,1);
+  el.innerHTML=HR_ZONES.map((z,i)=>{const p=Math.round(counts[i]/tot*100);return `<div class="zr"><div class="zn">${z.name}</div><div class="zrng">${z.min}–${z.max===999?'200+':z.max}</div><div class="zt"><div class="zf" style="width:${p}%;background:${z.color}"></div></div><div class="zp">${p}%</div></div>`;}).join('');
+  const z45=Math.round((counts[3]+counts[4])/tot*100),ie=document.getElementById('hrZoneInsight');
+  if(z45>25)ie.innerHTML=`<div class="ins warn"><div class="ins-ic"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg></div><div class="ins-tx"><strong>Too much intensity</strong>${z45}% in Z4/Z5. Target 80% Z1/Z2 for IM. Bolton collapse started here.</div></div>`;
+  else if(z45<10)ie.innerHTML=`<div class="ins good"><div class="ins-ic"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><div class="ins-tx"><strong>Great aerobic discipline</strong>Only ${z45}% in Z4/Z5. Base building on track.</div></div>`;
+  else ie.innerHTML=`<div class="ins info"><div class="ins-ic"><svg viewBox="0 0 24 24"><use href="#i-target"/></svg></div><div class="ins-tx"><strong>Balance OK</strong>${z45}% in Z4/Z5. Don't let it creep up.</div></div>`;
+}
+function renderRunPace(){
+  const runs=activities.filter(isRun).filter(a=>a.avg_speed>0&&km(a.distance||0)>2).slice(0,12).reverse(),svg=document.getElementById('runPaceChart');
+  if(!runs.length){svg.innerHTML='<text x="50%" y="50%" text-anchor="middle" fill="#5b6b85" font-size="11">No run data</text>';return;}
+  const paces=runs.map(a=>1000/a.avg_speed),mn=Math.min(...paces),mx=Math.max(...paces),W=300,H=100,pad=12;
+  const xS=i=>(i/(runs.length-1||1))*(W-pad*2)+pad,yS=p=>H-pad-((p-mn)/(mx-mn||1))*(H-pad*2);
+  const pts=runs.map((a,i)=>`${xS(i).toFixed(1)},${yS(1000/a.avg_speed).toFixed(1)}`).join(' ');
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.innerHTML=`<defs><linearGradient id="rg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.3"/><stop offset="100%" stop-color="#f43f5e" stop-opacity="0"/></linearGradient></defs><polygon points="${xS(0)},${H} ${pts} ${xS(runs.length-1)},${H}" fill="url(#rg)"/><polyline points="${pts}" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>${runs.map((a,i)=>`<circle cx="${xS(i)}" cy="${yS(1000/a.avg_speed)}" r="2.5" fill="#f43f5e"/>`).join('')}`;
+  document.getElementById('runPaceLabels').innerHTML=runs.map(a=>`<span>${new Date(aDate(a)).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>`).filter((_,i)=>i%2===0).join('');
+}
+function renderSwimTable(){
+  const swims=activities.filter(isSwim).filter(a=>a.avg_speed>0&&km(a.distance||0)>0.2).slice(0,8),el=document.getElementById('swimTable');
+  if(!swims.length){el.innerHTML='<div class="empty">No swim data yet</div>';return;}
+  const best=Math.min(...swims.map(a=>100/a.avg_speed));
+  el.innerHTML=`<table class="st-tbl"><thead><tr><th>Date</th><th>Dist</th><th>Pace/100m</th><th>Time</th><th>vs Best</th></tr></thead><tbody>${swims.map(a=>{const p=100/a.avg_speed,diff=p-best;return `<tr><td>${new Date(aDate(a)).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</td><td>${fmtKm(a.distance||0)}km</td><td style="color:var(--swim);font-weight:600">${swim100(a.avg_speed)}</td><td>${fmtT(a.moving_time||0)}</td><td style="color:${diff<1?'var(--green)':'var(--text3)'}">${diff<1?'Best':'+'+diff.toFixed(0)+'s'}</td></tr>`;}).join('')}</tbody></table>`;
+}
+function renderCadence(){
+  const runs=activities.filter(isRun).filter(a=>a.avg_cadence>0),el=document.getElementById('cadenceStats');
+  if(!runs.length){el.innerHTML='<div class="empty">No cadence data</div>';return;}
+  const cad=runs.map(a=>a.avg_cadence*2),avg=cad.reduce((s,v)=>s+v,0)/cad.length;
+  const badge=avg>=170?'mb-g':avg>=160?'mb-w':'mb-b',txt=avg>=170?'On target':avg>=160?'Close':'Below';
+  el.innerHTML=`<div class="mr"><span class="mr-n">Avg cadence</span><span class="mr-v">${Math.round(avg)} spm <span class="mb ${badge}">${txt}</span></span></div><div class="mr"><span class="mr-n">Target range</span><span class="mr-v">170–180 spm</span></div><div class="mr"><span class="mr-n">Best</span><span class="mr-v">${Math.round(Math.max(...cad))} spm</span></div><div class="mr"><span class="mr-n">Lowest</span><span class="mr-v">${Math.round(Math.min(...cad))} spm</span></div><div class="mr"><span class="mr-n">Runs analysed</span><span class="mr-v">${runs.length}</span></div>`;
+}
+function renderVolume(){
+  const sw=activities.filter(isSwim).reduce((s,a)=>s+km(a.distance||0),0),bk=activities.filter(isBike).reduce((s,a)=>s+km(a.distance||0),0),rn=activities.filter(isRun).reduce((s,a)=>s+km(a.distance||0),0),tot=sw+bk+rn||1;
+  document.getElementById('volumeSplit').innerHTML=[{l:'Swim',v:sw,c:'var(--swim)'},{l:'Bike',v:bk,c:'var(--bike)'},{l:'Run',v:rn,c:'var(--run)'}].map(d=>{const p=Math.round(d.v/tot*100);return `<div class="vol-bar"><div class="vol-head"><span>${d.l}</span><span style="color:${d.c}">${d.v.toFixed(0)} km · ${p}%</span></div><div class="vol-track"><div class="vol-fill" style="width:${p}%;background:${d.c}"></div></div></div>`;}).join('');
+}
+
+// ── DEBRIEF ──
+function renderDebriefPreview(){
+  const now=new Date(),wk7=activities.filter(a=>(now-aDate(a))/86400000<=7);
+  const sw=wk7.filter(isSwim).reduce((s,a)=>s+km(a.distance||0),0),bk=wk7.filter(isBike).reduce((s,a)=>s+km(a.distance||0),0),rn=wk7.filter(isRun).reduce((s,a)=>s+km(a.distance||0),0);
+  document.getElementById('debriefPreview').innerHTML=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">${[['Sessions',wk7.length,'var(--purple)'],['Swim',sw.toFixed(1)+'km','var(--swim)'],['Bike',bk.toFixed(0)+'km','var(--bike)'],['Run',rn.toFixed(1)+'km','var(--run)']].map(([l,v,c])=>`<div style="text-align:center;padding:11px 4px;background:var(--s2);border-radius:9px"><div style="font-family:var(--fh);font-size:1.1rem;font-weight:700;color:${c}">${v}</div><div style="font-size:.58rem;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.06em">${l}</div></div>`).join('')}</div>`;
+}
+async function generateDebrief(){
+  const btn=document.getElementById('debriefBtn'),out=document.getElementById('debriefOut');
+  btn.disabled=true;btn.innerHTML='<div class="spin"></div> Analysing…';out.classList.remove('show');
+  const now=new Date(),wk7=activities.filter(a=>(now-aDate(a))/86400000<=7);
+  const summary=wk7.map(a=>{const hr=a.average_heartrate?` | HR ${Math.round(a.average_heartrate)}/${Math.round(a.max_heartrate||a.average_heartrate)}bpm`:'';const cad=a.avg_cadence?` | ${Math.round(a.avg_cadence*2)}spm`:'';return `- ${a.sport_type}: ${fmtKm(a.distance||0)}km in ${fmtT(a.moving_time||0)}${hr}${cad}`;}).join('\n')||'- No activities';
+  const wk=curWeek(),bcnD=Math.ceil((BCN_DATE-now)/86400000),comp=weekCompliance();
+  const prompt=`You are a direct expert triathlon coach reviewing Shawn's week. No fluff.
+
+ATHLETE: Ironman Barcelona 4 Oct 2026 (${bcnD}d), Amsterdam Marathon 18 Oct. Week ${wk}/19 (${phaseFor(wk)} phase). Max HR 200. Zones Z1<120 Z2 120-140 Z3 141-160 Z4 161-180 Z5 181+. Bolton 70.3 bike HR 183-187 caused run collapse — pacing is #1 priority. Front crawl from scratch. No road power meter. Maurten-only nutrition. This week compliance: ${comp.matched}/${comp.total} planned sessions, ${comp.alt} bonus sessions.
 
 LAST 7 DAYS:
 ${summary}
 
-Give a structured debrief:
+Structured debrief:
 ### Sessions Completed
-### Key Observations (use specific numbers from the data)
-### Flags & Concerns (be blunt — call out HR breaches, low swim volume, etc)
+### Key Observations (specific numbers)
+### Flags & Concerns (blunt)
 ### Swim Progress
-### Next Week Focus (max 3 actionable points)
+### Next Week Focus (max 3 points)
 
-Max 400 words. Be direct and specific.`;
-  try {
-    const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.error||`Worker error ${r.status}`);
-    const txt=d.content?.[0]?.text||'No response.';
-    out.innerHTML=txt.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/✓/g,'<span class="good">✓</span>').replace(/\n/g,'<br>');
-    out.classList.add('show');
-  } catch(e){
-    out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;
-    out.classList.add('show');
-  }
-  btn.disabled=false;
-  btn.innerHTML='<span>✦</span> Regenerate Debrief';
+Max 400 words.`;
+  try{const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})}),d=await r.json();if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);const t=d.content?.[0]?.text||'No response.';out.innerHTML=t.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/\n/g,'<br>');out.classList.add('show');}catch(e){out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;out.classList.add('show');}
+  btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg> Regenerate Debrief';
 }
 
-// ── NAV ───────────────────────────────────────────
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page'+name).classList.add('active');
-  document.getElementById('nav'+name).classList.add('active');
+// ── MODAL ──
+function openStat(type){
+  const m=document.getElementById('modal'),t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
+  if(type==='streak'){const s=computeStreak();t.innerHTML=`<svg class="ic" style="color:var(--bike)" viewBox="0 0 24 24"><use href="#i-flame"/></svg> ${s}-Week Streak`;b.innerHTML=`You've trained 3+ sessions per week for <strong>${s} consecutive weeks</strong>. Consistency is the single biggest predictor of Ironman success. Keep the streak alive — even a short session counts.`;}
+  else if(type==='compliance'){const c=weekCompliance();t.innerHTML=`<svg class="ic" style="color:var(--green)" viewBox="0 0 24 24"><use href="#i-target"/></svg> ${c.pct}% Compliance`;b.innerHTML=`You've completed <strong>${c.matched} of ${c.total}</strong> planned sessions this week${c.alt?`, plus <strong>${c.alt} bonus session${c.alt>1?'s':''}</strong> beyond the plan`:''}. Compliance measures plan adherence — but extra quality training always counts toward your TriScore too.`;}
+  else if(type==='points'){const p=weekPoints();t.innerHTML=`<svg class="ic" style="color:var(--purple)" viewBox="0 0 24 24"><use href="#i-zap"/></svg> ${p.toLocaleString()} Points`;b.innerHTML=`Points earned this week from all training. Every session counts — swims, bikes, runs, and even alternative work like strength or hiking earn credit based on effort and duration. Higher-value key sessions earn more.`;}
+  m.classList.add('show');
 }
+function closeModal(){document.getElementById('modal').classList.remove('show');}
 
-// ── SETTINGS ──────────────────────────────────────
-function loadSettingsUI() {
-  const el=document.getElementById('setClientId');
-  if(el) el.value=localStorage.getItem('strava_client_id')||'';
-  setBadge('stStatus',!!localStorage.getItem('strava_token'));
-}
-function saveSettings() {
-  const v=document.getElementById('setClientId').value.trim();
-  if(v) localStorage.setItem('strava_client_id',v);
-  const b=document.querySelector('.btn-primary');
-  b.textContent='Saved ✓';setTimeout(()=>b.textContent='Save',1500);
-}
-function setBadge(id,ok) {
-  const el=document.getElementById(id);
-  if(!el)return;
-  el.textContent=ok?'Connected':'Not connected';
-  el.className='s-badge '+(ok?'sb-ok':'sb-no');
-}
-function logout() {
-  if(!confirm('Disconnect Strava?'))return;
-  ['strava_token','strava_refresh','strava_expires'].forEach(k=>localStorage.removeItem(k));
-  stravaToken=null;
-  hide('app');show('authScreen');
-}
+// ── NAV ──
+function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));document.getElementById('page'+name).classList.add('active');const nav=document.getElementById('nav'+name);if(nav)nav.classList.add('active');window.scrollTo(0,0);}
+
+// ── SETTINGS ──
+function loadSettingsUI(){const e=document.getElementById('setClientId');if(e)e.value=localStorage.getItem('strava_client_id')||'';setBadge('stStatus',!!localStorage.getItem('strava_token'));}
+function saveSettings(){const v=document.getElementById('setClientId').value.trim();if(v)localStorage.setItem('strava_client_id',v);const b=event.target;b.textContent='Saved ✓';setTimeout(()=>b.textContent='Save',1500);}
+function setBadge(id,ok){const e=document.getElementById(id);if(!e)return;e.textContent=ok?'Connected':'Not connected';e.className='sbadge '+(ok?'sb-ok':'sb-no');}
+function logout(){if(!confirm('Disconnect Strava?'))return;['strava_token','strava_refresh','strava_expires'].forEach(k=>localStorage.removeItem(k));stravaToken=null;hide('app');show('authScreen');}
 </script>
 </body>
 </html>
