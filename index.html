@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f1e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TriCoach">
+<link rel="manifest" href="manifest.json">
+<title>TriCoach — Shawn</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --bg:        #0a0f1e;
+    --surface:   #111827;
+    --surface2:  #1a2235;
+    --border:    #1e2d45;
+    --swim:      #00c2ff;
+    --bike:      #f59e0b;
+    --run:       #ef4444;
+    --green:     #10b981;
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --accent:    #6366f1;
+    --warning:   #f59e0b;
+    --danger:    #ef4444;
+    --r:         12px;
+    --safe-top:  env(safe-area-inset-top, 0px);
+    --safe-bot:  env(safe-area-inset-bottom, 0px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    min-height: 100dvh;
+    padding-top: var(--safe-top);
+    padding-bottom: calc(64px + var(--safe-bot));
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,15,30,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+  .logo span { color: var(--accent); }
+  .race-pill {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 100px; padding: 4px 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .race-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,15,30,0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding-bottom: var(--safe-bot);
+  }
+  .nav-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 10px 0; background: none; border: none; cursor: pointer;
+    color: var(--muted); font-size: 0.6rem; font-family: 'Inter', sans-serif;
+    font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-btn svg { width: 20px; height: 20px; stroke-width: 1.8; }
+  .nav-btn.active { color: var(--accent); }
+
+  /* ── PAGES ── */
+  .page { display: none; padding: 20px; }
+  .page.active { display: block; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 18px; margin-bottom: 14px;
+  }
+  .card-title {
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+
+  /* ── COUNTDOWN ── */
+  .countdown-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .countdown-item {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; text-align: center;
+  }
+  .countdown-days {
+    font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800;
+    line-height: 1; color: var(--text);
+  }
+  .countdown-days.urgent { color: var(--warning); }
+  .countdown-label { font-size: 0.65rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .countdown-race { font-size: 0.75rem; font-weight: 500; color: var(--text); margin-top: 2px; }
+
+  /* ── WEEK PROGRESS ── */
+  .week-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; }
+  .week-bar-wrap { background: var(--surface2); border-radius: 6px; height: 8px; overflow: hidden; margin-bottom: 4px; }
+  .week-bar { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--accent), var(--swim)); transition: width 0.8s ease; }
+  .week-meta { display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); }
+
+  /* ── DISCIPLINE STATS ── */
+  .disc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .disc-item { text-align: center; }
+  .disc-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 6px; font-size: 1rem;
+  }
+  .disc-icon.swim { background: rgba(0,194,255,0.12); border: 1px solid rgba(0,194,255,0.25); }
+  .disc-icon.bike { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25); }
+  .disc-icon.run  { background: rgba(239,68,68,0.12);  border: 1px solid rgba(239,68,68,0.25); }
+  .disc-value { font-family: 'DM Mono', monospace; font-size: 1.1rem; font-weight: 500; }
+  .disc-value.swim { color: var(--swim); }
+  .disc-value.bike { color: var(--bike); }
+  .disc-value.run  { color: var(--run); }
+  .disc-unit  { font-size: 0.6rem; color: var(--muted); margin-top: 1px; }
+
+  /* ── ACTIVITY LIST ── */
+  .activity-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-badge {
+    width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  }
+  .activity-badge.swim { background: rgba(0,194,255,0.12); }
+  .activity-badge.bike { background: rgba(245,158,11,0.12); }
+  .activity-badge.run  { background: rgba(239,68,68,0.12); }
+  .activity-badge.other { background: rgba(99,102,241,0.12); }
+  .activity-info { flex: 1; min-width: 0; }
+  .activity-name { font-size: 0.82rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .activity-meta { font-size: 0.7rem; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
+  .activity-stat { text-align: right; flex-shrink: 0; }
+  .activity-dist { font-family: 'DM Mono', monospace; font-size: 0.85rem; font-weight: 500; }
+  .activity-time { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+
+  /* ── HR ZONES ── */
+  .zone-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .zone-label { font-size: 0.68rem; color: var(--muted); width: 40px; flex-shrink: 0; font-family: 'DM Mono', monospace; }
+  .zone-bar-wrap { flex: 1; background: var(--surface2); border-radius: 4px; height: 8px; overflow: hidden; }
+  .zone-bar { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .zone-pct { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); width: 32px; text-align: right; }
+  .zone-warn { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; padding: 8px 12px; margin-top: 8px; font-size: 0.72rem; color: var(--danger); display: flex; align-items: center; gap: 6px; }
+
+  /* ── SWIM PROGRESS ── */
+  .swim-trend { display: flex; align-items: flex-end; gap: 6px; height: 60px; margin: 10px 0; }
+  .swim-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; }
+  .swim-bar-inner { flex: 1; width: 100%; display: flex; align-items: flex-end; }
+  .swim-bar-fill { width: 100%; border-radius: 3px 3px 0 0; background: linear-gradient(to top, var(--swim), rgba(0,194,255,0.3)); transition: height 0.8s ease; }
+  .swim-bar-lbl { font-size: 0.55rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  /* ── AI DEBRIEF ── */
+  .debrief-btn {
+    width: 100%; padding: 14px; border-radius: var(--r);
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    border: none; color: white; font-family: 'Syne', sans-serif;
+    font-size: 0.95rem; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: opacity 0.2s; margin-bottom: 14px;
+  }
+  .debrief-btn:active { opacity: 0.85; }
+  .debrief-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .debrief-output {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 18px;
+    font-size: 0.82rem; line-height: 1.7; color: var(--text);
+    white-space: pre-wrap; display: none;
+  }
+  .debrief-output.visible { display: block; }
+  .debrief-output h3 { font-family: 'Syne', sans-serif; font-size: 0.9rem; color: var(--accent); margin-bottom: 8px; margin-top: 16px; }
+  .debrief-output h3:first-child { margin-top: 0; }
+  .debrief-output .flag { color: var(--danger); }
+  .debrief-output .good { color: var(--green); }
+
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RACE PLAN ── */
+  .phase-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .phase-item:last-child { border-bottom: none; }
+  .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .phase-title { font-size: 0.82rem; font-weight: 500; margin-bottom: 3px; }
+  .phase-detail { font-size: 0.72rem; color: var(--muted); line-height: 1.5; font-family: 'DM Mono', monospace; }
+  .phase-flag { font-size: 0.68rem; margin-top: 4px; padding: 2px 8px; border-radius: 100px; display: inline-block; }
+  .phase-flag.warn { background: rgba(245,158,11,0.12); color: var(--warning); }
+  .phase-flag.ok   { background: rgba(16,185,129,0.12); color: var(--green); }
+
+  .nutrition-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    font-size: 0.78rem;
+  }
+  .nutrition-row:last-child { border-bottom: none; }
+  .nutrition-time { font-family: 'DM Mono', monospace; color: var(--muted); font-size: 0.7rem; }
+  .nutrition-pill { font-size: 0.65rem; padding: 2px 8px; border-radius: 100px; font-weight: 500; }
+  .nutrition-pill.maurten { background: rgba(99,102,241,0.15); color: var(--accent); border: 1px solid rgba(99,102,241,0.3); }
+
+  /* ── AUTH ── */
+  .auth-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100dvh; padding: 40px 20px; text-align: center; gap: 20px;
+  }
+  .auth-logo { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; }
+  .auth-logo span { color: var(--accent); }
+  .auth-sub { color: var(--muted); font-size: 0.9rem; max-width: 280px; line-height: 1.6; }
+  .auth-btn {
+    padding: 14px 32px; border-radius: var(--r);
+    background: #FC4C02; border: none; color: white;
+    font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; gap: 10px;
+    transition: opacity 0.2s;
+  }
+  .auth-btn:active { opacity: 0.85; }
+  .auth-note { font-size: 0.72rem; color: var(--muted); max-width: 260px; line-height: 1.5; }
+
+  /* ── SETUP ── */
+  .setup-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; margin-bottom: 10px;
+  }
+  .setup-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .setup-input {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px; color: var(--text);
+    font-family: 'DM Mono', monospace; font-size: 0.8rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .setup-input:focus { border-color: var(--accent); }
+  .setup-note { font-size: 0.68rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+  .save-btn {
+    width: 100%; padding: 13px; border-radius: var(--r);
+    background: var(--accent); border: none; color: white;
+    font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: opacity 0.2s; margin-top: 6px;
+  }
+  .save-btn:active { opacity: 0.85; }
+  .status-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.78rem; }
+  .status-row:last-child { border-bottom: none; }
+  .status-badge { font-size: 0.65rem; padding: 2px 8px; border-radius: 100px; font-weight: 500; }
+  .status-badge.ok   { background: rgba(16,185,129,0.12); color: var(--green); }
+  .status-badge.miss { background: rgba(239,68,68,0.12);  color: var(--danger); }
+
+  /* ── LOADING ── */
+  .loading-screen { display: flex; align-items: center; justify-content: center; min-height: 200px; }
+  .loading-text { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; }
+  .section-sub { font-size: 0.7rem; color: var(--muted); }
+
+  /* ── UTILS ── */
+  .tag { display: inline-block; font-size: 0.62rem; padding: 2px 7px; border-radius: 100px; font-weight: 500; margin-left: 6px; }
+  .tag.new { background: rgba(16,185,129,0.12); color: var(--green); }
+  .mt8 { margin-top: 8px; }
+  .flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen" class="auth-screen" style="display:none">
+  <div class="auth-logo">Tri<span>Coach</span></div>
+  <div class="auth-sub">Your personal Ironman Barcelona training dashboard. Connect Strava to get started.</div>
+  <button class="auth-btn" onclick="stravaAuth()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+    Connect with Strava
+  </button>
+  <div class="auth-note">TriCoach reads your activity data to power the dashboard and AI debrief. No data is stored externally.</div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none">
+  <header>
+    <div class="logo">Tri<span>Coach</span></div>
+    <div class="race-pill"><div class="dot"></div><span id="headerCountdown">— days</span></div>
+  </header>
+
+  <!-- DASHBOARD PAGE -->
+  <div id="pageDash" class="page active">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Dashboard</div>
+        <div class="section-sub" id="weekLabel">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Race Countdown -->
+    <div class="card">
+      <div class="card-title">Race Countdown</div>
+      <div class="countdown-grid">
+        <div class="countdown-item">
+          <div class="countdown-days" id="bcnDays">—</div>
+          <div class="countdown-label">days to go</div>
+          <div class="countdown-race">🏊 Ironman Barcelona</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-days" id="amdDays">—</div>
+          <div class="countdown-label">days to go</div>
+          <div class="countdown-race">🏃 Amsterdam Marathon</div>
+        </div>
+      </div>
+      <div class="week-label" id="planWeekLabel">Week — of 19</div>
+      <div class="week-bar-wrap"><div class="week-bar" id="planBar" style="width:0%"></div></div>
+      <div class="week-meta"><span>Start</span><span id="planPct">0%</span><span>Race Day</span></div>
+    </div>
+
+    <!-- This Week -->
+    <div class="card">
+      <div class="card-title">This Week — Volume</div>
+      <div class="disc-grid">
+        <div class="disc-item">
+          <div class="disc-icon swim">🏊</div>
+          <div class="disc-value swim" id="weekSwim">—</div>
+          <div class="disc-unit">km swim</div>
+        </div>
+        <div class="disc-item">
+          <div class="disc-icon bike">🚴</div>
+          <div class="disc-value bike" id="weekBike">—</div>
+          <div class="disc-unit">km bike</div>
+        </div>
+        <div class="disc-item">
+          <div class="disc-icon run">🏃</div>
+          <div class="disc-value run" id="weekRun">—</div>
+          <div class="disc-unit">km run</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="card">
+      <div class="card-title">Recent Sessions</div>
+      <div id="recentActivities">
+        <div class="loading-screen"><div class="loading-text"><div class="spinner"></div>Loading Strava data…</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANALYTICS PAGE -->
+  <div id="pageAnalytics" class="page">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Analytics</div>
+        <div class="section-sub">Last 30 days</div>
+      </div>
+    </div>
+
+    <!-- HR Zone Distribution -->
+    <div class="card">
+      <div class="card-title">HR Zone Distribution — Runs</div>
+      <div id="hrZones">
+        <div class="loading-screen"><div class="loading-text"><div class="spinner"></div>Calculating…</div></div>
+      </div>
+    </div>
+
+    <!-- Swim Trend -->
+    <div class="card">
+      <div class="card-title">Swim Distance Trend</div>
+      <div class="swim-trend" id="swimTrend"></div>
+      <div id="swimStats" style="font-size:0.75rem; color:var(--muted); margin-top:6px"></div>
+    </div>
+
+    <!-- Run Volume -->
+    <div class="card">
+      <div class="card-title">Weekly Run Volume</div>
+      <div class="swim-trend" id="runTrend"></div>
+      <div id="runStats" style="font-size:0.75rem; color:var(--muted); margin-top:6px"></div>
+    </div>
+
+    <!-- Bike Volume -->
+    <div class="card">
+      <div class="card-title">Weekly Bike Volume</div>
+      <div class="swim-trend" id="bikeTrend"></div>
+    </div>
+  </div>
+
+  <!-- AI DEBRIEF PAGE -->
+  <div id="pageDebrief" class="page">
+    <div class="section-head">
+      <div>
+        <div class="section-title">AI Debrief</div>
+        <div class="section-sub">Weekly coaching review</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">Claude Project Link</div>
+      <div style="font-size:0.78rem; color:var(--muted); line-height:1.6; margin-bottom:12px">
+        The debrief below uses your last 7 days of Strava data. For deeper coaching, open your Triathlon Coach project in Claude — it has your full training plan, Bolton race data, and Barcelona targets.
+      </div>
+      <a href="https://claude.ai/projects" target="_blank" style="display:block; text-align:center; padding:11px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; color:var(--accent); font-size:0.82rem; font-weight:500; text-decoration:none;">
+        Open Triathlon Coach Project →
+      </a>
+    </div>
+
+    <button class="debrief-btn" id="debriefBtn" onclick="generateDebrief()">
+      <span>✦</span> Generate Weekly Debrief
+    </button>
+
+    <div class="debrief-output" id="debriefOutput"></div>
+  </div>
+
+  <!-- RACE PLAN PAGE -->
+  <div id="pageRace" class="page">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Barcelona Plan</div>
+        <div class="section-sub">4 October 2026 · Full Ironman</div>
+      </div>
+    </div>
+
+    <!-- Execution Strategy -->
+    <div class="card">
+      <div class="card-title">Race Execution Strategy</div>
+      <div class="phase-item">
+        <div class="phase-dot" style="background:var(--swim)"></div>
+        <div>
+          <div class="phase-title">Swim — 3.8km</div>
+          <div class="phase-detail">Front crawl target. Seed conservatively.<br>Sight every 6–8 strokes. No sprint start.</div>
+          <div class="phase-flag ok">Target: sub 1:30:00</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-dot" style="background:var(--bike)"></div>
+        <div>
+          <div class="phase-title">Bike — 180km</div>
+          <div class="phase-detail">HR cap: 155–158bpm. First 90km: hold back.<br>No surges. Power target: ~190–200W avg.<br>Bolton lesson: DO NOT push HR 183+ bpm.</div>
+          <div class="phase-flag warn">⚠ Pacing discipline is your #1 risk</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-dot" style="background:var(--run)"></div>
+        <div>
+          <div class="phase-title">Run — 42.2km</div>
+          <div class="phase-detail">Start at HR 150–155bpm. Don't chase pace.<br>Barcelona heat (22–26°C) — slow first 10km.<br>Walk aid stations, ice in kit.</div>
+          <div class="phase-flag warn">⚠ Heat management critical</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nutrition Plan -->
+    <div class="card">
+      <div class="card-title">Nutrition Protocol — Maurten Only</div>
+      <div class="nutrition-row">
+        <div>
+          <div style="font-size:0.78rem;font-weight:500">Pre-race (T-3hrs)</div>
+          <div class="nutrition-time">Maurten Drink Mix 320</div>
+        </div>
+        <span class="nutrition-pill maurten">Maurten</span>
+      </div>
+      <div class="nutrition-row">
+        <div>
+          <div style="font-size:0.78rem;font-weight:500">Bike — every 30 min</div>
+          <div class="nutrition-time">Gel 100 or Gel 160 (CAF at 4–5hr mark)</div>
+        </div>
+        <span class="nutrition-pill maurten">Maurten</span>
+      </div>
+      <div class="nutrition-row">
+        <div>
+          <div style="font-size:0.78rem;font-weight:500">Run — every 20–25 min</div>
+          <div class="nutrition-time">Gel 100 + water at every aid station</div>
+        </div>
+        <span class="nutrition-pill maurten">Maurten</span>
+      </div>
+      <div class="nutrition-row">
+        <div>
+          <div style="font-size:0.78rem;font-weight:500">⚠ No mixed sources</div>
+          <div class="nutrition-time">Bolton GI failure: dried mango + Maurten</div>
+        </div>
+        <span class="nutrition-pill" style="background:rgba(239,68,68,0.12);color:var(--danger);border:1px solid rgba(239,68,68,0.2)">Never again</span>
+      </div>
+    </div>
+
+    <!-- Amsterdam note -->
+    <div class="card">
+      <div class="card-title">Amsterdam Marathon — 18 Oct 2026</div>
+      <div style="font-size:0.78rem; color:var(--muted); line-height:1.6">
+        14 days post-Barcelona. Treat as a supported long training run unless recovery is exceptional. No racing ego. HR cap 160bpm, walk if needed. Hotel: Lion d'Or, Haarlem (15–20 Oct).
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PAGE -->
+  <div id="pageSettings" class="page">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Settings</div>
+        <div class="section-sub">API keys &amp; connections</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Connection Status</div>
+      <div class="status-row">
+        <span>Strava</span>
+        <span class="status-badge" id="stravaStatus">Checking…</span>
+      </div>
+      <div class="status-row">
+        <span>Claude AI (for Debrief)</span>
+        <span class="status-badge" id="claudeStatus">Not set</span>
+      </div>
+    </div>
+
+    <div class="setup-card">
+      <div class="setup-label">Strava Client ID</div>
+      <input class="setup-input" id="inputClientId" placeholder="e.g. 123456" />
+      <div class="setup-note">From your Strava API application at strava.com/settings/api</div>
+    </div>
+
+    <div class="setup-card">
+      <div class="setup-label">Strava Client Secret</div>
+      <input class="setup-input" id="inputClientSecret" type="password" placeholder="Your client secret" />
+    </div>
+
+    <div class="setup-card">
+      <div class="setup-label">Claude API Key</div>
+      <input class="setup-input" id="inputClaudeKey" type="password" placeholder="sk-ant-…" />
+      <div class="setup-note">Used only for the AI weekly debrief. Get yours at console.anthropic.com</div>
+    </div>
+
+    <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+
+    <div style="margin-top:20px"></div>
+
+    <div class="card">
+      <div class="card-title">About</div>
+      <div style="font-size:0.75rem; color:var(--muted); line-height:1.7">
+        TriCoach PWA — built for Ironman Barcelona 2026.<br>
+        All data stays on your device. Strava OAuth tokens stored in localStorage.<br><br>
+        <strong style="color:var(--text)">To install on Android:</strong><br>
+        Open in Chrome → tap ⋮ menu → "Add to Home screen"
+      </div>
+    </div>
+
+    <button class="save-btn" style="background:rgba(239,68,68,0.15);color:var(--danger);border:1px solid rgba(239,68,68,0.2);margin-top:10px" onclick="logout()">
+      Disconnect Strava
+    </button>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav>
+    <button class="nav-btn active" id="navDash" onclick="showPage('Dash')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dash
+    </button>
+    <button class="nav-btn" id="navAnalytics" onclick="showPage('Analytics')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Analytics
+    </button>
+    <button class="nav-btn" id="navDebrief" onclick="showPage('Debrief')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Debrief
+    </button>
+    <button class="nav-btn" id="navRace" onclick="showPage('Race')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Race
+    </button>
+    <button class="nav-btn" id="navSettings" onclick="showPage('Settings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </button>
+  </nav>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONFIG — fill these in Settings or hardcode for dev
+// ─────────────────────────────────────────────
+const STRAVA_REDIRECT = window.location.origin + window.location.pathname;
+const BCN_DATE = new Date('2026-10-04');
+const AMD_DATE = new Date('2026-10-18');
+const PLAN_START = new Date('2026-06-16'); // Week 1 start (post-Bolton)
+const PLAN_WEEKS = 19;
+
+// HR Zones (from Strava — manual, max 200bpm)
+const HR_ZONES = [
+  { label: 'Z1', min: 0,   max: 119, color: '#10b981' },
+  { label: 'Z2', min: 120, max: 140, color: '#3b82f6' },
+  { label: 'Z3', min: 141, max: 160, color: '#f59e0b' },
+  { label: 'Z4', min: 161, max: 180, color: '#f97316' },
+  { label: 'Z5', min: 181, max: 999, color: '#ef4444' },
+];
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let stravaToken = null;
+let allActivities = [];
+let settings = {};
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+window.addEventListener('load', async () => {
+  loadSettings();
+  handleOAuthCallback();
+  stravaToken = localStorage.getItem('strava_token');
+
+  if (!stravaToken) {
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  } else {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    updateCountdowns();
+    await loadStravaData();
+  }
+});
+
+// ─────────────────────────────────────────────
+// STRAVA OAUTH
+// ─────────────────────────────────────────────
+function stravaAuth() {
+  const clientId = settings.clientId || localStorage.getItem('strava_client_id');
+  if (!clientId) {
+    alert('Please set your Strava Client ID in Settings first.');
+    return;
+  }
+  const scope = 'read,activity:read_all';
+  const url = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(STRAVA_REDIRECT)}&response_type=code&scope=${scope}`;
+  window.location.href = url;
+}
+
+function handleOAuthCallback() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  if (!code) return;
+
+  // Clean URL
+  window.history.replaceState({}, document.title, window.location.pathname);
+
+  const clientId = localStorage.getItem('strava_client_id');
+  const clientSecret = localStorage.getItem('strava_client_secret');
+
+  if (!clientId || !clientSecret) {
+    alert('Strava Client ID and Secret needed. Please set them in Settings, then reconnect.');
+    return;
+  }
+
+  fetch('https://www.strava.com/oauth/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_id: clientId,
+      client_secret: clientSecret,
+      code: code,
+      grant_type: 'authorization_code'
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.access_token) {
+      localStorage.setItem('strava_token', data.access_token);
+      localStorage.setItem('strava_refresh', data.refresh_token);
+      localStorage.setItem('strava_expires', data.expires_at);
+      stravaToken = data.access_token;
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      updateCountdowns();
+      loadStravaData();
+    }
+  })
+  .catch(e => console.error('OAuth error', e));
+}
+
+async function refreshIfNeeded() {
+  const exp = parseInt(localStorage.getItem('strava_expires') || '0');
+  if (Date.now() / 1000 < exp - 300) return;
+  const clientId = localStorage.getItem('strava_client_id');
+  const clientSecret = localStorage.getItem('strava_client_secret');
+  const refresh = localStorage.getItem('strava_refresh');
+  if (!clientId || !clientSecret || !refresh) return;
+  const r = await fetch('https://www.strava.com/oauth/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, refresh_token: refresh, grant_type: 'refresh_token' })
+  }).then(r => r.json());
+  if (r.access_token) {
+    localStorage.setItem('strava_token', r.access_token);
+    localStorage.setItem('strava_refresh', r.refresh_token);
+    localStorage.setItem('strava_expires', r.expires_at);
+    stravaToken = r.access_token;
+  }
+}
+
+// ─────────────────────────────────────────────
+// STRAVA DATA
+// ─────────────────────────────────────────────
+async function fetchActivities(after) {
+  await refreshIfNeeded();
+  const url = `https://www.strava.com/api/v3/athlete/activities?per_page=100&after=${after}`;
+  const r = await fetch(url, { headers: { Authorization: `Bearer ${stravaToken}` } });
+  if (!r.ok) throw new Error('Strava fetch failed');
+  return r.json();
+}
+
+async function loadStravaData() {
+  try {
+    const ninetyDaysAgo = Math.floor(Date.now() / 1000) - 90 * 86400;
+    const activities = await fetchActivities(ninetyDaysAgo);
+    allActivities = activities;
+    renderDashboard();
+    renderAnalytics();
+    updateStatusBadge('stravaStatus', true);
+  } catch (e) {
+    console.error(e);
+    updateStatusBadge('stravaStatus', false);
+  }
+}
+
+// ─────────────────────────────────────────────
+// COUNTDOWNS
+// ─────────────────────────────────────────────
+function updateCountdowns() {
+  const now = new Date();
+  const bcnDays = Math.ceil((BCN_DATE - now) / 86400000);
+  const amdDays = Math.ceil((AMD_DATE - now) / 86400000);
+  const planDays = Math.floor((now - PLAN_START) / 86400000);
+  const planTotal = PLAN_WEEKS * 7;
+  const pct = Math.min(100, Math.max(0, (planDays / planTotal) * 100));
+  const week = Math.max(1, Math.min(PLAN_WEEKS, Math.ceil(planDays / 7)));
+
+  document.getElementById('bcnDays').textContent = bcnDays;
+  document.getElementById('amdDays').textContent = amdDays;
+  document.getElementById('headerCountdown').textContent = `BCN ${bcnDays}d`;
+  document.getElementById('planWeekLabel').textContent = `Week ${week} of ${PLAN_WEEKS}`;
+  document.getElementById('planBar').style.width = pct + '%';
+  document.getElementById('planPct').textContent = Math.round(pct) + '%';
+  document.getElementById('weekLabel').textContent = `Week ${week} of ${PLAN_WEEKS} · ${now.toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'short' })}`;
+  if (bcnDays < 30) document.getElementById('bcnDays').classList.add('urgent');
+}
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+function sportEmoji(type) {
+  if (!type) return '⚡';
+  const t = type.toLowerCase();
+  if (t.includes('swim')) return '🏊';
+  if (t.includes('ride') || t.includes('virtual')) return '🚴';
+  if (t.includes('run')) return '🏃';
+  return '⚡';
+}
+function sportClass(type) {
+  if (!type) return 'other';
+  const t = type.toLowerCase();
+  if (t.includes('swim')) return 'swim';
+  if (t.includes('ride') || t.includes('virtual')) return 'bike';
+  if (t.includes('run')) return 'run';
+  return 'other';
+}
+function fmtDist(m, type) {
+  const km = m / 1000;
+  return km.toFixed(km < 10 ? 1 : 0) + ' km';
+}
+function fmtTime(s) {
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+function fmtDate(iso) {
+  return new Date(iso).toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
+}
+function weekStart(date) {
+  const d = new Date(date);
+  d.setHours(0,0,0,0);
+  d.setDate(d.getDate() - d.getDay() + 1);
+  return d;
+}
+function isSameWeek(d1, d2) {
+  return weekStart(d1).getTime() === weekStart(d2).getTime();
+}
+
+// ─────────────────────────────────────────────
+// DASHBOARD
+// ─────────────────────────────────────────────
+function renderDashboard() {
+  const now = new Date();
+  const thisWeek = allActivities.filter(a => isSameWeek(new Date(a.start_date_local || a.start_local || a.start_date), now));
+
+  let swimKm = 0, bikeKm = 0, runKm = 0;
+  thisWeek.forEach(a => {
+    const type = (a.sport_type || '').toLowerCase();
+    const km = (a.distance || 0) / 1000;
+    if (type.includes('swim')) swimKm += km;
+    else if (type.includes('ride')) bikeKm += km;
+    else if (type.includes('run')) runKm += km;
+  });
+  document.getElementById('weekSwim').textContent = swimKm.toFixed(1);
+  document.getElementById('weekBike').textContent = bikeKm.toFixed(0);
+  document.getElementById('weekRun').textContent = runKm.toFixed(1);
+
+  // Recent 8
+  const recent = allActivities.slice(0, 8);
+  const container = document.getElementById('recentActivities');
+  if (!recent.length) { container.innerHTML = '<div style="font-size:0.78rem;color:var(--muted);text-align:center;padding:20px">No recent activities</div>'; return; }
+  container.innerHTML = recent.map(a => {
+    const type = a.sport_type || '';
+    const cls = sportClass(type);
+    const emoji = sportEmoji(type);
+    const km = fmtDist(a.distance || 0, type);
+    const t = fmtTime(a.moving_time || a.elapsed_time || 0);
+    const date = fmtDate(a.start_date_local || a.start_local || a.start_date);
+    const name = a.name || type;
+    return `
+      <div class="activity-item">
+        <div class="activity-badge ${cls}">${emoji}</div>
+        <div class="activity-info">
+          <div class="activity-name">${name}</div>
+          <div class="activity-meta">${date}</div>
+        </div>
+        <div class="activity-stat">
+          <div class="activity-dist" style="color:var(--${cls === 'bike' ? 'bike' : cls === 'swim' ? 'swim' : cls === 'run' ? 'run' : 'text'})">${km}</div>
+          <div class="activity-time">${t}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────
+// ANALYTICS
+// ─────────────────────────────────────────────
+function renderAnalytics() {
+  renderHRZones();
+  renderSwimTrend();
+  renderRunTrend();
+  renderBikeTrend();
+}
+
+function renderHRZones() {
+  // Use relative_effort as proxy since we don't have streams here
+  const runs = allActivities.filter(a => (a.sport_type||'').toLowerCase().includes('run') && a.average_heartrate);
+  const container = document.getElementById('hrZones');
+  if (!runs.length) {
+    container.innerHTML = '<div style="font-size:0.75rem;color:var(--muted)">No HR data available. Ensure your Garmin syncs HR to Strava.</div>';
+    return;
+  }
+  // Bucket avg HR into zones
+  const counts = [0, 0, 0, 0, 0];
+  runs.forEach(a => {
+    const hr = a.average_heartrate;
+    const zi = HR_ZONES.findIndex(z => hr >= z.min && hr <= z.max);
+    if (zi >= 0) counts[zi]++;
+  });
+  const total = counts.reduce((a,b) => a+b, 0) || 1;
+  const z5pct = Math.round(counts[4] / total * 100);
+
+  container.innerHTML = HR_ZONES.map((z, i) => {
+    const pct = Math.round(counts[i] / total * 100);
+    return `
+      <div class="zone-row">
+        <div class="zone-label">${z.label}</div>
+        <div class="zone-bar-wrap"><div class="zone-bar" style="width:${pct}%;background:${z.color}"></div></div>
+        <div class="zone-pct">${pct}%</div>
+      </div>`;
+  }).join('') + (z5pct > 20 ? `<div class="zone-warn">⚠ ${z5pct}% of runs in Z5 — Bolton risk. Slow down.</div>` : '');
+}
+
+function getWeeklyTotals(sportFilter, weeks = 8) {
+  const labels = [];
+  const totals = [];
+  for (let i = weeks - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i * 7);
+    const ws = weekStart(d);
+    const we = new Date(ws); we.setDate(we.getDate() + 6);
+    const label = ws.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+    const total = allActivities
+      .filter(a => {
+        const type = (a.sport_type || '').toLowerCase();
+        const date = new Date(a.start_date_local || a.start_local || a.start_date);
+        return sportFilter(type) && date >= ws && date <= we;
+      })
+      .reduce((sum, a) => sum + (a.distance || 0) / 1000, 0);
+    labels.push(label);
+    totals.push(total);
+  }
+  return { labels, totals };
+}
+
+function renderTrend(containerId, { labels, totals }, colorVar, unit) {
+  const max = Math.max(...totals) || 1;
+  const container = document.getElementById(containerId);
+  container.innerHTML = totals.map((val, i) => {
+    const h = Math.max(4, (val / max) * 100);
+    return `
+      <div class="swim-bar-col">
+        <div class="swim-bar-inner">
+          <div class="swim-bar-fill" style="height:${h}%;background:linear-gradient(to top, ${colorVar}, ${colorVar}44)"></div>
+        </div>
+        <div class="swim-bar-lbl">${labels[i].split(' ')[0]}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderSwimTrend() {
+  const data = getWeeklyTotals(t => t.includes('swim'));
+  renderTrend('swimTrend', data, 'var(--swim)', 'km');
+  const total = data.totals.reduce((a,b)=>a+b,0);
+  const sessions = allActivities.filter(a => (a.sport_type||'').toLowerCase().includes('swim')).length;
+  document.getElementById('swimStats').textContent = `${sessions} sessions · ${total.toFixed(1)}km total (last 8 weeks)`;
+}
+
+function renderRunTrend() {
+  const data = getWeeklyTotals(t => t.includes('run'));
+  renderTrend('runTrend', data, 'var(--run)', 'km');
+  const total = data.totals.reduce((a,b)=>a+b,0);
+  document.getElementById('runStats').textContent = `${total.toFixed(0)}km total over last 8 weeks`;
+}
+
+function renderBikeTrend() {
+  const data = getWeeklyTotals(t => t.includes('ride'));
+  renderTrend('bikeTrend', data, 'var(--bike)', 'km');
+}
+
+// ─────────────────────────────────────────────
+// AI DEBRIEF
+// ─────────────────────────────────────────────
+async function generateDebrief() {
+  const apiKey = localStorage.getItem('claude_api_key');
+  if (!apiKey) {
+    alert('Add your Claude API key in Settings to use the AI debrief.');
+    return;
+  }
+
+  const btn = document.getElementById('debriefBtn');
+  const output = document.getElementById('debriefOutput');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Analysing your week…';
+  output.style.display = 'none';
+
+  // Build week summary for Claude
+  const now = new Date();
+  const weekActs = allActivities.filter(a => isSameWeek(new Date(a.start_date_local || a.start_local || a.start_date), now));
+  const prev7 = allActivities.filter(a => {
+    const d = new Date(a.start_date_local || a.start_local || a.start_date);
+    const diff = (now - d) / 86400000;
+    return diff <= 7;
+  });
+
+  const actSummary = prev7.map(a => {
+    const type = a.sport_type || 'Unknown';
+    const km = ((a.distance||0)/1000).toFixed(1);
+    const time = fmtTime(a.moving_time || a.elapsed_time || 0);
+    const hr = a.average_heartrate ? ` | Avg HR: ${Math.round(a.average_heartrate)}bpm` : '';
+    const maxHr = a.max_heartrate ? ` | Max HR: ${Math.round(a.max_heartrate)}bpm` : '';
+    const effort = a.relative_effort ? ` | Effort: ${a.relative_effort}` : '';
+    return `- ${type}: ${km}km in ${time}${hr}${maxHr}${effort}`;
+  }).join('\n') || '- No activities logged this week';
+
+  const today = now.toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long' });
+  const planDays = Math.floor((now - PLAN_START) / 86400000);
+  const week = Math.max(1, Math.ceil(planDays / 7));
+  const bcnDays = Math.ceil((BCN_DATE - now) / 86400000);
+
+  const prompt = `You are a direct, expert triathlon coach reviewing Shawn's training week. Be honest and specific — no fluff.
+
+ATHLETE CONTEXT:
+- Training for Ironman Barcelona (4 Oct 2026, ${bcnDays} days away) and Amsterdam Marathon (18 Oct 2026)
+- Currently Week ${week} of 19 (base/build phase)
+- Max HR: 200bpm. HR Zones: Z1<120, Z2 120-140, Z3 141-160, Z4 161-180, Z5 181+
+- Known risk: bike pacing too aggressive (ran HR 183-187bpm at Bolton 70.3, caused run collapse)
+- Primary limiters: swim technique (front crawl from scratch), run CV capacity
+- Nutrition rule: Maurten-only on race day (GI failure at Bolton from mixed sources)
+- Tuesday = swim drills with coach (fixed), Saturday = parkrun + swim (fixed)
+- No road power meter (Kickr Core only for turbo)
+
+LAST 7 DAYS ACTIVITIES:
+${actSummary}
+
+TODAY: ${today}
+
+Provide a structured weekly debrief with these sections:
+1. Sessions completed (what was done)
+2. Key observations (HR discipline, pacing, volume — be specific with numbers)
+3. Any flags or concerns (call out anything worrying immediately)
+4. Swim progress note
+5. Focus for next week (2-3 specific things only)
+
+Format each section with a header like "### Section Name". Be direct. Maximum 350 words.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await resp.json();
+    const text = data.content?.[0]?.text || 'No response received.';
+    output.innerHTML = formatDebrief(text);
+    output.style.display = 'block';
+    updateStatusBadge('claudeStatus', true);
+  } catch(e) {
+    output.innerHTML = `<span style="color:var(--danger)">Error: ${e.message}. Check your API key in Settings.</span>`;
+    output.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>✦</span> Regenerate Debrief';
+}
+
+function formatDebrief(text) {
+  return text
+    .replace(/### (.+)/g, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/⚠[️]?/g, '<span class="flag">⚠</span>')
+    .replace(/✓/g, '<span class="good">✓</span>')
+    .replace(/\n/g, '<br>');
+}
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page' + name).classList.add('active');
+  document.getElementById('nav' + name).classList.add('active');
+}
+
+// ─────────────────────────────────────────────
+// SETTINGS
+// ─────────────────────────────────────────────
+function loadSettings() {
+  settings.clientId = localStorage.getItem('strava_client_id') || '';
+  settings.claudeKey = localStorage.getItem('claude_api_key') || '';
+  const ci = document.getElementById('inputClientId');
+  const cc = document.getElementById('inputClaudeKey');
+  if (ci) ci.value = settings.clientId;
+  if (cc) cc.value = settings.claudeKey ? '••••••••' : '';
+}
+
+function saveSettings() {
+  const clientId = document.getElementById('inputClientId').value.trim();
+  const clientSecret = document.getElementById('inputClientSecret').value.trim();
+  const claudeKey = document.getElementById('inputClaudeKey').value.trim();
+  if (clientId) localStorage.setItem('strava_client_id', clientId);
+  if (clientSecret) localStorage.setItem('strava_client_secret', clientSecret);
+  if (claudeKey && !claudeKey.startsWith('••')) localStorage.setItem('claude_api_key', claudeKey);
+
+  const btn = document.querySelector('.save-btn');
+  btn.textContent = 'Saved ✓';
+  setTimeout(() => btn.textContent = 'Save Settings', 1500);
+  updateStatusBadge('claudeStatus', !!localStorage.getItem('claude_api_key'));
+}
+
+function updateStatusBadge(id, ok) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = ok ? 'Connected' : 'Not connected';
+  el.className = 'status-badge ' + (ok ? 'ok' : 'miss');
+}
+
+function logout() {
+  if (!confirm('Disconnect Strava? You will need to reconnect.')) return;
+  ['strava_token','strava_refresh','strava_expires'].forEach(k => localStorage.removeItem(k));
+  stravaToken = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
+}
+</script>
+</body>
+</html>
