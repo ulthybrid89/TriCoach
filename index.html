@@ -1316,9 +1316,9 @@ function renderAchievements(){
   // Display
   const el=document.getElementById('achievementsGrid');
   if(achievements.length===0){
-    el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text3);font-size:.78rem">Keep training to unlock achievements!</div>';
+    el.innerHTML='<div style="grid-column:1 / -1;text-align:center;padding:20px;color:var(--text3);font-size:.78rem">Keep training to unlock achievements!</div>';
   }else{
-    el.innerHTML=achievements.map(a=>`<div style="background:var(--s2);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px;text-align:center"><div style="font-size:2rem;margin-bottom:6px">${a.icon}</div><div style="font-size:.75rem;font-weight:600;color:${a.color};margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">${a.label}</div><div style="font-size:.7rem;color:var(--text2)">${a.desc}</div></div>`).join('');
+    el.innerHTML=achievements.map(a=>'<div style="background:var(--s2);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px;text-align:center"><div style="font-size:2rem;margin-bottom:6px">'+a.icon+'</div><div style="font-size:.75rem;font-weight:600;color:'+a.color+';margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">'+a.label+'</div><div style="font-size:.7rem;color:var(--text2)">'+a.desc+'</div></div>').join('');
   }
 }
 
