@@ -853,8 +853,9 @@ const wkOf=d=>{const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-x.g
 const sameWk=(a,b)=>wkOf(a).getTime()===wkOf(b).getTime();
 const useIcon=a=>isSwim(a)?'i-waves':isBike(a)?'i-bike':isRun(a)?'i-run':'i-zap';
 const clsOf=a=>isSwim(a)?'sw':isBike(a)?'bk':isRun(a)?'rn':'ot';
-const fmtPace=ms=>{if(!ms||ms<=0)return'—';const s=1000/ms,m=Math.floor(s/60);return `${m}:${Math.round(s%60).toString().padStart(2,'0')}`;};
-const swim100=ms=>{if(!ms||ms<=0)return'—';const s=100/ms,m=Math.floor(s/60);return `${m}:${Math.round(s%60).toString().padStart(2,'0')}`;};
+const fmtPace=ms=>{if(!ms||ms<=0)return'—';const tot=Math.round(1000/ms);const m=Math.floor(tot/60);return `${m}:${(tot%60).toString().padStart(2,'0')}`;};
+const swim100=ms=>{if(!ms||ms<=0)return'—';const tot=Math.round(100/ms);const m=Math.floor(tot/60);return `${m}:${(tot%60).toString().padStart(2,'0')}`;};
+
 const curWeek=()=>Math.max(1,Math.min(PLAN_WEEKS,Math.ceil((new Date()-PLAN_START)/86400000/7)));
 
 // ── SESSION POINTS ENGINE ──
@@ -1673,18 +1674,26 @@ function computeFitnessScore(filter, opts={}){
     if(speeds.length>=2){
       const earlier=speeds.slice(-3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length);
       const recent=speeds.slice(0,3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length);
-      paceScore=Math.min(20,Math.max(0,(recent-earlier)/earlier*200+10));
-      const pctChg=((recent-earlier)/earlier*100);
-      paceTrend=pctChg>0?`+${pctChg.toFixed(1)}% faster`:pctChg<0?`${pctChg.toFixed(1)}% slower`:'Stable';
-    } else paceScore=10;
-  } else paceScore=opts.paceCheck?10:20;
+      const pctChg=(recent-earlier)/earlier*100;
+      // Stable = 8/20, improving = up to 20/20, declining = down to 0/20
+      paceScore=Math.min(20,Math.max(0,pctChg*4+8));
+      paceTrend=pctChg>1?`+${pctChg.toFixed(1)}% faster`:pctChg<-1?`${pctChg.toFixed(1)}% slower`:'Stable';
+    } else paceScore=5; // only 1 session — not enough data, give minimal credit
+  } else if(opts.paceCheck){
+    paceScore=0; // no data at all
+    paceTrend='No data';
+  } else {
+    paceScore=10; // discipline doesn't use pace metric — neutral half-credit
+  }
   let hrScore=0,hrDetail='N/A';
   if(opts.hrCheck){
-    const runs=last28All.filter(a=>a.average_heartrate);
-    const z12=runs.filter(a=>a.average_heartrate<=160).length;
-    hrScore=runs.length?Math.min(15,(z12/runs.length)*15):7;
-    hrDetail=runs.length?`${Math.round(z12/runs.length*100)}% in Z1–Z3`:'No HR data';
-  } else hrScore=15;
+    const hrRuns=last28All.filter(a=>a.average_heartrate);
+    const z12=hrRuns.filter(a=>a.average_heartrate<=160).length;
+    hrScore=hrRuns.length?Math.min(15,(z12/hrRuns.length)*15):0; // no data = 0, not 7
+    hrDetail=hrRuns.length?`${Math.round(z12/hrRuns.length*100)}% in Z1–Z3`:'No HR data';
+  } else {
+    hrScore=7; // discipline doesn't track HR discipline — neutral half-credit
+  }
   const total=Math.min(100,Math.round(volScore+consScore+paceScore+hrScore));
   return {
     total,
@@ -1706,39 +1715,78 @@ function renderFitnessScores(){
     {d:swim,c:'sw',l:'Swim',col:'var(--swim)'},
     {d:bike,c:'bk',l:'Bike',col:'var(--bike)'},
     {d:run,c:'rn',l:'Run',col:'var(--run)'},
-    {d:overall,c:'ov',l:'Overall',col:'var(--purple)',noBreakdown:true},
+    {d:overall,c:'ov',l:'Overall',col:'var(--purple)'},
   ];
-  el.innerHTML=scores.map(({d,c,l,col,noBreakdown})=>`
-    <div class="fit-card ${c}" style="cursor:${noBreakdown?'default':'pointer'}" onclick="${noBreakdown?'':` openFitnessBreakdown('${l}')`}">
+  el.innerHTML=scores.map(({d,c,l,col})=>`
+    <div class="fit-card ${c}" style="cursor:pointer" onclick="openFitnessBreakdown('${l}')">
       <div class="fit-score ${c}">${d.total}</div>
       <div class="fit-label">${l} Fitness</div>
       <div class="fit-bar"><div class="fit-bar-fill" style="width:${d.total}%;background:${col}"></div></div>
-      <div class="fit-desc">${scoreLabel(d.total)}${noBreakdown?'':' · tap for details'}</div>
+      <div class="fit-desc">${scoreLabel(d.total)} · tap for details</div>
     </div>`).join('');
-  // Store for modal use
-  window._fitnessScores={swim,bike,run};
+  window._fitnessScores={swim,bike,run,overall};
 }
 function openFitnessBreakdown(label){
-  const map={Swim:window._fitnessScores?.swim,Bike:window._fitnessScores?.bike,Run:window._fitnessScores?.run};
-  const d=map[label];if(!d)return;
-  const opts={Swim:{volTarget:20,sessTarget:2},Bike:{volTarget:200,sessTarget:2.5},Run:{volTarget:50,sessTarget:3}};
-  const col={Swim:'var(--swim)',Bike:'var(--bike)',Run:'var(--run)'}[label];
+  const fs=window._fitnessScores;if(!fs)return;
   const t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
   _openActivityId=null;
-  t.innerHTML=`<span style="color:${col};font-family:var(--fh)">${label} Fitness Score — ${d.total}/100</span>`;
+  const scoreLabel=s=>s>=80?'Race Ready':s>=65?'Strong':s>=50?'Building':s>=35?'Developing':'Early';
+
+  if(label==='Overall'){
+    const d=fs.overall;
+    const col='var(--purple)';
+    t.innerHTML=`<span style="color:${col};font-family:var(--fh)">Overall Fitness — ${d.total}/100</span>`;
+    const disciplines=[
+      {l:'Swim',s:fs.swim.total,col:'var(--swim)',w:25,sessions:fs.swim.sessions},
+      {l:'Bike',s:fs.bike.total,col:'var(--bike)',w:40,sessions:fs.bike.sessions},
+      {l:'Run',s:fs.run.total,col:'var(--run)',w:35,sessions:fs.run.sessions},
+    ];
+    b.innerHTML=`
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="font-family:var(--fh);font-size:3rem;font-weight:700;background:linear-gradient(135deg,var(--purple),var(--swim));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1">${d.total}</div>
+        <div style="font-size:.72rem;color:var(--text3);margin-top:4px">${scoreLabel(d.total)} · weighted across all three disciplines</div>
+        <div style="height:8px;background:var(--s3);border-radius:4px;overflow:hidden;margin-top:12px">
+          <div style="height:100%;width:${d.total}%;background:linear-gradient(90deg,var(--swim),var(--bike),var(--run));border-radius:4px"></div>
+        </div>
+      </div>
+      <div style="font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Discipline Contributions</div>
+      ${disciplines.map(disc=>{
+        const contribution=Math.round(disc.s*disc.w/100);
+        const pct=Math.round(disc.s);
+        return `<div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px">
+            <div style="font-size:.8rem;font-weight:600;color:var(--text)">${disc.l} <span style="font-size:.65rem;color:var(--text3);font-weight:400">(${disc.w}% weight)</span></div>
+            <div style="font-family:var(--fm);font-size:.76rem;color:${disc.col};font-weight:700">${disc.s}/100 → +${contribution}pts</div>
+          </div>
+          <div style="height:7px;background:var(--s3);border-radius:4px;overflow:hidden;margin-bottom:5px">
+            <div style="height:100%;width:${pct}%;background:${disc.col};border-radius:4px"></div>
+          </div>
+          <div style="font-size:.63rem;color:var(--text3)">${disc.sessions} sessions in last 28 days · ${scoreLabel(disc.s)}</div>
+        </div>`;
+      }).join('')}
+      <div style="background:var(--s2);border-radius:10px;padding:12px;font-size:.72rem;color:var(--text3);line-height:1.6;margin-top:4px">
+        Weighted: Bike 40% · Run 35% · Swim 25% — reflecting Ironman time-on-discipline. Tap individual scores for sub-component breakdown.
+      </div>`;
+    document.getElementById('modal').classList.add('show');
+    return;
+  }
+
+  const map={Swim:fs.swim,Bike:fs.bike,Run:fs.run};
+  const d=map[label];if(!d)return;
+  const col={Swim:'var(--swim)',Bike:'var(--bike)',Run:'var(--run)'}[label];
+  t.innerHTML=`<span style="color:${col};font-family:var(--fh)">${label} Fitness — ${d.total}/100</span>`;
   const components=[
     {name:'Volume',score:d.vol.score,max:40,detail:d.vol.detail,desc:'Distance covered vs IM target in last 28 days'},
     {name:'Consistency',score:d.cons.score,max:25,detail:d.cons.detail,desc:'Average sessions per week — regularity beats intensity'},
-    {name:'Pace Trend',score:d.pace.score,max:20,detail:d.pace.detail,desc:'Speed trend comparing recent vs earlier sessions'},
-    {name:'HR Discipline',score:d.hr.score,max:15,detail:d.hr.detail,desc:label==='Run'?'% of runs in Z1–Z3 (aerobic base building)':'Not applicable for this discipline'},
+    {name:'Pace Trend',score:d.pace.score,max:20,detail:d.pace.detail,desc:label==='Swim'?'Speed trend across endurance swims only (drills excluded)':'Speed trend comparing recent vs earlier sessions'},
+    {name:'HR Discipline',score:d.hr.score,max:15,detail:d.hr.detail,desc:label==='Run'?'% of runs in Z1–Z3 — aerobic base building for IM':'Not measured for this discipline (half-credit applied)'},
   ];
-  const scoreLabel=s=>s>=80?'Race Ready':s>=65?'Strong':s>=50?'Building':s>=35?'Developing':'Early';
   b.innerHTML=`
     <div style="text-align:center;margin-bottom:18px">
       <div style="font-family:var(--fh);font-size:3rem;font-weight:700;color:${col};line-height:1">${d.total}</div>
       <div style="font-size:.72rem;color:var(--text3);margin-top:4px">${scoreLabel(d.total)} · ${d.sessions} sessions in last 28 days</div>
       <div style="height:8px;background:var(--s3);border-radius:4px;overflow:hidden;margin-top:12px">
-        <div style="height:100%;width:${d.total}%;background:${col};border-radius:4px;transition:width .8s ease"></div>
+        <div style="height:100%;width:${d.total}%;background:${col};border-radius:4px"></div>
       </div>
     </div>
     <div style="font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Score Breakdown</div>
