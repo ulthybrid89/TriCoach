@@ -31,7 +31,7 @@
 html{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-tap-highlight-color:transparent;font-size:17px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{min-height:100dvh;padding-top:var(--st);padding-bottom:calc(70px + var(--sb));overflow-x:hidden}
 ::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
-svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:white;stroke-linecap:round;stroke-linejoin:round}
 
 /* HEADER */
 header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:13px 18px;padding-top:calc(13px + var(--st));display:flex;align-items:center;justify-content:space-between}
@@ -1576,7 +1576,7 @@ function openSession(s){
   const imp=s.importance||'priority';
   const impLbl={key:'Key Session ★★★★★',priority:'Priority ★★★',optional:'Optional ★'}[imp];
   const impCol={key:'var(--gold)',priority:'var(--purple)',optional:'var(--text3)'}[imp];
-  t.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" style="stroke:${cval};stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;margin-right:8px;vertical-align:middle"><use href="#${ic}"/></svg> ${s.title}`;
+  t.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" style="stroke:white;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;margin-right:8px;vertical-align:middle"><use href="#${ic}"/></svg> ${s.title}`;
   let body=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
     <div style="font-size:.7rem;color:${impCol};font-weight:700;text-transform:uppercase;letter-spacing:.05em">${impLbl}</div>
     <div style="font-size:.7rem;color:var(--text3);font-family:var(--fm)">${s.detail}</div>
