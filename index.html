@@ -1187,13 +1187,28 @@ function renderReadinessCard(data){
   const bgMap={green:'rgba(52,211,153,0.12)',amber:'rgba(251,191,36,0.12)',red:'rgba(251,113,133,0.12)'};
   const borderMap={green:'rgba(52,211,153,0.3)',amber:'rgba(251,191,36,0.3)',red:'rgba(251,113,133,0.3)'};
   const col=colMap[rl.level],bg=bgMap[rl.level],border=borderMap[rl.level];
+  // Metrics — show sleep hours label as "Hrs" to avoid duplicate "Sleep"
   const metrics=[];
   if(data.hrv!=null)metrics.push({l:'HRV',v:Math.round(data.hrv),u:'ms'});
   if(data.resting_hr!=null)metrics.push({l:'Rest HR',v:Math.round(data.resting_hr),u:'bpm'});
   if(data.sleep_score!=null)metrics.push({l:'Sleep',v:Math.round(data.sleep_score),u:'/100'});
-  if(data.sleep_hours!=null)metrics.push({l:'Sleep',v:data.sleep_hours,u:'hrs'});
-  const scoreHtml=rl.score!=null?`<div style="font-family:var(--fh);font-size:2rem;font-weight:700;color:${col};line-height:1">${rl.score}</div><div style="font-size:.6rem;color:var(--text3);font-family:var(--fm)">/100</div>`:`<div style="width:10px;height:10px;border-radius:50%;background:${col};margin:4px auto 0"></div>`;
-  el.innerHTML=`<div style="background:${bg};border:1px solid ${border};border-radius:var(--r);padding:16px;margin-bottom:12px"><div style="display:flex;align-items:center;gap:14px"><div style="text-align:center;min-width:52px">${scoreHtml}</div><div style="flex:1"><div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${col};margin-bottom:2px">Today's Readiness</div><div style="font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:3px">${rl.label}</div><div style="font-size:.72rem;color:var(--text2);line-height:1.4">${rl.desc}</div></div></div>${metrics.length?`<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">${metrics.slice(0,4).map(m=>`<div style="background:rgba(0,0,0,0.25);border-radius:8px;padding:7px 10px;text-align:center;min-width:56px"><div style="font-family:var(--fm);font-size:.82rem;font-weight:700;color:var(--text)">${m.v}<span style="font-size:.58rem;color:var(--text3)">${m.u}</span></div><div style="font-size:.58rem;color:var(--text3);margin-top:1px">${m.l}</div></div>`).join('')}</div>`:''}</div>`;
+  if(data.sleep_hours!=null)metrics.push({l:'Sleep Hrs',v:data.sleep_hours,u:'hrs'});
+  // Score pill or level dot
+  const levelDot=`<div style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${col};margin-right:6px;vertical-align:middle"></div>`;
+  const scoreHtml=rl.score!=null
+    ?`<div style="font-family:var(--fh);font-size:2rem;font-weight:700;color:${col};line-height:1">${rl.score}<span style="font-size:.7rem;color:var(--text3)">/100</span></div>`
+    :'';
+  el.innerHTML=`<div style="background:${bg};border:1px solid ${border};border-radius:var(--r);padding:16px;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      ${scoreHtml?`<div style="text-align:center;min-width:52px">${scoreHtml}</div>`:''}
+      <div style="flex:1">
+        <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${col};margin-bottom:3px">${levelDot}Today's Readiness</div>
+        <div style="font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:3px">${rl.label}</div>
+        <div style="font-size:.72rem;color:var(--text2);line-height:1.4">${rl.desc}</div>
+      </div>
+    </div>
+    ${metrics.length?`<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">${metrics.map(m=>`<div style="background:rgba(0,0,0,0.25);border-radius:8px;padding:7px 10px;text-align:center;min-width:56px"><div style="font-family:var(--fm);font-size:.82rem;font-weight:700;color:var(--text)">${m.v}<span style="font-size:.58rem;color:var(--text3)">${m.u}</span></div><div style="font-size:.58rem;color:var(--text3);margin-top:1px">${m.l}</div></div>`).join('')}</div>`:''}
+  </div>`;
 }
 
 // ── PLAN PAGE ──
