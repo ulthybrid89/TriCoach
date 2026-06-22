@@ -840,6 +840,10 @@ function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();r
 // ── HELPERS ──
 const sp=a=>(a.sport_type||'').toLowerCase();
 const isSwim=a=>sp(a).includes('swim'),isBike=a=>sp(a).includes('ride'),isRun=a=>sp(a).includes('run');
+// Drill sessions: name contains drill/technique/drills keywords — excluded from pace calcs
+const DRILL_KEYWORDS=/drill|technique|techni|kick|pull buoy|sculling|catch/i;
+const isSwimDrill=a=>isSwim(a)&&DRILL_KEYWORDS.test(a.name||'');
+const isSwimPace=a=>isSwim(a)&&!isSwimDrill(a); // endurance swims only — use for all pace/speed calcs
 const km=m=>m/1000, fmtKm=(m,d=1)=>km(m).toFixed(km(m)<10?d:0);
 const fmtT=s=>{const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h?`${h}h ${m}m`:`${m}m`;};
 const fmtHMS=s=>{const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return `${h}:${m.toString().padStart(2,'0')}`;};
@@ -1186,7 +1190,7 @@ function renderXP(){
 let baseSplits={swim:0,bike:0,run:0,t1:300,t2:300};
 function renderPredictor(){
   // SWIM: best recent pool front-crawl speed → OW adjusted
-  const swims=activities.filter(isSwim).filter(a=>a.average_speed>0.4);
+  const swims=activities.filter(isSwimPace).filter(a=>a.average_speed>0.4);
   const bestSwimSpeed=swims.length?Math.max(...swims.map(a=>a.average_speed)):0.72;
   const owSpeed=bestSwimSpeed*0.92; // open water penalty
   baseSplits.swim=3800/owSpeed;
@@ -1260,8 +1264,8 @@ function renderRunPace(){
   document.getElementById('runPaceLabels').innerHTML=runs.map(a=>`<span>${new Date(aDate(a)).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>`).filter((_,i)=>i%2===0).join('');
 }
 function renderSwimTable(){
-  const swims=activities.filter(isSwim).filter(a=>a.average_speed>0&&km(a.distance||0)>0.2).sort((a,b)=>aDate(b)-aDate(a)).slice(0,8),el=document.getElementById('swimTable');
-  if(!swims.length){el.innerHTML='<div class="empty">No swim data yet</div>';return;}
+  const swims=activities.filter(isSwimPace).filter(a=>a.average_speed>0&&km(a.distance||0)>0.2).sort((a,b)=>aDate(b)-aDate(a)).slice(0,8),el=document.getElementById('swimTable');
+  if(!swims.length){el.innerHTML='<div class="empty">No pace swim data yet — drill sessions excluded</div>';return;}
   const best=Math.min(...swims.map(a=>100/a.average_speed));
   el.innerHTML=`<table class="st-tbl"><thead><tr><th>Date</th><th>Dist</th><th>Pace/100m</th><th>Time</th><th>vs Best</th></tr></thead><tbody>${swims.map(a=>{const p=100/a.average_speed,diff=p-best;return `<tr><td>${new Date(aDate(a)).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</td><td>${fmtKm(a.distance||0)}km</td><td style="color:var(--swim2);font-weight:700">${swim100(a.average_speed)}</td><td>${fmtT(a.moving_time||0)}</td><td style="color:${diff<1?'var(--green)':'var(--text3)'}">${diff<1?'Best':'+'+diff.toFixed(0)+'s'}</td></tr>`;}).join('')}</tbody></table>`;
 }
@@ -1429,7 +1433,7 @@ async function fetchAnalysisForActivity(a){
   const now=new Date(),wk=curWeek(),ph=phaseFor(wk),bcnD=Math.ceil((BCN_DATE-now)/86400000);
   const cal=a.calories||(a.kilojoules?Math.round(a.kilojoules*0.239):0);
   const hrZone=a.average_heartrate?HR_ZONES.find(z=>a.average_heartrate>=z.min&&a.average_heartrate<=z.max):null;
-  const recentSameType=activities.filter(x=>sp(x)===sp(a)&&x.id!==a.id).slice(0,5);
+  const recentSameType=activities.filter(x=>(isSwimDrill(a)?isSwimDrill(x):sp(x)===sp(a))&&x.id!==a.id).slice(0,5);
   const avgRecentHR=recentSameType.filter(x=>x.average_heartrate).length?
     Math.round(recentSameType.filter(x=>x.average_heartrate).reduce((s,x)=>s+x.average_heartrate,0)/recentSameType.filter(x=>x.average_heartrate).length):null;
   const avgRecentSpeed=recentSameType.filter(x=>x.average_speed).length?
@@ -1652,16 +1656,20 @@ function openSession(s){
 // ── FITNESS SCORES ──
 function computeFitnessScore(filter, opts={}){
   const now=new Date();
-  const acts=activities.filter(filter);
-  const last28=acts.filter(a=>(now-aDate(a))/86400000<=28);
-  const totalKm=last28.reduce((s,a)=>s+km(a.distance||0),0);
+  // sessFilter: use all matching activities for volume/consistency (e.g. all swims incl drills)
+  // filter: pace-appropriate activities only (e.g. non-drill swims)
+  const allActs=activities.filter(opts.sessFilter||filter);
+  const paceActs=activities.filter(filter);
+  const last28All=allActs.filter(a=>(now-aDate(a))/86400000<=28);
+  const last28Pace=paceActs.filter(a=>(now-aDate(a))/86400000<=28);
+  const totalKm=last28All.reduce((s,a)=>s+km(a.distance||0),0);
   const volTarget=opts.volTarget||100;
   const volScore=Math.min(40,totalKm/volTarget*40);
-  const sessPerWk=last28.length/4;
+  const sessPerWk=last28All.length/4;
   const consScore=Math.min(25,sessPerWk/opts.sessTarget*25);
   let paceScore=0,paceTrend='—';
-  if(opts.paceCheck&&last28.length>=2){
-    const speeds=last28.filter(a=>a.average_speed>0).map(a=>a.average_speed);
+  if(opts.paceCheck&&last28Pace.length>=2){
+    const speeds=last28Pace.filter(a=>a.average_speed>0).map(a=>a.average_speed);
     if(speeds.length>=2){
       const earlier=speeds.slice(-3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length);
       const recent=speeds.slice(0,3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length);
@@ -1672,7 +1680,7 @@ function computeFitnessScore(filter, opts={}){
   } else paceScore=opts.paceCheck?10:20;
   let hrScore=0,hrDetail='N/A';
   if(opts.hrCheck){
-    const runs=last28.filter(a=>a.average_heartrate);
+    const runs=last28All.filter(a=>a.average_heartrate);
     const z12=runs.filter(a=>a.average_heartrate<=160).length;
     hrScore=runs.length?Math.min(15,(z12/runs.length)*15):7;
     hrDetail=runs.length?`${Math.round(z12/runs.length*100)}% in Z1–Z3`:'No HR data';
@@ -1684,11 +1692,11 @@ function computeFitnessScore(filter, opts={}){
     cons:{score:Math.round(consScore),max:25,detail:`${sessPerWk.toFixed(1)} sessions/wk avg`},
     pace:{score:Math.round(paceScore),max:20,detail:paceTrend},
     hr:{score:Math.round(hrScore),max:15,detail:hrDetail},
-    sessions:last28.length,
+    sessions:last28All.length,
   };
 }
 function renderFitnessScores(){
-  const swim=computeFitnessScore(isSwim,{volTarget:20,sessTarget:2,paceCheck:true,hrCheck:false});
+  const swim=computeFitnessScore(isSwimPace,{volTarget:20,sessTarget:2,paceCheck:true,hrCheck:false,sessFilter:isSwim});
   const bike=computeFitnessScore(isBike,{volTarget:200,sessTarget:2.5,paceCheck:true,hrCheck:false});
   const run=computeFitnessScore(isRun,{volTarget:50,sessTarget:3,paceCheck:true,hrCheck:true});
   const overall={total:Math.round(swim.total*0.25+bike.total*0.4+run.total*0.35)};
