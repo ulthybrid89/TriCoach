@@ -47,7 +47,8 @@ header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-
 /* NAV */
 nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding-bottom:var(--sb)}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 4px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:.62rem;font-weight:600;letter-spacing:.02em;text-transform:uppercase;transition:.2s;position:relative}
-.nb svg{width:22px;height:22px;transition:transform .2s}
+.nb svg{width:22px;height:22px;stroke:var(--text3);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.nb.active svg{stroke:var(--purple)}
 .nb.active{color:var(--purple)}
 .nb.active svg{transform:translateY(-2px)}
 .nb.active::before{content:'';position:absolute;top:0;width:24px;height:2px;border-radius:2px;background:var(--purple)}
@@ -1283,7 +1284,8 @@ async function generateDebrief(){
   const btn=document.getElementById('debriefBtn'),out=document.getElementById('debriefOut');
   btn.disabled=true;btn.innerHTML='<div class="spin"></div> Analysing…';out.classList.remove('show');
   const now=new Date(),wk7=activities.filter(a=>(now-aDate(a))/86400000<=7);
-  const summary=wk7.map(a=>{const hr=a.average_heartrate?` | HR ${Math.round(a.average_heartrate)}/${Math.round(a.max_heartrate||a.average_heartrate)}bpm`:'';const cad=a.avg_cadence?` | ${Math.round(a.avg_cadence*2)}spm`:'';return `- ${a.sport_type}: ${fmtKm(a.distance||0)}km in ${fmtT(a.moving_time||0)}${hr}${cad}`;}).join('\n')||'- No activities';
+  const summary=wk7.map(a=>{const hr=a.average_heartrate?` | HR ${Math.round(a.average_heartrate)}/${Math.round(a.max_heartrate||a.average_heartrate)}bpm`:'';const cad=a.avg_cadence?` | ${Math.round(a.avg_cadence*2)}spm`:'';return `- ${a.sport_type}: ${fmtKm(a.distance||0)}km in ${fmtT(a.moving_time||0)}${hr}${cad}`;}).join('
+')||'- No activities';
   const wk=curWeek(),bcnD=Math.ceil((BCN_DATE-now)/86400000),comp=weekCompliance();
   const prompt=`You are a direct expert triathlon coach reviewing Shawn's week. No fluff.
 
@@ -1300,7 +1302,8 @@ Structured debrief:
 ### Next Week Focus (max 3 points)
 
 Max 400 words.`;
-  try{const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})}),d=await r.json();if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);const t=d.content?.[0]?.text||'No response.';const rendered=t.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/\n/g,'<br>');out.innerHTML=rendered;out.classList.add('show');saveDebrief(rendered);loadSavedDebrief();}catch(e){out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;out.classList.add('show');}
+  try{const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})}),d=await r.json();if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);const t=d.content?.[0]?.text||'No response.';const rendered=t.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/
+/g,'<br>');out.innerHTML=rendered;out.classList.add('show');saveDebrief(rendered);loadSavedDebrief();}catch(e){out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;out.classList.add('show');}
   btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg> Regenerate Debrief';
 }
 
