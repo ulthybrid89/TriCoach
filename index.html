@@ -504,7 +504,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
   <div class="sec-head"><div><div class="sec-title">Home</div><div class="sec-sub" id="dashSub">Loading…</div></div></div>
 
   <!-- TriScore hero -->
-  <div class="score-hero">
+  <div class="score-hero" onclick="openStat('triscore')" style="cursor:pointer">
     <div class="ring-wrap">
       <svg width="104" height="104" viewBox="0 0 104 104">
         <circle cx="52" cy="52" r="46" fill="none" stroke="var(--s3)" stroke-width="9"/>
@@ -888,8 +888,12 @@ function computeTriScore(){
   const last4wk=activities.filter(a=>(now-aDate(a))/86400000<=28);
   const sessions=last4wk.length;
   const consistency=Math.min(250,sessions*9); // ~28 sessions = max
-  const totalKm=last4wk.reduce((s,a)=>s+km(a.distance||0),0);
-  const volume=Math.min(250,totalKm*0.5);
+  // Weight km by IM distance ratios: bike/swim ~47x, run/swim ~11x — so 1km swim ≈ 11km run ≈ 47km bike
+  const swimKm=last4wk.filter(isSwim).reduce((s,a)=>s+km(a.distance||0),0);
+  const bikeKm=last4wk.filter(isBike).reduce((s,a)=>s+km(a.distance||0),0);
+  const runKm=last4wk.filter(isRun).reduce((s,a)=>s+km(a.distance||0),0);
+  const normKm=swimKm*(180/3.8)+bikeKm+runKm*(180/42.2); // normalise to bike-equivalent km
+  const volume=Math.min(250,normKm*0.06); // ~4200 norm-km = max (solid IM training block)
   const comp=weekCompliance().pct;
   const compliance=comp*2.5; // max 250
   const runs=last4wk.filter(isRun).filter(a=>a.average_heartrate);
@@ -1705,9 +1709,9 @@ function computeFitnessScore(filter, opts={}){
   };
 }
 function renderFitnessScores(){
-  const swim=computeFitnessScore(isSwimPace,{volTarget:20,sessTarget:2,paceCheck:true,hrCheck:false,sessFilter:isSwim});
-  const bike=computeFitnessScore(isBike,{volTarget:200,sessTarget:2.5,paceCheck:true,hrCheck:false});
-  const run=computeFitnessScore(isRun,{volTarget:50,sessTarget:3,paceCheck:true,hrCheck:true});
+  const swim=computeFitnessScore(isSwimPace,{volTarget:30,sessTarget:2,paceCheck:true,hrCheck:false,sessFilter:isSwim});
+  const bike=computeFitnessScore(isBike,{volTarget:500,sessTarget:2.5,paceCheck:true,hrCheck:false});
+  const run=computeFitnessScore(isRun,{volTarget:120,sessTarget:3,paceCheck:true,hrCheck:true});
   const overall={total:Math.round(swim.total*0.25+bike.total*0.4+run.total*0.35)};
   const scoreLabel=s=>s>=80?'Race Ready':s>=65?'Strong':s>=50?'Building':s>=35?'Developing':'Early';
   const el=document.getElementById('fitnessScores');
@@ -1837,9 +1841,64 @@ function clearSavedDebrief(){localStorage.removeItem('tricoach_debrief');documen
 // ── MODAL ──
 function openStat(type){
   const m=document.getElementById('modal'),t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
+  _openActivityId=null;
   if(type==='streak'){const s=computeStreak();t.innerHTML=`<svg class="ic" style="color:var(--bike)" viewBox="0 0 24 24"><use href="#i-flame"/></svg> ${s}-Week Streak`;b.innerHTML=`You've trained 3+ sessions per week for <strong>${s} consecutive weeks</strong>. Consistency is the single biggest predictor of Ironman success. Keep the streak alive — even a short session counts.`;}
   else if(type==='compliance'){const c=weekCompliance();t.innerHTML=`<svg class="ic" style="color:var(--green)" viewBox="0 0 24 24"><use href="#i-target"/></svg> ${c.pct}% Compliance`;b.innerHTML=`You've completed <strong>${c.matched} of ${c.total}</strong> planned sessions this week${c.alt?`, plus <strong>${c.alt} bonus session${c.alt>1?'s':''}</strong> beyond the plan`:''}. Compliance measures plan adherence — but extra quality training always counts toward your TriScore too.`;}
   else if(type==='points'){const p=weekPoints();t.innerHTML=`<svg class="ic" style="color:var(--purple)" viewBox="0 0 24 24"><use href="#i-zap"/></svg> ${p.toLocaleString()} Points`;b.innerHTML=`Points earned this week from all training. Every session counts — swims, bikes, runs, and even alternative work like strength or hiking earn credit based on effort and duration. Higher-value key sessions earn more.`;}
+  else if(type==='triscore'){
+    const score=computeTriScore();
+    const r=rankFor(score);
+    const now=new Date();
+    const last4wk=activities.filter(a=>(now-aDate(a))/86400000<=28);
+    const sessions=last4wk.length;
+    const swimKm=last4wk.filter(isSwim).reduce((s,a)=>s+km(a.distance||0),0);
+    const bikeKm=last4wk.filter(isBike).reduce((s,a)=>s+km(a.distance||0),0);
+    const runKm=last4wk.filter(isRun).reduce((s,a)=>s+km(a.distance||0),0);
+    const normKm=swimKm*(180/3.8)+bikeKm+runKm*(180/42.2);
+    const consistency=Math.min(250,sessions*9);
+    const volume=Math.min(250,normKm*0.06);
+    const comp=weekCompliance().pct;
+    const compliance=Math.round(comp*2.5);
+    const runs=last4wk.filter(isRun).filter(a=>a.average_heartrate);
+    const z12=runs.filter(a=>a.average_heartrate<=140).length;
+    const balance=runs.length?Math.min(250,Math.round((z12/runs.length)*250)):150;
+    const components=[
+      {name:'Consistency',score:Math.round(consistency),max:250,detail:`${sessions} sessions in last 28 days`,desc:'~28 sessions = max. Every workout counts.'},
+      {name:'Volume',score:Math.round(volume),max:250,detail:`${swimKm.toFixed(1)}km swim · ${bikeKm.toFixed(0)}km bike · ${runKm.toFixed(1)}km run`,desc:'Weighted by IM distance ratio — bike km counts most.'},
+      {name:'Compliance',score:compliance,max:250,detail:`${comp}% this week`,desc:'How closely you\'re following the 19-week plan.'},
+      {name:'HR Balance',score:balance,max:250,detail:runs.length?`${Math.round(z12/runs.length*100)}% runs in Z1/Z2`:'No run HR data',desc:'% of runs at aerobic intensity. Bolton lesson: go easy.'},
+    ];
+    t.innerHTML=`<svg class="ic" style="color:var(--purple)" viewBox="0 0 24 24"><use href="#i-zap"/></svg> TriScore ${score} / 1000`;
+    b.innerHTML=`
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="font-family:var(--fh);font-size:3rem;font-weight:700;background:linear-gradient(135deg,var(--purple),var(--swim));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1">${score}</div>
+        <div style="display:inline-block;padding:3px 10px;border-radius:6px;background:var(--s3);font-size:.72rem;font-weight:700;color:var(--purple);margin-top:6px;letter-spacing:.05em">${r.tier} · ${r.name}</div>
+        <div style="font-size:.72rem;color:var(--text3);margin-top:8px">${r.desc}</div>
+        <div style="height:8px;background:var(--s3);border-radius:4px;overflow:hidden;margin-top:12px">
+          <div style="height:100%;width:${score/10}%;background:linear-gradient(90deg,var(--purple),var(--swim));border-radius:4px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:.58rem;color:var(--text3);font-family:var(--fm);margin-top:4px"><span>0</span><span>Building</span><span>Athlete</span><span>Competitor</span><span>Elite</span></div>
+      </div>
+      <div style="font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Score Breakdown</div>
+      ${components.map(comp=>{
+        const pct=Math.round(comp.score/comp.max*100);
+        const barCol=pct>=75?'var(--green)':pct>=50?'var(--purple)':'var(--warn)';
+        return `<div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px">
+            <div style="font-size:.8rem;font-weight:600;color:var(--text)">${comp.name}</div>
+            <div style="font-family:var(--fm);font-size:.76rem;color:${barCol};font-weight:700">${comp.score}/${comp.max}</div>
+          </div>
+          <div style="height:7px;background:var(--s3);border-radius:4px;overflow:hidden;margin-bottom:5px">
+            <div style="height:100%;width:${pct}%;background:${barCol};border-radius:4px"></div>
+          </div>
+          <div style="font-size:.68rem;color:var(--text2)">${comp.detail}</div>
+          <div style="font-size:.63rem;color:var(--text3);margin-top:2px">${comp.desc}</div>
+        </div>`;
+      }).join('')}
+      <div style="background:var(--s2);border-radius:10px;padding:12px;font-size:.72rem;color:var(--text3);line-height:1.6;margin-top:4px">
+        TriScore updates live from Strava every time you open the app. All four components are based on the last 28 days.
+      </div>`;
+  }
   m.classList.add('show');
 }
 function closeModal(){document.getElementById('modal').classList.remove('show');_openActivityId=null;}
