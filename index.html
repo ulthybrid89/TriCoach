@@ -832,7 +832,7 @@ async function refreshIfNeeded(){const exp=parseInt(localStorage.getItem('strava
 
 // ── DATA ──
 async function loadData(){await refreshIfNeeded();try{const after=Math.floor(Date.now()/1000)-90*86400;const r=await fetch(`https://www.strava.com/api/v3/athlete/activities?per_page=100&after=${after}`,{headers:{Authorization:`Bearer ${stravaToken}`}});if(!r.ok)throw new Error('Strava API');activities=await r.json();renderAll();setBadge('stStatus',true);}catch(e){console.error(e);setBadge('stStatus',false);}}
-function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();loadSavedDebrief();}
+function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();loadSavedDebrief();backgroundAnalyseAll();}
 
 // ── HELPERS ──
 const sp=a=>(a.sport_type||'').toLowerCase();
@@ -1368,10 +1368,9 @@ function openActivity(id){
             <span style="font-size:.58rem;color:var(--text3);font-weight:400">${cached.date} · <span onclick="analyseActivity(${a.id})" style="color:var(--purple);cursor:pointer;text-decoration:underline">Re-analyse</span></span>
           </div>${cached.html}`;
         }
-        return `<button onclick="analyseActivity(${a.id})" style="width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-family:var(--fh);font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:-0.01em">
-          <svg style="width:16px;height:16px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>
-          Analyse This Session
-        </button>`;
+        const eligible=(a.moving_time||0)>=600&&(isSwim(a)||isBike(a)||isRun(a));
+        if(!eligible)return '';
+        return `<div style="display:flex;align-items:center;gap:8px;padding:12px;background:var(--s2);border-radius:10px;font-size:.76rem;color:var(--text3)"><div class="spin"></div>Analysis queued…</div>`;
       })()}
     </div>`;
 
@@ -1382,10 +1381,8 @@ function openActivity(id){
 function saveActivityAnalysis(id,html){
   try{
     const store=JSON.parse(localStorage.getItem('tricoach_analyses')||'{}');
-    // Keep max 50 analyses, drop oldest if over limit
     const keys=Object.keys(store);
-    if(keys.length>=50){
-      // Remove the oldest entry
+    if(keys.length>=100){
       const oldest=keys.sort((a,b)=>(store[a].ts||0)-(store[b].ts||0))[0];
       delete store[oldest];
     }
@@ -1423,27 +1420,20 @@ function renderAnalysisHtml(text){
   return html;
 }
 
-async function analyseActivity(id){
-  const a=activities.find(x=>x.id==id||x.id==String(id));
-  if(!a)return;
-  const wrap=document.getElementById('actCoachWrap');
-  wrap.innerHTML=`<div style="display:flex;align-items:center;gap:10px;padding:14px;background:var(--s2);border-radius:10px;font-size:.78rem;color:var(--text3)"><div class="spin"></div>Analysing session…</div>`;
-
+// ── SHARED CLAUDE CALL FOR ONE ACTIVITY ──
+async function fetchAnalysisForActivity(a){
   const now=new Date(),wk=curWeek(),ph=phaseFor(wk),bcnD=Math.ceil((BCN_DATE-now)/86400000);
   const cal=a.calories||(a.kilojoules?Math.round(a.kilojoules*0.239):0);
   const hrZone=a.average_heartrate?HR_ZONES.find(z=>a.average_heartrate>=z.min&&a.average_heartrate<=z.max):null;
-
   const recentSameType=activities.filter(x=>sp(x)===sp(a)&&x.id!==a.id).slice(0,5);
   const avgRecentHR=recentSameType.filter(x=>x.average_heartrate).length?
     Math.round(recentSameType.filter(x=>x.average_heartrate).reduce((s,x)=>s+x.average_heartrate,0)/recentSameType.filter(x=>x.average_heartrate).length):null;
   const avgRecentSpeed=recentSameType.filter(x=>x.average_speed).length?
     recentSameType.filter(x=>x.average_speed).reduce((s,x)=>s+x.average_speed,0)/recentSameType.filter(x=>x.average_speed).length:null;
-
   let paceStr='—',paceContext='';
   if(isRun(a)&&a.average_speed){paceStr=fmtPace(a.average_speed)+'/km';if(avgRecentSpeed)paceContext=`Recent avg: ${fmtPace(avgRecentSpeed)}/km`;}
   else if(isSwim(a)&&a.average_speed){paceStr=swim100(a.average_speed)+'/100m';if(avgRecentSpeed)paceContext=`Recent avg: ${swim100(avgRecentSpeed)}/100m`;}
   else if(isBike(a)&&a.average_speed){paceStr=(a.average_speed*3.6).toFixed(1)+'km/h';if(avgRecentSpeed)paceContext=`Recent avg: ${(avgRecentSpeed*3.6).toFixed(1)}km/h`;}
-
   const prompt=`You are a direct, expert triathlon coach. Analyse this single training session for Shawn with specific, data-driven feedback. Be blunt and precise — no generic advice.
 
 ATHLETE CONTEXT:
@@ -1484,23 +1474,68 @@ RACE RELEVANCE: How does this session contribute (or not) to Barcelona readiness
 ONE THING: The single most important thing Shawn should do differently or keep doing based on this data.
 
 Max 280 words. Use numbers. Be direct.`;
+  const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,messages:[{role:'user',content:prompt}]})});
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||`${r.status}`);
+  return d.content?.[0]?.text||'No response.';
+}
 
+// ── BACKGROUND BATCH ANALYSER ──
+let _analyseRunning=false;
+async function backgroundAnalyseAll(){
+  if(_analyseRunning)return; // only one batch at a time
+  _analyseRunning=true;
   try{
-    const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,messages:[{role:'user',content:prompt}]})});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.error||`${r.status}`);
-    const text=d.content?.[0]?.text||'No response.';
+    // Only eligible: swim/bike/run, ≥10 min, not already stored
+    const eligible=activities
+      .filter(a=>(isSwim(a)||isBike(a)||isRun(a))&&(a.moving_time||0)>=600&&!loadActivityAnalysis(a.id))
+      .sort((a,b)=>aDate(b)-aDate(a)); // newest first — most relevant
+    for(const a of eligible){
+      // If modal is open on this activity, update it live when done
+      try{
+        const text=await fetchAnalysisForActivity(a);
+        const html=renderAnalysisHtml(text);
+        saveActivityAnalysis(a.id,html);
+        // If this activity's modal is currently open, inject result live
+        const wrap=document.getElementById('actCoachWrap');
+        const modal=document.getElementById('modal');
+        if(wrap&&modal&&modal.classList.contains('show')){
+          const dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+          wrap.innerHTML=analysisHeader(a.id,dateStr)+html;
+        }
+      }catch(e){
+        console.warn('Background analysis failed for',a.id,e.message);
+      }
+      // Stagger calls: 2s between each to avoid hammering the worker
+      await new Promise(r=>setTimeout(r,2000));
+    }
+  }finally{
+    _analyseRunning=false;
+  }
+}
+
+function analysisHeader(id,dateStr){
+  return `<div style="font-size:.62rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+    <span style="display:flex;align-items:center;gap:6px"><svg style="width:13px;height:13px;stroke:var(--purple);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>AI Session Analysis</span>
+    <span style="font-size:.58rem;color:var(--text3);font-weight:400">${dateStr} · <span onclick="analyseActivity(${id})" style="color:var(--purple);cursor:pointer;text-decoration:underline">Re-analyse</span></span>
+  </div>`;
+}
+
+// ── RE-ANALYSE (manual, from modal only) ──
+async function analyseActivity(id){
+  const a=activities.find(x=>x.id==id||x.id==String(id));
+  if(!a)return;
+  const wrap=document.getElementById('actCoachWrap');
+  if(!wrap)return;
+  wrap.innerHTML=`<div style="display:flex;align-items:center;gap:8px;padding:12px;background:var(--s2);border-radius:10px;font-size:.76rem;color:var(--text3)"><div class="spin"></div>Re-analysing…</div>`;
+  try{
+    const text=await fetchAnalysisForActivity(a);
     const html=renderAnalysisHtml(text);
     saveActivityAnalysis(a.id,html);
     const dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-    wrap.innerHTML=`
-      <div style="font-size:.62rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
-        <span style="display:flex;align-items:center;gap:6px"><svg style="width:13px;height:13px;stroke:var(--purple);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>AI Session Analysis</span>
-        <span style="font-size:.58rem;color:var(--text3);font-weight:400">${dateStr} · <span onclick="analyseActivity(${a.id})" style="color:var(--purple);cursor:pointer;text-decoration:underline">Re-analyse</span></span>
-      </div>
-      ${html}`;
+    wrap.innerHTML=analysisHeader(a.id,dateStr)+html;
   }catch(e){
-    wrap.innerHTML=`<div style="background:var(--run-d);border:1px solid rgba(251,113,133,.2);border-radius:10px;padding:12px;font-size:.78rem;color:var(--run2)">Analysis failed: ${e.message}</div>`;
+    wrap.innerHTML=`<div style="background:var(--run-d);border:1px solid rgba(251,113,133,.2);border-radius:10px;padding:12px;font-size:.78rem;color:var(--run2)">Re-analysis failed: ${e.message}</div>`;
   }
 }
 
