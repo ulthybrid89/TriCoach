@@ -1311,22 +1311,173 @@ function openActivity(id){
   if(!a)return;
   const t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
   const c=clsOf(a);const col=c==='sw'?'var(--swim)':c==='bk'?'var(--bike)':c==='rn'?'var(--run)':'var(--purple)';
-  t.innerHTML=`<svg class="ic" style="color:${col}" viewBox="0 0 24 24"><use href="#${useIcon(a)}"/></svg> ${a.name||a.sport_type}`;
+  const ic=useIcon(a);
+  t.innerHTML=`<svg class="ic" style="color:${col}" viewBox="0 0 24 24"><use href="#${ic}"/></svg> ${a.name||a.sport_type}`;
+
+  // HR zone for this activity
+  const hrZone=a.average_heartrate?HR_ZONES.find(z=>a.average_heartrate>=z.min&&a.average_heartrate<=z.max):null;
+  const hrZoneName=hrZone?hrZone.name:'—';
+  const hrColor=hrZone?hrZone.color:'var(--text3)';
+  const cal=a.calories||(a.kilojoules?Math.round(a.kilojoules*0.239):0);
+
+  // Pace display
+  let paceStr='—';
+  if(isRun(a)&&a.average_speed)paceStr=fmtPace(a.average_speed)+' /km';
+  else if(isSwim(a)&&a.average_speed)paceStr=swim100(a.average_speed)+' /100m';
+  else if(isBike(a)&&a.average_speed)paceStr=(a.average_speed*3.6).toFixed(1)+' km/h';
+
+  // Inline HR zone bar
+  const hrPct=a.average_heartrate?Math.round((a.average_heartrate/200)*100):0;
+
   const rows=[
-    ['Date', fmtDate(aDate(a))],
     ['Distance', fmtKm(a.distance||0)+' km'],
     ['Moving Time', fmtT(a.moving_time||0)],
-    ['Avg HR', a.average_heartrate?Math.round(a.average_heartrate)+' bpm':'—'],
-    ['Max HR', a.max_heartrate?Math.round(a.max_heartrate)+' bpm':'—'],
-    ['Avg Pace', isRun(a)?fmtPace(a.average_speed)+'  /km':isSwim(a)?swim100(a.average_speed)+' /100m':'—'],
-    ['Cadence', a.average_cadence?Math.round(a.average_cadence*2)+' spm':'—'],
+    ['Pace / Speed', paceStr],
     ['Elevation', a.total_elevation_gain?Math.round(a.total_elevation_gain)+'m':'—'],
-    ['Calories', (()=>{const cal=a.calories||(a.kilojoules?Math.round(a.kilojoules*0.239):0);return cal?cal.toLocaleString()+' kcal':'—';})()],
-    ['Relative Effort', a.suffer_score||a.relative_effort||'—'],
-    ['Points Earned', '+'+sessionPoints(a)+' pts'],
+    ['Cadence', a.average_cadence?Math.round(a.average_cadence*2)+' spm':'—'],
+    ['Calories', cal?cal.toLocaleString()+' kcal':'—'],
+    ['Effort Score', a.suffer_score||a.relative_effort||'—'],
+    ['Points', '+'+sessionPoints(a)+' pts'],
   ];
-  b.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:10px;overflow:hidden">${rows.map(([l,v])=>`<div style="background:var(--s2);padding:10px 12px"><div style="font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">${l}</div><div style="font-family:var(--fm);font-size:.82rem;font-weight:600;color:var(--text)">${v}</div></div>`).join('')}</div>`;
+
+  b.innerHTML=`
+    <div style="font-size:.68rem;color:var(--text3);font-family:var(--fm);margin-bottom:12px">${fmtDate(aDate(a))}</div>
+
+    ${a.average_heartrate?`<div style="background:var(--s2);border-radius:10px;padding:12px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.07em">Heart Rate</div>
+        <div style="font-size:.68rem;font-weight:700;color:${hrColor};font-family:var(--fm)">${hrZoneName} · ${Math.round(a.average_heartrate)} avg / ${Math.round(a.max_heartrate||a.average_heartrate)} max</div>
+      </div>
+      <div style="height:8px;background:var(--s3);border-radius:4px;overflow:hidden;position:relative">
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,#10b981 20%,#3b82f6 40%,#f59e0b 60%,#f97316 80%,#f43f5e);border-radius:4px;opacity:0.35"></div>
+        <div style="height:100%;width:2px;background:white;border-radius:2px;position:absolute;left:${hrPct}%;transform:translateX(-50%);box-shadow:0 0 4px rgba(255,255,255,.6)"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.52rem;color:var(--text3);font-family:var(--fm);margin-top:4px"><span>Z1</span><span>Z2</span><span>Z3</span><span>Z4</span><span>Z5</span></div>
+    </div>`:''}
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px">
+      ${rows.map(([l,v])=>`<div style="background:var(--s2);padding:10px 12px"><div style="font-size:.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">${l}</div><div style="font-family:var(--fm);font-size:.82rem;font-weight:600;color:var(--text)">${v}</div></div>`).join('')}
+    </div>
+
+    <div id="actCoachWrap">
+      <button onclick="analyseActivity(${a.id})" style="width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-family:var(--fh);font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:-0.01em">
+        <svg style="width:16px;height:16px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>
+        Analyse This Session
+      </button>
+    </div>`;
+
   document.getElementById('modal').classList.add('show');
+}
+
+async function analyseActivity(id){
+  const a=activities.find(x=>x.id==id||x.id==String(id));
+  if(!a)return;
+  const wrap=document.getElementById('actCoachWrap');
+  wrap.innerHTML=`<div style="display:flex;align-items:center;gap:10px;padding:14px;background:var(--s2);border-radius:10px;font-size:.78rem;color:var(--text3)"><div class="spin"></div>Analysing session…</div>`;
+
+  const now=new Date(),wk=curWeek(),ph=phaseFor(wk),bcnD=Math.ceil((BCN_DATE-now)/86400000);
+  const cal=a.calories||(a.kilojoules?Math.round(a.kilojoules*0.239):0);
+  const hrZone=a.average_heartrate?HR_ZONES.find(z=>a.average_heartrate>=z.min&&a.average_heartrate<=z.max):null;
+
+  // Recent context for comparison
+  const recentSameType=activities.filter(x=>sp(x)===sp(a)&&x.id!==a.id).slice(0,5);
+  const avgRecentHR=recentSameType.filter(x=>x.average_heartrate).length?
+    Math.round(recentSameType.filter(x=>x.average_heartrate).reduce((s,x)=>s+x.average_heartrate,0)/recentSameType.filter(x=>x.average_heartrate).length):null;
+  const avgRecentSpeed=recentSameType.filter(x=>x.average_speed).length?
+    recentSameType.filter(x=>x.average_speed).reduce((s,x)=>s+x.average_speed,0)/recentSameType.filter(x=>x.average_speed).length:null;
+
+  let paceStr='—',paceContext='';
+  if(isRun(a)&&a.average_speed){
+    paceStr=fmtPace(a.average_speed)+'/km';
+    if(avgRecentSpeed)paceContext=`Recent avg: ${fmtPace(avgRecentSpeed)}/km`;
+  } else if(isSwim(a)&&a.average_speed){
+    paceStr=swim100(a.average_speed)+'/100m';
+    if(avgRecentSpeed)paceContext=`Recent avg: ${swim100(avgRecentSpeed)}/100m`;
+  } else if(isBike(a)&&a.average_speed){
+    paceStr=(a.average_speed*3.6).toFixed(1)+'km/h';
+    if(avgRecentSpeed)paceContext=`Recent avg: ${(avgRecentSpeed*3.6).toFixed(1)}km/h`;
+  }
+
+  const prompt=`You are a direct, expert triathlon coach. Analyse this single training session for Shawn with specific, data-driven feedback. Be blunt and precise — no generic advice.
+
+ATHLETE CONTEXT:
+- Ironman Barcelona 4 Oct 2026 (${bcnD} days away), Amsterdam Marathon 18 Oct
+- Week ${wk}/19, ${ph} phase
+- Max HR 200bpm. Zones: Z1 <120, Z2 120–140, Z3 141–160, Z4 161–180, Z5 181+
+- Bolton 70.3: bike HR 183–187bpm caused complete run collapse — pacing is #1 risk
+- Swimming front crawl from scratch (Tuesday coached sessions)
+- No road power meter (Kickr Core only)
+- Maurten-only nutrition
+
+SESSION DATA:
+- Type: ${a.sport_type}
+- Date: ${fmtDate(aDate(a))}
+- Distance: ${fmtKm(a.distance||0)}km
+- Moving time: ${fmtT(a.moving_time||0)}
+- Pace/speed: ${paceStr}${paceContext?` (${paceContext})`:''}
+- Avg HR: ${a.average_heartrate?Math.round(a.average_heartrate)+'bpm ('+( hrZone?hrZone.name:'unknown zone')+')':'no HR data'}
+- Max HR: ${a.max_heartrate?Math.round(a.max_heartrate)+'bpm':'—'}
+- Cadence: ${a.average_cadence?Math.round(a.average_cadence*2)+' spm':'no data'}
+- Elevation: ${a.total_elevation_gain?Math.round(a.total_elevation_gain)+'m':'—'}
+- Calories: ${cal?cal+'kcal':'—'}
+- Relative effort score: ${a.suffer_score||a.relative_effort||'—'}
+${avgRecentHR?`- Avg HR of last 5 ${a.sport_type}s: ${avgRecentHR}bpm`:''}
+
+Respond in this exact format with NO markdown headers, just labelled sections:
+
+VERDICT: One sentence. Was this session good, concerning, or neutral for Barcelona prep?
+
+HR ANALYSIS: What do the HR numbers actually mean for this specific session? Reference the zone, compare to target. If it's a run above Z2 explain the Bolton risk. If no HR data, say so directly.
+
+PACE/EFFORT: Is this pace appropriate for this phase and distance? Faster or slower than recent sessions and why that matters.
+
+CADENCE: ${a.average_cadence?'Assess the cadence number specifically against the 170–180spm target and what it means.':'No cadence data — note this and what Shawn is missing.'}
+
+RACE RELEVANCE: How does this session contribute (or not) to Barcelona readiness? Be specific about what it trained.
+
+ONE THING: The single most important thing Shawn should do differently or keep doing based on this data.
+
+Max 280 words. Use numbers. Be direct.`;
+
+  try{
+    const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,messages:[{role:'user',content:prompt}]})});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||`${r.status}`);
+    const text=d.content?.[0]?.text||'No response.';
+
+    // Parse sections
+    const sections=['VERDICT','HR ANALYSIS','PACE/EFFORT','CADENCE','RACE RELEVANCE','ONE THING'];
+    let html='';
+    sections.forEach((sec,i)=>{
+      const next=sections[i+1];
+      const pattern=new RegExp(sec+':\\s*([\\s\\S]*?)'+(next?next+':':'$'));
+      const m=text.match(pattern);
+      if(!m)return;
+      const content=m[1].trim().replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+      const isVerdict=sec==='VERDICT',isFlag=sec==='ONE THING';
+      const secCol=isVerdict?'var(--purple)':isFlag?'var(--gold)':'var(--text3)';
+      const bg=isVerdict?'rgba(165,180,252,0.1)':isFlag?'rgba(251,191,36,0.08)':'var(--s2)';
+      const border=isVerdict?'1px solid rgba(165,180,252,0.25)':isFlag?'1px solid rgba(251,191,36,0.2)':'1px solid var(--border)';
+      html+=`<div style="background:${bg};border:${border};border-radius:10px;padding:12px;margin-bottom:8px">
+        <div style="font-size:.58rem;font-weight:700;color:${secCol};text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">${sec}</div>
+        <div style="font-size:.78rem;color:var(--text2);line-height:1.65">${content}</div>
+      </div>`;
+    });
+
+    // Fallback if parsing fails
+    if(!html){
+      html=`<div style="background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.78rem;color:var(--text2);line-height:1.7">${text.replace(/\n/g,'<br>')}</div>`;
+    }
+
+    wrap.innerHTML=`
+      <div style="font-size:.62rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+        <svg style="width:13px;height:13px;stroke:var(--purple);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>
+        AI Session Analysis
+      </div>
+      ${html}`;
+  }catch(e){
+    wrap.innerHTML=`<div style="background:var(--run-d);border:1px solid rgba(251,113,133,.2);border-radius:10px;padding:12px;font-size:.78rem;color:var(--run2)">Analysis failed: ${e.message}</div>`;
+  }
 }
 
 function sessionCoachTip(s){
