@@ -30,6 +30,7 @@
 html{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-tap-highlight-color:transparent;font-size:17px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{min-height:100dvh;padding-top:var(--st);padding-bottom:calc(70px + var(--sb));overflow-x:hidden}
 ::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
+svg{stroke:currentColor;fill:currentColor}
 svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
 
 /* HEADER */
@@ -1206,13 +1207,12 @@ function getLevelName(discipline,lvl){const arr=discipline==='swim'?SWIM_LEVELS:
 function getOverallLevel(){const s=levelFor(disciplineXP(isSwim)),b=levelFor(disciplineXP(isBike)),r=levelFor(disciplineXP(isRun));return Math.round((s+b+r)/3);}
 function renderXP(){
   const data=[{f:isSwim,c:'sw',ic:'i-waves',n:'Swim',d:'swim'},{f:isBike,c:'bk',ic:'i-bike',n:'Bike',d:'bike'},{f:isRun,c:'rn',ic:'i-run',n:'Run',d:'run'}];
-  document.getElementById('xpBars').innerHTML=data.map(d=>{const xp=disciplineXP(d.f),L=xpInLevel(xp),lvlName=getLevelName(d.d,L.lvl),tier=tierFor(L.lvl);
+  document.getElementById('xpBars').innerHTML=data.map(d=>{const xp=disciplineXP(d.f),L=xpInLevel(xp),lvlName=getLevelName(d.d,L.lvl);
     return `<div class="xp" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px;margin-bottom:10px">
       <div class="xp-head">
         <div class="xp-name ${d.c}" style="font-size:.82rem;color:var(--text);font-weight:600">
           <span class="xp-ic"><svg viewBox="0 0 24 24"><use href="#${d.ic}"/></svg></span>${d.n} · Level ${L.lvl}/25
         </div>
-        <div class="xp-lvl" style="color:${tierColor(tier)};font-weight:700;font-size:.72rem">${tier}</div>
       </div>
       <div style="font-size:.82rem;font-weight:600;color:var(--text);margin:8px 0 8px">${lvlName}</div>
       <div class="xp-track"><div class="xp-fill ${d.c}" style="width:${L.pct}%"></div></div>
