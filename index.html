@@ -349,7 +349,9 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .modal.show{display:flex}
 .modal-card{width:100%;background:var(--s1);border-top:1px solid var(--border2);border-radius:24px 24px 0 0;padding:24px 20px;padding-bottom:calc(24px + var(--sb));animation:slideup .3s cubic-bezier(.4,0,.2,1);max-height:88dvh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 @keyframes slideup{from{transform:translateY(100%)}to{transform:none}}
-.modal-grip{width:36px;height:4px;border-radius:2px;background:var(--s4);margin:0 auto 18px}
+.modal-grip{width:36px;height:4px;border-radius:2px;background:var(--s4);margin:0 auto 18px;cursor:pointer}
+.modal-close{position:absolute;top:18px;right:20px;width:30px;height:30px;border-radius:50%;background:var(--s3);border:none;color:var(--text3);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:.15s}
+.modal-close:active{background:var(--s4)}
 .modal-title{font-family:var(--fh);font-size:1.2rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px}
 .modal-body{font-size:.82rem;color:var(--text2);line-height:1.6}
 
@@ -440,7 +442,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 <!-- ICONS (hidden defs) -->
 <svg width="0" height="0" style="position:absolute"><defs>
 <g id="i-swim"><path d="M2 16c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1"/><path d="M2 20c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1"/><circle cx="16" cy="6" r="2"/><path d="M6 14l4-3 3 2 3-4"/></g>
-<g id="i-bike"><circle cx="5" cy="17" r="3.5"/><circle cx="19" cy="17" r="3.5"/><path d="M12 17l-2.5-5H7m5 5l2.5-5m0 0l-1-3h3m-2 3h4.5M7 12l2-3h6"/></g>
+<g id="i-bike"><path d="M5 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M13 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M9 19v-4l-3 -3l5 -4l2 3h3"/><path d="M10.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></g>
 <g id="i-run"><path d="M11 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/></g>
 <g id="i-trophy"><path d="M6 9H4.5a2.5 2.5 0 010-5H6m12 5h1.5a2.5 2.5 0 000-5H18M6 4h12v5a6 6 0 01-12 0V4zm6 11v3m-3 3h6"/></g>
 <g id="i-flame"><path d="M12 2c1 3 4 5 4 9a4 4 0 01-8 0c0-1 .5-2 1-3-2 1-4 3-4 6a7 7 0 0014 0c0-5-4-8-7-12z"/></g>
@@ -772,8 +774,9 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 
 <!-- MODAL -->
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal-card">
-    <div class="modal-grip"></div>
+  <div class="modal-card" style="position:relative">
+    <div class="modal-grip" onclick="closeModal()"></div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-title" id="modalTitle"></div>
     <div class="modal-body" id="modalBody"></div>
   </div>
@@ -810,7 +813,7 @@ function weekPlan(wk){
   ];
 }
 
-let stravaToken=null, activities=[], lastTriScore=0;
+let stravaToken=null, activities=[], lastTriScore=0, _openActivityId=null;
 
 // ── INIT ──
 window.addEventListener('load',async()=>{
@@ -1309,6 +1312,7 @@ Max 400 words.`;
 function openActivity(id){
   const a=activities.find(x=>x.id==id||x.id==String(id));
   if(!a)return;
+  _openActivityId=String(a.id);
   const t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
   const c=clsOf(a);const col=c==='sw'?'var(--swim)':c==='bk'?'var(--bike)':c==='rn'?'var(--run)':'var(--purple)';
   const ic=useIcon(a);
@@ -1496,10 +1500,10 @@ async function backgroundAnalyseAll(){
         const text=await fetchAnalysisForActivity(a);
         const html=renderAnalysisHtml(text);
         saveActivityAnalysis(a.id,html);
-        // If this activity's modal is currently open, inject result live
+        // Only inject live if THIS activity's modal is currently open
         const wrap=document.getElementById('actCoachWrap');
         const modal=document.getElementById('modal');
-        if(wrap&&modal&&modal.classList.contains('show')){
+        if(wrap&&modal&&modal.classList.contains('show')&&_openActivityId===String(a.id)){
           const dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
           wrap.innerHTML=analysisHeader(a.id,dateStr)+html;
         }
@@ -1650,45 +1654,105 @@ function computeFitnessScore(filter, opts={}){
   const now=new Date();
   const acts=activities.filter(filter);
   const last28=acts.filter(a=>(now-aDate(a))/86400000<=28);
-  // Volume score: how much relative to IM target
   const totalKm=last28.reduce((s,a)=>s+km(a.distance||0),0);
   const volTarget=opts.volTarget||100;
   const volScore=Math.min(40,totalKm/volTarget*40);
-  // Consistency: sessions per week
   const sessPerWk=last28.length/4;
   const consScore=Math.min(25,sessPerWk/opts.sessTarget*25);
-  // Pace/speed trend (if applicable)
-  let paceScore=0;
+  let paceScore=0,paceTrend='—';
   if(opts.paceCheck&&last28.length>=2){
     const speeds=last28.filter(a=>a.average_speed>0).map(a=>a.average_speed);
-    if(speeds.length>=2){const first=speeds.slice(-3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length),last3=speeds.slice(0,3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length);paceScore=Math.min(20,Math.max(0,(last3-first)/first*200+10));}
-    else paceScore=10;
+    if(speeds.length>=2){
+      const earlier=speeds.slice(-3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length);
+      const recent=speeds.slice(0,3).reduce((s,v)=>s+v,0)/Math.min(3,speeds.length);
+      paceScore=Math.min(20,Math.max(0,(recent-earlier)/earlier*200+10));
+      const pctChg=((recent-earlier)/earlier*100);
+      paceTrend=pctChg>0?`+${pctChg.toFixed(1)}% faster`:pctChg<0?`${pctChg.toFixed(1)}% slower`:'Stable';
+    } else paceScore=10;
   } else paceScore=opts.paceCheck?10:20;
-  // HR discipline (runs only)
-  let hrScore=0;
-  if(opts.hrCheck){const runs=last28.filter(a=>a.average_heartrate);const z12=runs.filter(a=>a.average_heartrate<=160).length;hrScore=runs.length?Math.min(15,(z12/runs.length)*15):7;}
-  else hrScore=15;
-  const total=Math.round(volScore+consScore+paceScore+hrScore);
-  return Math.min(100,total);
+  let hrScore=0,hrDetail='N/A';
+  if(opts.hrCheck){
+    const runs=last28.filter(a=>a.average_heartrate);
+    const z12=runs.filter(a=>a.average_heartrate<=160).length;
+    hrScore=runs.length?Math.min(15,(z12/runs.length)*15):7;
+    hrDetail=runs.length?`${Math.round(z12/runs.length*100)}% in Z1–Z3`:'No HR data';
+  } else hrScore=15;
+  const total=Math.min(100,Math.round(volScore+consScore+paceScore+hrScore));
+  return {
+    total,
+    vol:{score:Math.round(volScore),max:40,detail:`${totalKm.toFixed(0)}km / ${volTarget}km target (28d)`},
+    cons:{score:Math.round(consScore),max:25,detail:`${sessPerWk.toFixed(1)} sessions/wk avg`},
+    pace:{score:Math.round(paceScore),max:20,detail:paceTrend},
+    hr:{score:Math.round(hrScore),max:15,detail:hrDetail},
+    sessions:last28.length,
+  };
 }
 function renderFitnessScores(){
-  const swimScore=computeFitnessScore(isSwim,{volTarget:20,sessTarget:2,paceCheck:true,hrCheck:false});
-  const bikeScore=computeFitnessScore(isBike,{volTarget:200,sessTarget:2.5,paceCheck:true,hrCheck:false});
-  const runScore=computeFitnessScore(isRun,{volTarget:50,sessTarget:3,paceCheck:true,hrCheck:true});
-  const overall=Math.round((swimScore*0.25+bikeScore*0.4+runScore*0.35));
+  const swim=computeFitnessScore(isSwim,{volTarget:20,sessTarget:2,paceCheck:true,hrCheck:false});
+  const bike=computeFitnessScore(isBike,{volTarget:200,sessTarget:2.5,paceCheck:true,hrCheck:false});
+  const run=computeFitnessScore(isRun,{volTarget:50,sessTarget:3,paceCheck:true,hrCheck:true});
+  const overall={total:Math.round(swim.total*0.25+bike.total*0.4+run.total*0.35)};
   const scoreLabel=s=>s>=80?'Race Ready':s>=65?'Strong':s>=50?'Building':s>=35?'Developing':'Early';
   const el=document.getElementById('fitnessScores');
-  el.innerHTML=[
-    {s:swimScore,c:'sw',l:'Swim',col:'var(--swim)'},
-    {s:bikeScore,c:'bk',l:'Bike',col:'var(--bike)'},
-    {s:runScore,c:'rn',l:'Run',col:'var(--run)'},
-    {s:overall,c:'ov',l:'Overall',col:'var(--purple)'},
-  ].map(d=>`<div class="fit-card ${d.c}">
-    <div class="fit-score ${d.c}">${d.s}</div>
-    <div class="fit-label">${d.l} Fitness</div>
-    <div class="fit-bar"><div class="fit-bar-fill" style="width:${d.s}%;background:${d.col}"></div></div>
-    <div class="fit-desc">${scoreLabel(d.s)}</div>
-  </div>`).join('');
+  const scores=[
+    {d:swim,c:'sw',l:'Swim',col:'var(--swim)'},
+    {d:bike,c:'bk',l:'Bike',col:'var(--bike)'},
+    {d:run,c:'rn',l:'Run',col:'var(--run)'},
+    {d:overall,c:'ov',l:'Overall',col:'var(--purple)',noBreakdown:true},
+  ];
+  el.innerHTML=scores.map(({d,c,l,col,noBreakdown})=>`
+    <div class="fit-card ${c}" style="cursor:${noBreakdown?'default':'pointer'}" onclick="${noBreakdown?'':` openFitnessBreakdown('${l}')`}">
+      <div class="fit-score ${c}">${d.total}</div>
+      <div class="fit-label">${l} Fitness</div>
+      <div class="fit-bar"><div class="fit-bar-fill" style="width:${d.total}%;background:${col}"></div></div>
+      <div class="fit-desc">${scoreLabel(d.total)}${noBreakdown?'':' · tap for details'}</div>
+    </div>`).join('');
+  // Store for modal use
+  window._fitnessScores={swim,bike,run};
+}
+function openFitnessBreakdown(label){
+  const map={Swim:window._fitnessScores?.swim,Bike:window._fitnessScores?.bike,Run:window._fitnessScores?.run};
+  const d=map[label];if(!d)return;
+  const opts={Swim:{volTarget:20,sessTarget:2},Bike:{volTarget:200,sessTarget:2.5},Run:{volTarget:50,sessTarget:3}};
+  const col={Swim:'var(--swim)',Bike:'var(--bike)',Run:'var(--run)'}[label];
+  const t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
+  _openActivityId=null;
+  t.innerHTML=`<span style="color:${col};font-family:var(--fh)">${label} Fitness Score — ${d.total}/100</span>`;
+  const components=[
+    {name:'Volume',score:d.vol.score,max:40,detail:d.vol.detail,desc:'Distance covered vs IM target in last 28 days'},
+    {name:'Consistency',score:d.cons.score,max:25,detail:d.cons.detail,desc:'Average sessions per week — regularity beats intensity'},
+    {name:'Pace Trend',score:d.pace.score,max:20,detail:d.pace.detail,desc:'Speed trend comparing recent vs earlier sessions'},
+    {name:'HR Discipline',score:d.hr.score,max:15,detail:d.hr.detail,desc:label==='Run'?'% of runs in Z1–Z3 (aerobic base building)':'Not applicable for this discipline'},
+  ];
+  const scoreLabel=s=>s>=80?'Race Ready':s>=65?'Strong':s>=50?'Building':s>=35?'Developing':'Early';
+  b.innerHTML=`
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-family:var(--fh);font-size:3rem;font-weight:700;color:${col};line-height:1">${d.total}</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:4px">${scoreLabel(d.total)} · ${d.sessions} sessions in last 28 days</div>
+      <div style="height:8px;background:var(--s3);border-radius:4px;overflow:hidden;margin-top:12px">
+        <div style="height:100%;width:${d.total}%;background:${col};border-radius:4px;transition:width .8s ease"></div>
+      </div>
+    </div>
+    <div style="font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Score Breakdown</div>
+    ${components.map(comp=>{
+      const pct=Math.round(comp.score/comp.max*100);
+      const barCol=pct>=75?'var(--green)':pct>=50?col:'var(--warn)';
+      return `<div style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px">
+          <div style="font-size:.8rem;font-weight:600;color:var(--text)">${comp.name}</div>
+          <div style="font-family:var(--fm);font-size:.76rem;color:${barCol};font-weight:700">${comp.score}/${comp.max}</div>
+        </div>
+        <div style="height:7px;background:var(--s3);border-radius:4px;overflow:hidden;margin-bottom:5px">
+          <div style="height:100%;width:${pct}%;background:${barCol};border-radius:4px"></div>
+        </div>
+        <div style="font-size:.68rem;color:var(--text2)">${comp.detail}</div>
+        <div style="font-size:.63rem;color:var(--text3);margin-top:2px">${comp.desc}</div>
+      </div>`;
+    }).join('')}
+    <div style="background:var(--s2);border-radius:10px;padding:12px;font-size:.72rem;color:var(--text3);line-height:1.6;margin-top:4px">
+      Score is based on the last 28 days. Max 100 = race-ready peak for your event distance and phase.
+    </div>`;
+  document.getElementById('modal').classList.add('show');
 }
 
 // ── SAVED DEBRIEF ──
@@ -1722,7 +1786,7 @@ function openStat(type){
   else if(type==='points'){const p=weekPoints();t.innerHTML=`<svg class="ic" style="color:var(--purple)" viewBox="0 0 24 24"><use href="#i-zap"/></svg> ${p.toLocaleString()} Points`;b.innerHTML=`Points earned this week from all training. Every session counts — swims, bikes, runs, and even alternative work like strength or hiking earn credit based on effort and duration. Higher-value key sessions earn more.`;}
   m.classList.add('show');
 }
-function closeModal(){document.getElementById('modal').classList.remove('show');}
+function closeModal(){document.getElementById('modal').classList.remove('show');_openActivityId=null;}
 
 // ── NAV ──
 function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));document.getElementById('page'+name).classList.add('active');const nav=document.getElementById('nav'+name);if(nav)nav.classList.add('active');window.scrollTo(0,0);}
