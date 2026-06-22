@@ -17,7 +17,7 @@
   --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
   --swim:#22d3ee;--swim2:#67e8f9;--swim-d:rgba(34,211,238,0.16);
   --bike:#fbbf24;--bike2:#fcd34d;--bike-d:rgba(251,191,36,0.16);
-  --run:#fb7185;--run2:#fda4af;--run-d:rgba(251,113,133,0.16);
+  --run:#a78bfa;--run2:#c4b5fd;--run-d:rgba(167,139,250,0.16);
   --green:#34d399;--green-d:rgba(52,211,153,0.16);
   --gold:#fbbf24;--gold-d:rgba(251,191,36,0.16);
   --purple:#a5b4fc;--purple2:#c7d2fe;--purple-d:rgba(165,180,252,0.16);
@@ -118,7 +118,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .ws::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
 .ws.sw::after{background:var(--swim)}.ws.bk::after{background:var(--bike)}.ws.rn::after{background:var(--run)}
 .ws-ic{width:38px;height:38px;border-radius:11px;margin:0 auto 9px;display:flex;align-items:center;justify-content:center}
-.ws.sw .ws-ic{background:rgba(34,211,238,0.25);color:var(--swim2)}.ws.bk .ws-ic{background:rgba(251,191,36,0.25);color:var(--bike2)}.ws.rn .ws-ic{background:rgba(251,113,133,0.25);color:var(--run2)}
+.ws.sw .ws-ic{background:rgba(34,211,238,0.25);color:var(--swim2)}.ws.bk .ws-ic{background:rgba(251,191,36,0.25);color:var(--bike2)}.ws.rn .ws-ic{background:rgba(167,139,250,0.25);color:var(--run2)}
 .ws-ic svg{width:21px;height:21px;stroke-width:2.2}
 .ws-v{font-family:var(--fh);font-size:1.5rem;font-weight:700;line-height:1}
 .ws.sw .ws-v{color:var(--swim)}.ws.bk .ws-v{color:var(--bike)}.ws.rn .ws-v{color:var(--run)}
@@ -154,7 +154,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .act{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
 .act:last-child{border-bottom:none}
 .act-b{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
-.act-b.sw{background:rgba(34,211,238,0.22);color:var(--swim2)}.act-b.bk{background:rgba(251,191,36,0.22);color:var(--bike2)}.act-b.rn{background:rgba(251,113,133,0.22);color:var(--run2)}.act-b.ot{background:rgba(165,180,252,0.22);color:var(--purple2)}
+.act-b.sw{background:rgba(34,211,238,0.22);color:var(--swim2)}.act-b.bk{background:rgba(251,191,36,0.22);color:var(--bike2)}.act-b.rn{background:rgba(167,139,250,0.22);color:var(--run2)}.act-b.ot{background:rgba(165,180,252,0.22);color:var(--purple2)}
 .act-b svg{width:22px;height:22px;stroke-width:2.2}
 .act-i{flex:1;min-width:0}
 .act-n{font-size:.92rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
@@ -201,7 +201,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .xp-name .xp-ic svg{width:14px;height:14px;stroke-width:2}
 .xp-name.sw .xp-ic{background:rgba(34,211,238,0.22);color:var(--swim2)}
 .xp-name.bk .xp-ic{background:rgba(251,191,36,0.22);color:var(--bike2)}
-.xp-name.rn .xp-ic{background:rgba(251,113,133,0.22);color:var(--run2)}
+.xp-name.rn .xp-ic{background:rgba(167,139,250,0.22);color:var(--run2)}
 .xp-lvl{font-size:.65rem;font-family:var(--fm);color:var(--text2)}
 .xp-track{height:9px;background:var(--s3);border-radius:5px;overflow:hidden;position:relative}
 .xp-fill{height:100%;border-radius:5px;transition:width 1s cubic-bezier(.4,0,.2,1)}
@@ -220,7 +220,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .split-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
 .split-row:last-child{border-bottom:none}
 .split-ic{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.split-ic.sw{background:rgba(34,211,238,0.22);color:var(--swim2)}.split-ic.bk{background:rgba(251,191,36,0.22);color:var(--bike2)}.split-ic.rn{background:rgba(251,113,133,0.22);color:var(--run2)}.split-ic.t{background:var(--s3);color:var(--text2)}
+.split-ic.sw{background:rgba(34,211,238,0.22);color:var(--swim2)}.split-ic.bk{background:rgba(251,191,36,0.22);color:var(--bike2)}.split-ic.rn{background:rgba(167,139,250,0.22);color:var(--run2)}.split-ic.t{background:var(--s3);color:var(--text2)}
 .split-ic svg{width:21px;height:21px;stroke-width:2.2}
 .split-info{flex:1}
 .split-name{font-size:.8rem;font-weight:600}
@@ -233,7 +233,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .slider-name .sn-ic svg{width:13px;height:13px;stroke-width:2}
 .slider-name.sw .sn-ic{background:rgba(34,211,238,0.22);color:var(--swim2)}
 .slider-name.bk .sn-ic{background:rgba(251,191,36,0.22);color:var(--bike2)}
-.slider-name.rn .sn-ic{background:rgba(251,113,133,0.22);color:var(--run2)}
+.slider-name.rn .sn-ic{background:rgba(167,139,250,0.22);color:var(--run2)}
 .slider-val{font-family:var(--fm);font-size:.72rem;color:var(--purple);background:var(--purple-d);padding:2px 9px;border-radius:100px}
 input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:var(--s3);outline:none}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--purple);cursor:pointer;border:3px solid var(--bg);box-shadow:0 0 0 1px var(--purple)}
@@ -374,7 +374,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .wow-val{font-family:var(--fh);font-size:1.1rem;font-weight:700;line-height:1}
 .wow-delta{display:inline-flex;align-items:center;gap:3px;font-size:.64rem;font-family:var(--fm);margin-top:5px;padding:2px 7px;border-radius:100px}
 .wow-delta.up{background:rgba(52,211,153,.15);color:var(--green)}
-.wow-delta.dn{background:rgba(251,113,133,.15);color:var(--run)}
+.wow-delta.dn{background:rgba(167,139,250,.15);color:var(--run)}
 .wow-delta.eq{background:var(--s3);color:var(--text3)}
 .wow-delta svg{width:10px;height:10px;stroke-width:2.5}
 .wow-bar-wrap{display:flex;align-items:flex-end;justify-content:center;gap:4px;height:36px;margin:8px 0 4px}
@@ -562,9 +562,6 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 
   <!-- Insights -->
   <div id="insightRow" class="ins-row"></div>
-
-  <!-- Readiness card (populated by wellness data) -->
-  <div id="readinessCard"></div>
 
   <!-- Load chart -->
   <div class="card">
@@ -756,7 +753,6 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
     <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg>Status</div>
     <div class="sr"><span>Strava</span><span class="sbadge" id="stStatus">Checking…</span></div>
     <div class="sr"><span>Claude AI</span><span class="sbadge sb-ok" id="clStatus">Connected</span></div>
-    <div class="sr"><span>Intervals.icu</span><span class="sbadge" id="iculStatus">Checking…</span></div>
   </div>
   <div class="card">
     <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-cog"/></svg>Strava Client ID</div>
@@ -790,7 +786,6 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 // ── CONFIG ──
 const STRAVA_WORKER_URL='https://tricoach-strava-proxy.tricoach.workers.dev';
 const CLAUDE_WORKER_URL='https://tricoach-claude-proxy.tricoach.workers.dev';
-const WELLNESS_WORKER_URL='https://tricoach-wellness-proxy.tricoach.workers.dev';
 const STRAVA_REDIRECT=window.location.origin+window.location.pathname;
 const BCN_DATE=new Date('2026-10-04'), AMD_DATE=new Date('2026-10-18'), PLAN_START=new Date('2026-06-16'), PLAN_WEEKS=19;
 const FTP=220, WEIGHT=72, BEST_5K_SEC=1488; // from Strava zones
@@ -818,7 +813,7 @@ function weekPlan(wk){
   ];
 }
 
-let stravaToken=null, activities=[], lastTriScore=0, _openActivityId=null, wellnessData=null;
+let stravaToken=null, activities=[], lastTriScore=0, _openActivityId=null;
 
 // ── INIT ──
 window.addEventListener('load',async()=>{
@@ -840,7 +835,7 @@ async function refreshIfNeeded(){const exp=parseInt(localStorage.getItem('strava
 
 // ── DATA ──
 async function loadData(){await refreshIfNeeded();try{const after=Math.floor(Date.now()/1000)-90*86400;const r=await fetch(`https://www.strava.com/api/v3/athlete/activities?per_page=100&after=${after}`,{headers:{Authorization:`Bearer ${stravaToken}`}});if(!r.ok)throw new Error('Strava API');activities=await r.json();renderAll();setBadge('stStatus',true);}catch(e){console.error(e);setBadge('stStatus',false);}}
-function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();loadSavedDebrief();backgroundAnalyseAll();loadWellness();}
+function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();loadSavedDebrief();backgroundAnalyseAll();}
 
 // ── HELPERS ──
 const sp=a=>(a.sport_type||'').toLowerCase();
@@ -1142,57 +1137,6 @@ function renderLoadChart(){
   document.getElementById('loadLabels').innerHTML=labels.map(l=>`<span>${l.split(' ')[0]}</span>`).join('');
 }
 
-// ── WELLNESS / READINESS ──
-async function loadWellness(){
-  const el=document.getElementById('readinessCard');
-  if(!el)return;
-  try{
-    const today=new Date().toISOString().split('T')[0];
-    const r=await fetch(`${WELLNESS_WORKER_URL}/wellness?date=${today}`);
-    if(!r.ok)throw new Error('Wellness fetch failed');
-    wellnessData=await r.json();
-    renderReadinessCard(wellnessData);
-    setBadge('iculStatus',true);
-    renderPlan();
-  }catch(e){
-    console.warn('Wellness unavailable:',e.message);
-    setBadge('iculStatus',false);
-    if(el)el.innerHTML='';
-  }
-}
-function readinessLevel(data){
-  if(data&&data.training_readiness!=null){
-    const r=data.training_readiness;
-    if(r>=75)return{level:'green',label:'Ready to Train',score:r,desc:'Readiness high — hit your targets today.'};
-    if(r>=50)return{level:'amber',label:'Moderate Readiness',score:r,desc:'Reduce intensity. Keep volume, drop effort.'};
-    return{level:'red',label:'Recovery Day',score:r,desc:'HRV or sleep suppressed. Z1/Z2 only — protect the adaptation.'};
-  }
-  if(data&&data.hrv!=null){
-    if(data.hrv>=50)return{level:'green',label:'Ready to Train',score:null,desc:'HRV suggests good recovery.'};
-    if(data.hrv>=35)return{level:'amber',label:'Moderate Readiness',score:null,desc:'HRV slightly suppressed. Take it controlled.'};
-    return{level:'red',label:'Recovery Day',score:null,desc:'Low HRV. Prioritise Z1/Z2 and sleep tonight.'};
-  }
-  return null;
-}
-function renderReadinessCard(data){
-  const el=document.getElementById('readinessCard');
-  if(!el)return;
-  const rl=readinessLevel(data);
-  if(!rl){el.innerHTML='';return;}
-  const colMap={green:'var(--green)',amber:'var(--warn)',red:'var(--danger)'};
-  const bgMap={green:'rgba(52,211,153,0.12)',amber:'rgba(251,191,36,0.12)',red:'rgba(251,113,133,0.12)'};
-  const borderMap={green:'rgba(52,211,153,0.3)',amber:'rgba(251,191,36,0.3)',red:'rgba(251,113,133,0.3)'};
-  const col=colMap[rl.level],bg=bgMap[rl.level],border=borderMap[rl.level];
-  const metrics=[];
-  if(data.hrv!=null)metrics.push({l:'HRV',v:Math.round(data.hrv),u:'ms'});
-  if(data.resting_hr!=null)metrics.push({l:'Rest HR',v:Math.round(data.resting_hr),u:'bpm'});
-  if(data.sleep_score!=null)metrics.push({l:'Sleep',v:Math.round(data.sleep_score),u:'/100'});
-  if(data.body_battery!=null)metrics.push({l:'Battery',v:Math.round(data.body_battery),u:'/100'});
-  else if(data.sleep_hours!=null)metrics.push({l:'Sleep',v:data.sleep_hours,u:'hrs'});
-  const scoreHtml=rl.score!=null?`<div style="font-family:var(--fh);font-size:2rem;font-weight:700;color:${col};line-height:1">${rl.score}</div><div style="font-size:.6rem;color:var(--text3);font-family:var(--fm)">/100</div>`:'';
-  el.innerHTML=`<div style="background:${bg};border:1px solid ${border};border-radius:var(--r);padding:16px;margin-bottom:12px"><div style="display:flex;align-items:center;gap:14px"><div style="text-align:center;min-width:52px">${scoreHtml}<div style="width:10px;height:10px;border-radius:50%;background:${col};margin:${rl.score!=null?'6':'4'}px auto 0"></div></div><div style="flex:1"><div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${col};margin-bottom:2px">Today's Readiness</div><div style="font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:3px">${rl.label}</div><div style="font-size:.72rem;color:var(--text2);line-height:1.4">${rl.desc}</div></div></div>${metrics.length?`<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">${metrics.slice(0,4).map(m=>`<div style="background:rgba(0,0,0,0.25);border-radius:8px;padding:7px 10px;text-align:center;min-width:56px"><div style="font-family:var(--fm);font-size:.82rem;font-weight:700;color:var(--text)">${m.v}<span style="font-size:.58rem;color:var(--text3)">${m.u}</span></div><div style="font-size:.58rem;color:var(--text3);margin-top:1px">${m.l}</div></div>`).join('')}</div>`:''}</div>`;
-}
-
 // ── PLAN PAGE ──
 function renderPlan(){
   const wk=curWeek(),ph=phaseFor(wk);
@@ -1212,21 +1156,14 @@ function renderPlan(){
     bb.innerHTML=`<div class="ins gold" style="margin-bottom:12px"><div class="ins-ic"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></div><div class="ins-tx"><strong>+${comp.alt} Bonus Session${comp.alt>1?'s':''}</strong>Extra training beyond plan earned ${altPts.toLocaleString()} bonus points. Counts toward your score.</div></div>`;
   }else bb.innerHTML='';
   // session list
-  const rl=wellnessData?readinessLevel(wellnessData):null;
   document.getElementById('sessionList').innerHTML=comp.statuses.map(s=>{
     const done=s.status==='matched';const c=s.type==='swim'?'sw':s.type==='bike'?'bk':'rn';
     const icn=s.type==='swim'?'i-waves':s.type==='bike'?'i-bike':'i-run';
     const stTxt=done?'Matched':'Pending';const stCls=done?'st-matched':'st-pending';
-    const colorBg=s.type==='swim'?'rgba(34,211,238,0.22)':s.type==='bike'?'rgba(251,191,36,0.22)':'rgba(251,113,133,0.22)';
+    const colorBg=s.type==='swim'?'rgba(34,211,238,0.22)':s.type==='bike'?'rgba(251,191,36,0.22)':'rgba(167,139,250,0.22)';
     const colorFg=s.type==='swim'?'var(--swim2)':s.type==='bike'?'var(--bike2)':'var(--run2)';
     const actInfo=done&&s.act?` · ${fmtKm(s.act.distance||0)}km done`:'';
-    // Readiness badge for pending hard sessions
-    let readinessBadge='';
-    if(!done&&rl&&rl.level!=='green'&&!s.fixed){
-      if(rl.level==='amber')readinessBadge=`<span style="font-size:.58rem;background:rgba(251,191,36,0.2);color:var(--warn);border-radius:6px;padding:2px 6px;margin-left:4px">↓ Reduce</span>`;
-      if(rl.level==='red')readinessBadge=`<span style="font-size:.58rem;background:rgba(251,113,133,0.2);color:var(--danger);border-radius:6px;padding:2px 6px;margin-left:4px">Z1/Z2 only</span>`;
-    }
-    return `<div class="session ${done?'done':''}" onclick="openSession(${JSON.stringify({...s,act:s.act?{name:s.act.name,distance:s.act.distance,moving_time:s.act.moving_time,average_heartrate:s.act.average_heartrate,max_heartrate:s.act.max_heartrate,average_cadence:s.act.average_cadence,calories:s.act.calories,kilojoules:s.act.kilojoules}:null}).replace(/"/g,'&quot;')})"><div class="sess-check"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><div class="sess-ic" style="background:${colorBg};color:${colorFg}"><svg viewBox="0 0 24 24"><use href="#${icn}"/></svg></div><div class="sess-info"><div class="sess-title">${s.title}${readinessBadge}</div><div class="sess-detail">${s.detail}${actInfo}</div><span class="sess-status ${stCls}">${stTxt}</span></div><div class="sess-pts">+${s.pts}</div></div>`;
+    return `<div class="session ${done?'done':''}" onclick="openSession(${JSON.stringify({...s,act:s.act?{name:s.act.name,distance:s.act.distance,moving_time:s.act.moving_time,average_heartrate:s.act.average_heartrate,max_heartrate:s.act.max_heartrate,average_cadence:s.act.average_cadence,calories:s.act.calories,kilojoules:s.act.kilojoules}:null}).replace(/"/g,'&quot;')})"><div class="sess-check"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><div class="sess-ic" style="background:${colorBg};color:${colorFg}"><svg viewBox="0 0 24 24"><use href="#${icn}"/></svg></div><div class="sess-info"><div class="sess-title">${s.title}</div><div class="sess-detail">${s.detail}${actInfo}</div><span class="sess-status ${stCls}">${stTxt}</span></div><div class="sess-pts">+${s.pts}</div></div>`;
   }).join('');
   renderXP();
 }
@@ -1352,34 +1289,21 @@ async function generateDebrief(){
   const now=new Date(),wk7=activities.filter(a=>(now-aDate(a))/86400000<=7);
   const summary=wk7.map(a=>{const hr=a.average_heartrate?` | HR ${Math.round(a.average_heartrate)}/${Math.round(a.max_heartrate||a.average_heartrate)}bpm`:'';const cad=a.average_cadence?` | ${Math.round(a.average_cadence*2)}spm`:'';return `- ${a.sport_type}: ${fmtKm(a.distance||0)}km in ${fmtT(a.moving_time||0)}${hr}${cad}`;}).join('\n')||'- No activities';
   const wk=curWeek(),bcnD=Math.ceil((BCN_DATE-now)/86400000),comp=weekCompliance();
-  // Build wellness summary if available
-  let wellnessSummary='';
-  if(wellnessData&&wellnessData.history&&wellnessData.history.length){
-    wellnessSummary='\n\nWELLNESS (last 7 days from Garmin via Intervals.icu):\n'+wellnessData.history.map(d=>{
-      const parts=[];
-      if(d.hrv!=null)parts.push(`HRV ${Math.round(d.hrv)}ms`);
-      if(d.resting_hr!=null)parts.push(`RHR ${Math.round(d.resting_hr)}bpm`);
-      if(d.sleep_score!=null)parts.push(`Sleep ${Math.round(d.sleep_score)}/100`);
-      if(d.training_readiness!=null)parts.push(`Readiness ${Math.round(d.training_readiness)}/100`);
-      return `- ${d.date}: ${parts.join(', ')||'no data'}`;
-    }).join('\n');
-  }
   const prompt=`You are a direct expert triathlon coach reviewing Shawn's week. No fluff.
 
 ATHLETE: Ironman Barcelona 4 Oct 2026 (${bcnD}d), Amsterdam Marathon 18 Oct. Week ${wk}/19 (${phaseFor(wk)} phase). Max HR 200. Zones Z1<120 Z2 120-140 Z3 141-160 Z4 161-180 Z5 181+. Bolton 70.3 bike HR 183-187 caused run collapse — pacing is #1 priority. Front crawl from scratch. No road power meter. Maurten-only nutrition. This week compliance: ${comp.matched}/${comp.total} planned sessions, ${comp.alt} bonus sessions.
 
 LAST 7 DAYS:
-${summary}${wellnessSummary}
+${summary}
 
 Structured debrief:
 ### Sessions Completed
 ### Key Observations (specific numbers)
 ### Flags & Concerns (blunt)
-### Recovery & Readiness${wellnessData?` (use the Garmin wellness data above — flag any HRV dips vs sessions)`:' (no wellness data this week)'}
 ### Swim Progress
 ### Next Week Focus (max 3 points)
 
-Max 450 words.`;
+Max 400 words.`;
   try{const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})}),d=await r.json();if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);const t=d.content?.[0]?.text||'No response.';const rendered=t.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/\n/g,'<br>');out.innerHTML=rendered;out.classList.add('show');saveDebrief(rendered);loadSavedDebrief();}catch(e){out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;out.classList.add('show');}
   btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg> Regenerate Debrief';
 }
@@ -1615,7 +1539,7 @@ async function analyseActivity(id){
     const dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
     wrap.innerHTML=analysisHeader(a.id,dateStr)+html;
   }catch(e){
-    wrap.innerHTML=`<div style="background:var(--run-d);border:1px solid rgba(251,113,133,.2);border-radius:10px;padding:12px;font-size:.78rem;color:var(--run2)">Re-analysis failed: ${e.message}</div>`;
+    wrap.innerHTML=`<div style="background:var(--run-d);border:1px solid rgba(167,139,250,.2);border-radius:10px;padding:12px;font-size:.78rem;color:var(--run2)">Re-analysis failed: ${e.message}</div>`;
   }
 }
 
@@ -1868,7 +1792,7 @@ function closeModal(){document.getElementById('modal').classList.remove('show');
 function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));document.getElementById('page'+name).classList.add('active');const nav=document.getElementById('nav'+name);if(nav)nav.classList.add('active');window.scrollTo(0,0);}
 
 // ── SETTINGS ──
-function loadSettingsUI(){const e=document.getElementById('setClientId');if(e)e.value=localStorage.getItem('strava_client_id')||'';setBadge('stStatus',!!localStorage.getItem('strava_token'));setBadge('iculStatus',wellnessData!=null);}
+function loadSettingsUI(){const e=document.getElementById('setClientId');if(e)e.value=localStorage.getItem('strava_client_id')||'';setBadge('stStatus',!!localStorage.getItem('strava_token'));}
 function saveSettings(){const v=document.getElementById('setClientId').value.trim();if(v)localStorage.setItem('strava_client_id',v);const b=event.target;b.textContent='Saved ✓';setTimeout(()=>b.textContent='Save',1500);}
 function setBadge(id,ok){const e=document.getElementById(id);if(!e)return;e.textContent=ok?'Connected':'Not connected';e.className='sbadge '+(ok?'sb-ok':'sb-no');}
 function logout(){if(!confirm('Disconnect Strava?'))return;['strava_token','strava_refresh','strava_expires'].forEach(k=>localStorage.removeItem(k));stravaToken=null;hide('app');show('authScreen');}
