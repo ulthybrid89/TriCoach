@@ -206,7 +206,10 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .xp-fill{height:100%;border-radius:5px;transition:width 1s cubic-bezier(.4,0,.2,1)}
 .xp-fill.sw{background:linear-gradient(90deg,var(--swim),var(--swim2))}
 .xp-fill.bk{background:linear-gradient(90deg,var(--bike),var(--bike2))}
-.xp-fill.rn{background:linear-gradient(90deg,var(--run),var(--run2))}
+.xp-lvl{font-size:.65rem;font-family:var(--fm);color:var(--text2)}
+.xp-title{font-size:.7rem;color:var(--text2);font-weight:600;margin-top:2px}
+@keyframes slideIn{from{opacity:0;transform:translateX(100px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(100px)}}
 
 
 
@@ -941,7 +944,7 @@ async function refreshIfNeeded(){const exp=parseInt(localStorage.getItem('strava
 
 // ── DATA ──
 async function loadData(){await refreshIfNeeded();try{const after=Math.floor(Date.now()/1000)-90*86400;const r=await fetch(`https://www.strava.com/api/v3/athlete/activities?per_page=100&after=${after}`,{headers:{Authorization:`Bearer ${stravaToken}`}});if(!r.ok)throw new Error('Strava API');activities=await r.json();renderAll();setBadge('stStatus',true);}catch(e){console.error(e);setBadge('stStatus',false);}}
-function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();loadSavedDebrief();}
+function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();loadSavedDebrief();checkNewAchievements();}
 
 // ── HELPERS ──
 const sp=a=>(a.sport_type||'').toLowerCase();
@@ -1285,9 +1288,11 @@ function disciplineXP(filter){return activities.filter(filter).reduce((s,a)=>s+s
 function levelFor(xp){return Math.floor(Math.sqrt(xp/200))+1;}
 function xpInLevel(xp){const lvl=levelFor(xp),base=Math.pow(lvl-1,2)*200,next=Math.pow(lvl,2)*200;return{lvl,pct:Math.round((xp-base)/(next-base)*100),cur:Math.round(xp-base),need:Math.round(next-base)};}
 function renderXP(){
-  const data=[{f:isSwim,c:'sw',ic:'i-waves',n:'Swim'},{f:isBike,c:'bk',ic:'i-bike',n:'Bike'},{f:isRun,c:'rn',ic:'i-run',n:'Run'}];
-  document.getElementById('xpBars').innerHTML=data.map(d=>{const xp=disciplineXP(d.f),L=xpInLevel(xp);
-    return `<div class="xp"><div class="xp-head"><div class="xp-name ${d.c}"><span class="xp-ic"><svg viewBox="0 0 24 24"><use href="#${d.ic}"/></svg></span>${d.n} · Lv ${L.lvl}</div><div class="xp-lvl">${L.cur}/${L.need} XP</div></div><div class="xp-track"><div class="xp-fill ${d.c}" style="width:${L.pct}%"></div></div></div>`;
+  const data=[{f:isSwim,c:'sw',ic:'i-waves',n:'Swim',key:'sw'},{f:isBike,c:'bk',ic:'i-bike',n:'Bike',key:'bk'},{f:isRun,c:'rn',ic:'i-run',n:'Run',key:'rn'}];
+  document.getElementById('xpBars').innerHTML=data.map(d=>{
+    const xp=disciplineXP(d.f),L=xpInLevel(xp);
+    const levelData=athleteLevels[d.key].find(x=>x.lvl===L.lvl)||{lvl:L.lvl,title:'Level '+L.lvl};
+    return `<div class="xp"><div class="xp-head"><div class="xp-name ${d.c}"><span class="xp-ic"><svg viewBox="0 0 24 24"><use href="#${d.ic}"/></svg></span>${d.n} · Lv ${L.lvl}</div><div class="xp-lvl">${L.cur}/${L.need} XP</div></div><div style="font-size:.66rem;color:var(--text2);margin-bottom:6px;font-weight:500">${levelData.title}</div><div class="xp-track"><div class="xp-fill ${d.c}" style="width:${L.pct}%"></div></div></div>`;
   }).join('');
 }
 
@@ -1331,6 +1336,87 @@ function updatePrediction(){
     {ic:'i-run',c:'rn',n:'Run',d:'42.2km marathon',t:rnT},
   ];
   document.getElementById('predSplits').innerHTML=splits.map(s=>`<div class="split-row"><div class="split-ic ${s.c}"><svg viewBox="0 0 24 24"><use href="#${s.ic}"/></svg></div><div class="split-info"><div class="split-name">${s.n}</div><div class="split-detail">${s.d}</div></div><div class="split-time">${fmtHMS(s.t)}</div></div>`).join('');
+}
+
+// ── LEVELS & ACHIEVEMENTS ──
+const athleteLevels={
+  sw:[
+    {lvl:1,title:'Sinker'},{lvl:2,title:'Width Only'},{lvl:3,title:'Armbands Required'},{lvl:4,title:'Chlorine Drinker'},{lvl:5,title:'Doggy Paddler'},
+    {lvl:6,title:'Breaststroke Denier'},{lvl:7,title:'Lane Rope Hugger'},{lvl:8,title:'Splash Hazard'},{lvl:9,title:'Goggle Tan'},{lvl:10,title:'Pool Regular'},
+    {lvl:11,title:'Lucy Charles Fan'},{lvl:12,title:'Jan Frodeno Watcher'},{lvl:13,title:'Anne Haug Student'},{lvl:14,title:'Sarah True Admirer'},{lvl:15,title:'Alistair Brownlee Buddy'},
+    {lvl:16,title:'Poseidon Disciple'},{lvl:17,title:'Aquaman Cosplay'},{lvl:18,title:'Mermaid Status'},{lvl:19,title:'Triton Reborn'},{lvl:20,title:'Nereid Companion'},
+    {lvl:21,title:'Undine Spirit'},{lvl:22,title:'Siren of the Sea'},{lvl:23,title:'Ocean Deity'},{lvl:24,title:'Leviathan Trainer'},{lvl:25,title:'Sea God'}
+  ],
+  bk:[
+    {lvl:1,title:'Stabilisers Still On'},{lvl:2,title:'Afraid of Hills'},{lvl:3,title:'One Gear Wonder'},{lvl:4,title:'Chain Dropper'},{lvl:5,title:'Puncture Magnet'},
+    {lvl:6,title:'Nervous Descender'},{lvl:7,title:'Kickr Hermit'},{lvl:8,title:'Zwift Refugee'},{lvl:9,title:'Cat 5 Cosplay'},{lvl:10,title:'Local Hanger'},
+    {lvl:11,title:'Kristian Blummenfelt Student'},{lvl:12,title:'Lionel Sanders Watcher'},{lvl:13,title:'Fabian Cancellara Fan'},{lvl:14,title:'Geraint Thomas Admirer'},{lvl:15,title:'Tadej Pogacar Spotter'},
+    {lvl:16,title:'Pegasus Rider'},{lvl:17,title:'Road Runner Spirit'},{lvl:18,title:'Flash Training Partner'},{lvl:19,title:'Mercury Blessed'},{lvl:20,title:'Hermes Chosen'},
+    {lvl:21,title:'Wind Spirit'},{lvl:22,title:'Thunder Cyclist'},{lvl:23,title:'Storm Chaser'},{lvl:24,title:'Velocity Incarnate'},{lvl:25,title:'Speed God'}
+  ],
+  rn:[
+    {lvl:1,title:'Waddles'},{lvl:2,title:'Shuffle King'},{lvl:3,title:'Parkrun Tail Walker'},{lvl:4,title:'Never Negative Splits'},{lvl:5,title:'GPS Pauser'},
+    {lvl:6,title:'Heavy Breather'},{lvl:7,title:'Strava Tourist'},{lvl:8,title:'Dreaming of Sub-30'},{lvl:9,title:'Bolton Survivor'},{lvl:10,title:'Age Group Threat'},
+    {lvl:11,title:'Eliud Kipchoge Student'},{lvl:12,title:'Paula Radcliffe Watcher'},{lvl:13,title:'Haile Gebrselassie Fan'},{lvl:14,title:'Mo Farah Admirer'},{lvl:15,title:'Sifan Hassan Inspired'},
+    {lvl:16,title:'Athena Warrior'},{lvl:17,title:'Hermes Messenger'},{lvl:18,title:'Cheetah Spirit'},{lvl:19,title:'Phoenix Rising'},{lvl:20,title:'Valkyrie Runner'},
+    {lvl:21,title:'Mythic Sprinter'},{lvl:22,title:'Legend in Motion'},{lvl:23,title:'Immortal Pace'},{lvl:24,title:'Godspeed'},{lvl:25,title:'Running God'}
+  ]
+};
+
+const achievementDefs=[
+  // Swim
+  {id:'swim_1km',disc:'sw',title:'First Kilometre',desc:'Completed 1km continuous swim',check:a=>a.filter(isSwim).some(s=>km(s.distance||0)>=1)},
+  {id:'swim_3km',disc:'sw',title:'IM Swim Distance',desc:'Completed 3.8km swim (IM distance)',check:a=>a.filter(isSwim).some(s=>km(s.distance||0)>=3.8)},
+  {id:'swim_100m_pace',disc:'sw',title:'Sub-1:45 per 100m',desc:'Pace of 1:45/100m or faster sustained',check:a=>a.filter(isSwim).filter(s=>s.avg_speed>0).some(s=>100/s.avg_speed<=105)},
+  {id:'swim_fast_pace',disc:'sw',title:'Sub-1:30 per 100m',desc:'Elite pace: 1:30/100m or faster',check:a=>a.filter(isSwim).filter(s=>s.avg_speed>0).some(s=>100/s.avg_speed<=90)},
+  {id:'swim_open_water',disc:'sw',title:'Open Water Swimmer',desc:'First open water swim logged',check:a=>a.filter(isSwim).some(s=>(s.location_city||'').toLowerCase().includes('open')||(s.name||'').toLowerCase().includes('open'))},
+  {id:'swim_volume',disc:'sw',title:'5km Swim Week',desc:'5km+ total swim distance in one week',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wswim=a.filter(isSwim).filter(s=>aDate(s)>=ws&&aDate(s)<=we).reduce((t,s)=>t+km(s.distance||0),0);return wswim>=5;}},
+  // Bike
+  {id:'bike_100km',disc:'bk',title:'Century Ride',desc:'Completed 100km ride',check:a=>a.filter(isBike).some(s=>km(s.distance||0)>=100)},
+  {id:'bike_180km',disc:'bk',title:'IM Bike Distance',desc:'Completed 180km ride (full IM distance)',check:a=>a.filter(isBike).some(s=>km(s.distance||0)>=180)},
+  {id:'bike_30kmh',disc:'bk',title:'30km/h Average',desc:'Avg speed 30km/h+ over 50km ride',check:a=>a.filter(isBike).filter(s=>km(s.distance||0)>=50&&s.average_speed).some(s=>s.average_speed>=8.33)},
+  {id:'bike_5hr_180',disc:'bk',title:'Sub-5hr IM Bike',desc:'Completed 180km in under 5 hours',check:a=>a.filter(isBike).some(s=>km(s.distance||0)>=180&&(s.moving_time||0)/3600<5)},
+  {id:'bike_volume',disc:'bk',title:'300km Week',desc:'300km+ total bike distance in one week',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wbike=a.filter(isBike).filter(s=>aDate(s)>=ws&&aDate(s)<=we).reduce((t,s)=>t+km(s.distance||0),0);return wbike>=300;}},
+  {id:'brick_session',disc:'tri',title:'First Brick',desc:'Bike + run on same day',check:a=>{const days=new Map();a.forEach(act=>{const d=aDate(act).toDateString();if(!days.has(d))days.set(d,[]);days.get(d).push(act);});let found=false;days.forEach(acts=>{if(acts.filter(isBike).length>0&&acts.filter(isRun).length>0)found=true;});return found;}},
+  // Run
+  {id:'run_10km',disc:'rn',title:'10km Runner',desc:'Completed 10km run',check:a=>a.filter(isRun).some(s=>km(s.distance||0)>=10)},
+  {id:'run_21km',disc:'rn',title:'Half Marathon',desc:'Completed 21km run (half marathon distance)',check:a=>a.filter(isRun).some(s=>km(s.distance||0)>=21)},
+  {id:'run_42km',disc:'rn',title:'Marathoner',desc:'Completed 42km run (full marathon distance)',check:a=>a.filter(isRun).some(s=>km(s.distance||0)>=42)},
+  {id:'run_sub30_5k',disc:'rn',title:'Sub-30 5k',desc:'5km pace faster than 6:00/km',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)<=5.2&&s.avg_speed).some(s=>1000/s.avg_speed<360)},
+  {id:'run_sub25_5k',disc:'rn',title:'Sub-25 5k',desc:'5km pace faster than 5:00/km',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)<=5.2&&s.avg_speed).some(s=>1000/s.avg_speed<300)},
+  {id:'run_sub60_10k',disc:'rn',title:'Sub-60 10k',desc:'10km pace faster than 6:00/km average',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&km(s.distance||0)<=10.5&&s.avg_speed).some(s=>1000/s.avg_speed<360)},
+  {id:'run_sub55_10k',disc:'rn',title:'Sub-55 10k',desc:'10km pace faster than 5:30/km average',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&km(s.distance||0)<=10.5&&s.avg_speed).some(s=>1000/s.avg_speed<330)},
+  {id:'run_sub2hr_hm',disc:'rn',title:'Sub-2hr Half',desc:'Half marathon in under 2 hours',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=20&&km(s.distance||0)<=21.5).some(s=>(s.moving_time||0)<7200)},
+  {id:'run_sub4hr_marathon',disc:'rn',title:'Sub-4hr Marathon',desc:'Marathon in under 4 hours',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=42).some(s=>(s.moving_time||0)<14400)},
+  {id:'run_sub3hr45_marathon',disc:'rn',title:'Sub-3:45 Marathon',desc:'Marathon in under 3:45',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=42).some(s=>(s.moving_time||0)<13500)},
+  {id:'run_6min_km_10km',disc:'rn',title:'6:00/km for 10km',desc:'Hold 6:00/km pace over 10km+',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&s.avg_speed).some(s=>1000/s.avg_speed<=360)},
+  {id:'run_5min30_km_10km',disc:'rn',title:'5:30/km for 10km',desc:'Hold 5:30/km pace over 10km+',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&s.avg_speed).some(s=>1000/s.avg_speed<=330)},
+  {id:'run_5min_km_10km',disc:'rn',title:'5:00/km for 10km',desc:'Hold 5:00/km pace over 10km+ (very strong)',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&s.avg_speed).some(s=>1000/s.avg_speed<=300)},
+  // Triathlon
+  {id:'tri_all_three',disc:'tri',title:'Complete Athlete',desc:'All 3 disciplines in one week',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const acts=a.filter(act=>aDate(act)>=ws&&aDate(act)<=we);return acts.filter(isSwim).length>0&&acts.filter(isBike).length>0&&acts.filter(isRun).length>0;}},
+  {id:'tri_150km_week',disc:'tri',title:'150km Training Week',desc:'150km+ total distance in one week (~10 hours)',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wtot=a.filter(act=>aDate(act)>=ws&&aDate(act)<=we).reduce((t,act)=>t+km(act.distance||0),0);return wtot>=150;}},
+  {id:'tri_200km_week',disc:'tri',title:'200km Training Week',desc:'200km+ total distance in one week (peak week)',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wtot=a.filter(act=>aDate(act)>=ws&&aDate(act)<=we).reduce((t,act)=>t+km(act.distance||0),0);return wtot>=200;}},
+  {id:'tri_300km_week',disc:'tri',title:'300km Week',desc:'300km+ total distance in one week (race prep)',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wtot=a.filter(act=>aDate(act)>=ws&&aDate(act)<=we).reduce((t,act)=>t+km(act.distance||0),0);return wtot>=300;}},
+  {id:'tri_8week_streak',disc:'tri',title:'8-Week Streak',desc:'Trained 8 consecutive weeks without missing a week',check:a=>{let streak=0;const now=new Date();for(let i=0;i<12;i++){const d=new Date(now);d.setDate(d.getDate()-i*7);const ws=wkOf(d),we=new Date(ws);we.setDate(we.getDate()+6);if(a.filter(act=>aDate(act)>=ws&&aDate(act)<=we).length>0)streak++;else break;}return streak>=8;}},
+  {id:'triscore_400',disc:'tri',title:'TriScore 400',desc:'Achieved TriScore of 400+',check:a=>computeTriScore()>=400},
+  {id:'triscore_550',disc:'tri',title:'TriScore 550',desc:'Achieved TriScore of 550+ (Athlete tier)',check:a=>computeTriScore()>=550},
+  {id:'triscore_700',disc:'tri',title:'TriScore 700',desc:'Achieved TriScore of 700+ (Competitor tier)',check:a=>computeTriScore()>=700},
+  {id:'triscore_850',disc:'tri',title:'TriScore 850',desc:'Achieved TriScore of 850+ (Elite tier)',check:a=>computeTriScore()>=850},
+];
+function getUnlockedAchievements(){return JSON.parse(localStorage.getItem('tricoach_achievements')||'{}');}
+function checkNewAchievements(){
+  const unlocked=getUnlockedAchievements();const newAchievements=[];
+  achievementDefs.forEach(def=>{if(!unlocked[def.id]&&def.check(activities)){unlocked[def.id]={unlockedAt:new Date().toISOString()};newAchievements.push(def);}});
+  if(newAchievements.length>0){localStorage.setItem('tricoach_achievements',JSON.stringify(unlocked));newAchievements.forEach(ach=>setTimeout(()=>showAchievementPopup(ach),500));}
+}
+function showAchievementPopup(ach){
+  const colors={sw:'var(--swim)',bk:'var(--bike)',rn:'var(--run)',tri:'var(--purple)'};
+  const icons={sw:'i-waves',bk:'i-bike',rn:'i-run',tri:'i-trophy'};
+  const el=document.createElement('div');
+  el.style.cssText=`position:fixed;bottom:100px;right:16px;z-index:300;background:${colors[ach.disc]};border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:16px;max-width:280px;animation:slideIn .4s ease;box-shadow:0 10px 40px rgba(0,0,0,0.3)`;
+  el.innerHTML=`<div style="display:flex;gap:10px;align-items:flex-start"><div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg class="ic" viewBox="0 0 24 24" style="color:white"><use href="#${icons[ach.disc]}"/></svg></div><div><div style="font-family:var(--fh);font-size:.88rem;font-weight:700;color:white;letter-spacing:-0.01em">${ach.title}</div><div style="font-size:.7rem;color:rgba(255,255,255,0.8);margin-top:3px">${ach.desc}</div></div></div>`;
+  document.body.appendChild(el);
+  setTimeout(()=>{el.style.animation='slideOut .3s ease forwards';setTimeout(()=>el.remove(),300);},3500);
 }
 
 // ── ANALYTICS ──
@@ -1485,11 +1571,12 @@ function openActivity(id){
 function openSession(s){
   const t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
   const c=s.type==='swim'?'var(--swim)':s.type==='bike'?'var(--bike)':'var(--run)';
+  const cval=s.type==='swim'?'#22d3ee':s.type==='bike'?'#fbbf24':'#fb7185';
   const ic=s.type==='swim'?'i-waves':s.type==='bike'?'i-bike':'i-run';
   const imp=s.importance||'priority';
   const impLbl={key:'Key Session ★★★★★',priority:'Priority ★★★',optional:'Optional ★'}[imp];
   const impCol={key:'var(--gold)',priority:'var(--purple)',optional:'var(--text3)'}[imp];
-  t.innerHTML=`<svg class="ic" style="color:${c}" viewBox="0 0 24 24"><use href="#${ic}"/></svg> ${s.title}`;
+  t.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" style="stroke:${cval};stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;margin-right:8px;vertical-align:middle"><use href="#${ic}"/></svg> ${s.title}`;
   let body=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
     <div style="font-size:.7rem;color:${impCol};font-weight:700;text-transform:uppercase;letter-spacing:.05em">${impLbl}</div>
     <div style="font-size:.7rem;color:var(--text3);font-family:var(--fm)">${s.detail}</div>
