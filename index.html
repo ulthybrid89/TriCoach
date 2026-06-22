@@ -1167,12 +1167,16 @@ function readinessLevel(data){
     if(r>=50)return{level:'amber',label:'Moderate Readiness',score:r,desc:'Reduce intensity. Keep volume, drop effort.'};
     return{level:'red',label:'Recovery Day',score:r,desc:'HRV or sleep suppressed. Z1/Z2 only — protect the adaptation.'};
   }
-  if(data&&data.hrv!=null){
-    if(data.hrv>=60)return{level:'green',label:'Ready to Train',score:null,desc:'HRV looks good — go hit your targets.'};
-    if(data.hrv>=45)return{level:'amber',label:'Moderate Readiness',score:null,desc:'HRV slightly suppressed. Keep it controlled today.'};
-    return{level:'red',label:'Recovery Day',score:null,desc:'Low HRV. Prioritise Z1/Z2 and sleep tonight.'};
-  }
-  return null;
+  // Composite score from HRV + sleep score + sleep hours
+  const hrv=data?.hrv??null,sleep=data?.sleep_score??null,hrs=data?.sleep_hours??null;
+  if(hrv==null&&sleep==null)return null;
+  let score=100;
+  if(hrv!=null){if(hrv>=70)score=Math.min(score,90);else if(hrv>=55)score=Math.min(score,70);else score=Math.min(score,45);}
+  if(sleep!=null){if(sleep>=70)score=Math.min(score,90);else if(sleep>=50)score=Math.min(score,65);else score=Math.min(score,40);}
+  if(hrs!=null){if(hrs<5)score=Math.min(score,45);else if(hrs<6.5)score=Math.min(score,65);}
+  if(score>=75)return{level:'green',label:'Ready to Train',score:null,desc:'HRV and sleep look good — go hit your targets.'};
+  if(score>=50)return{level:'amber',label:'Moderate Readiness',score:null,desc:'Sleep or HRV suppressed. Keep intensity controlled today.'};
+  return{level:'red',label:'Recovery Day',score:null,desc:'Poor sleep detected. Z1/Z2 only — protect tonight\'s recovery.'};
 }
 function renderReadinessCard(data){
   const el=document.getElementById('readinessCard');
