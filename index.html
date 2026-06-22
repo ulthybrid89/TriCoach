@@ -5,11 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#070b14">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TriCoach">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
-<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <title>TriCoach</title>
@@ -34,7 +31,6 @@ html{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-tap-hi
 body{min-height:100dvh;padding-top:var(--st);padding-bottom:calc(70px + var(--sb));overflow-x:hidden}
 ::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
 svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
-svg{stroke:currentColor;fill:currentColor;color:inherit}
 
 /* HEADER */
 header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:13px 18px;padding-top:calc(13px + var(--st));display:flex;align-items:center;justify-content:space-between}
@@ -50,8 +46,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-
 /* NAV */
 nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;padding-bottom:var(--sb)}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 4px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:.62rem;font-weight:600;letter-spacing:.02em;text-transform:uppercase;transition:.2s;position:relative}
-.nb svg{width:22px;height:22px;stroke:var(--text3);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
-.nb.active svg{stroke:var(--purple)}
+.nb svg{width:22px;height:22px;transition:transform .2s}
 .nb.active{color:var(--purple)}
 .nb.active svg{transform:translateY(-2px)}
 .nb.active::before{content:'';position:absolute;top:0;width:24px;height:2px;border-radius:2px;background:var(--purple)}
@@ -518,6 +513,17 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
       <div class="score-rank"><span id="rankName">—</span><span class="tier-badge" id="rankTier">—</span></div>
       <div class="score-desc" id="rankDesc">Building your TriScore…</div>
       <div class="score-delta" id="scoreDelta"><svg viewBox="0 0 24 24"><use href="#i-arrow-up"/></svg><span>Live from Strava</span></div>
+    </div>
+  </div>
+
+  <!-- Overall Level Badge -->
+  <div style="background:linear-gradient(135deg,var(--s2),var(--s1));border:1px solid var(--border2);border-radius:var(--r);padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden">
+    <div style="position:absolute;bottom:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.08),transparent 70%)"></div>
+    <div style="width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--gold));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fh);font-size:2rem;font-weight:700;color:white" id="overallLvlNum">—</div>
+    <div style="flex:1">
+      <div style="font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:3px">Overall Progression</div>
+      <div style="font-family:var(--fh);font-size:1.15rem;font-weight:700;margin-bottom:4px"><span id="overallTierName">—</span> <span id="overallTierBadge" style="font-size:.62rem;padding:2px 8px;border-radius:100px;background:var(--purple-d);color:var(--purple)">—</span></div>
+      <div style="font-size:.72rem;color:var(--text2)">Swim <span id="ovSwimLvl" style="color:var(--swim);font-weight:600">—</span> · Bike <span id="ovBikeLvl" style="color:var(--bike);font-weight:600">—</span> · Run <span id="ovRunLvl" style="color:var(--run);font-weight:600">—</span></div>
     </div>
   </div>
 
@@ -1079,7 +1085,24 @@ function renderWeeklySummaryCard(){
 }
 
 // ── DASHBOARD ──
+function renderOverallLevel(){
+  const ovLvl=getOverallLevel();
+  const tier=tierFor(ovLvl);
+  const sLvl=levelFor(disciplineXP(isSwim));
+  const bLvl=levelFor(disciplineXP(isBike));
+  const rLvl=levelFor(disciplineXP(isRun));
+  document.getElementById('overallLvlNum').textContent=ovLvl;
+  document.getElementById('overallTierName').textContent=tier;
+  const badge=document.getElementById('overallTierBadge');
+  badge.textContent=tier;
+  badge.style.background=tierColor(tier)++'33';
+  badge.style.color=tierColor(tier);
+  document.getElementById('ovSwimLvl').textContent=`L${sLvl}`;
+  document.getElementById('ovBikeLvl').textContent=`L${bLvl}`;
+  document.getElementById('ovRunLvl').textContent=`L${rLvl}`;
+}
 function renderDash(){
+  renderOverallLevel();
   const now=new Date(),thisWk=activities.filter(a=>sameWk(aDate(a),now));
   const agg=(f)=>({km:thisWk.filter(f).reduce((s,a)=>s+km(a.distance||0),0),t:thisWk.filter(f).reduce((s,a)=>s+(a.moving_time||0),0)});
   const sw=agg(isSwim),bk=agg(isBike),rn=agg(isRun);
@@ -1169,14 +1192,32 @@ function renderPlan(){
 }
 function ringSet(id,frac,circ){const r=document.getElementById(id);if(!r)return;setTimeout(()=>r.style.transition='stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)',50);setTimeout(()=>r.style.strokeDashoffset=circ-frac*circ,100);}
 
-// ── XP / LEVELS ──
+// ── XP / LEVELS (25-LEVEL PROGRESSION) ──
+const SWIM_LEVELS=['Sinker','Armband Reliant','Chlorine Drinker','Doggy Paddler','Breaststroke Denier','Lane Rope Hugger','Splash Hazard','Goggle Tan','Pool Regular','Open Water Curious','Wetsuit Dependent','Sighting Disaster','Front Crawl Convert','Speedo Wearer','Jan Frodeno\'s Pool Buddy','Lucy Charles-Barclay Can See You','Smooth In The Water','Sarah True\'s Training Partner','Drafting Behind Lucy','Alistair Brownlee\'s Warm-Up','Anne Haug\'s Sparring Partner','Lucy Charles-Barclay Rival','Lucy Charles-Barclay Nightmare','Lucy Charles-Barclay','Gods Tier'];
+const BIKE_LEVELS=['Stabilisers On','Afraid Of Hills','One Gear Wonder','Chain Dropper','Puncture Magnet','Nervous Descender','Kickr Hermit','Zwift Refugee','Cat 5 Cosplay','Strava KOM Hunter','Local Chaingang Hanger','Actually Clips In','Tempo Tourist','FTP Obsessive','Sub-3hr Century','Fabian Cancellara\'s Mechanic','Geraint Thomas\'s Domestique','Tadej\'s Waterboy','Jan Frodeno\'s Training Partner','Lionel Sanders\' Rival','Anne Haug\'s Bike Split Target','Kristian Blummenfelt\'s Shadow','Blummenfelt Beware','Kristian Blummenfelt\'s Nightmare','Gods Tier'];
+const RUN_LEVELS=['Waddles','Shuffle King','Parkrun Tail Walker','Finishes Last But Finishes','Never Negative Splits','GPS Pauser','Strava Segment Tourist','Heavy Breather','Dreaming Of Sub-30','Sub-30 5K','Bolton Survivor','Age Group Threat','Mo Farah\'s Warm-Up Lap','Paula Radcliffe\'s Cool-Down Jog','Sub-25 5K','Kipchoge\'s Cautionary Tale','Haile\'s Coffee Run Partner','Sifan Hassan\'s Rival','Patrick Lange\'s Run Split Target','Jan Frodeno\'s Worst Nightmare','Eliud\'s Training Partner','Eliud Sees You Coming','Sub-20 5K','Eliud\'s Nightmare','Gods Tier'];
+
+function tierFor(lvl){if(lvl<=10)return'Brutal';if(lvl<=15)return'Real Athlete';return'Gods Tier';}
+function tierColor(tier){return tier==='Brutal'?'var(--text3)':tier==='Real Athlete'?'var(--purple)':'var(--gold)';}
 function disciplineXP(filter){return activities.filter(filter).reduce((s,a)=>s+sessionPoints(a),0);}
-function levelFor(xp){return Math.floor(Math.sqrt(xp/200))+1;}
+function levelFor(xp){return Math.min(25,Math.floor(Math.sqrt(xp/200))+1);}
 function xpInLevel(xp){const lvl=levelFor(xp),base=Math.pow(lvl-1,2)*200,next=Math.pow(lvl,2)*200;return{lvl,pct:Math.round((xp-base)/(next-base)*100),cur:Math.round(xp-base),need:Math.round(next-base)};}
+function getLevelName(discipline,lvl){const arr=discipline==='swim'?SWIM_LEVELS:discipline==='bike'?BIKE_LEVELS:RUN_LEVELS;return arr[Math.max(0,Math.min(24,lvl-1))];}
+function getOverallLevel(){const s=levelFor(disciplineXP(isSwim)),b=levelFor(disciplineXP(isBike)),r=levelFor(disciplineXP(isRun));return Math.round((s+b+r)/3);}
 function renderXP(){
-  const data=[{f:isSwim,c:'sw',ic:'i-waves',n:'Swim'},{f:isBike,c:'bk',ic:'i-bike',n:'Bike'},{f:isRun,c:'rn',ic:'i-run',n:'Run'}];
-  document.getElementById('xpBars').innerHTML=data.map(d=>{const xp=disciplineXP(d.f),L=xpInLevel(xp);
-    return `<div class="xp"><div class="xp-head"><div class="xp-name ${d.c}"><span class="xp-ic"><svg viewBox="0 0 24 24"><use href="#${d.ic}"/></svg></span>${d.n} · Lv ${L.lvl}</div><div class="xp-lvl">${L.cur}/${L.need} XP</div></div><div class="xp-track"><div class="xp-fill ${d.c}" style="width:${L.pct}%"></div></div></div>`;
+  const data=[{f:isSwim,c:'sw',ic:'i-waves',n:'Swim',d:'swim'},{f:isBike,c:'bk',ic:'i-bike',n:'Bike',d:'bike'},{f:isRun,c:'rn',ic:'i-run',n:'Run',d:'run'}];
+  document.getElementById('xpBars').innerHTML=data.map(d=>{const xp=disciplineXP(d.f),L=xpInLevel(xp),lvlName=getLevelName(d.d,L.lvl),tier=tierFor(L.lvl);
+    return `<div class="xp" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px;margin-bottom:10px">
+      <div class="xp-head">
+        <div class="xp-name ${d.c}" style="font-size:.82rem;color:var(--text);font-weight:600">
+          <span class="xp-ic"><svg viewBox="0 0 24 24"><use href="#${d.ic}"/></svg></span>${d.n} · Level ${L.lvl}/25
+        </div>
+        <div class="xp-lvl" style="color:${tierColor(tier)};font-weight:700;font-size:.72rem">${tier}</div>
+      </div>
+      <div style="font-size:.82rem;font-weight:600;color:var(--text);margin:8px 0 8px">${lvlName}</div>
+      <div class="xp-track"><div class="xp-fill ${d.c}" style="width:${L.pct}%"></div></div>
+      <div class="xp-lvl" style="margin-top:6px;font-size:.64rem">${L.cur.toLocaleString()}/${L.need.toLocaleString()} XP</div>
+    </div>`;
   }).join('');
 }
 
