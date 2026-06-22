@@ -347,7 +347,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 /* MODAL */
 .modal{position:fixed;inset:0;z-index:200;background:rgba(7,11,20,.7);backdrop-filter:blur(8px);display:none;align-items:flex-end;animation:fade .25s}
 .modal.show{display:flex}
-.modal-card{width:100%;background:var(--s1);border-top:1px solid var(--border2);border-radius:24px 24px 0 0;padding:24px 20px;padding-bottom:calc(24px + var(--sb));animation:slideup .3s cubic-bezier(.4,0,.2,1)}
+.modal-card{width:100%;background:var(--s1);border-top:1px solid var(--border2);border-radius:24px 24px 0 0;padding:24px 20px;padding-bottom:calc(24px + var(--sb));animation:slideup .3s cubic-bezier(.4,0,.2,1);max-height:88dvh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 @keyframes slideup{from{transform:translateY(100%)}to{transform:none}}
 .modal-grip{width:36px;height:4px;border-radius:2px;background:var(--s4);margin:0 auto 18px}
 .modal-title{font-family:var(--fh);font-size:1.2rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px}
@@ -441,7 +441,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 <svg width="0" height="0" style="position:absolute"><defs>
 <g id="i-swim"><path d="M2 16c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1"/><path d="M2 20c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1"/><circle cx="16" cy="6" r="2"/><path d="M6 14l4-3 3 2 3-4"/></g>
 <g id="i-bike"><circle cx="5" cy="17" r="3.5"/><circle cx="19" cy="17" r="3.5"/><path d="M12 17l-2.5-5H7m5 5l2.5-5m0 0l-1-3h3m-2 3h4.5M7 12l2-3h6"/></g>
-<g id="i-run"><circle cx="14" cy="4" r="1.5"/><path d="M9 19l2-5 3 2 3-4.5M9 19h5m-5 0l-2 2m9-9.5l2 1.5-1 3.5m-1-5l-2-3-3 1"/></g>
+<g id="i-run"><circle cx="15" cy="4" r="1.5"/><path d="M8 21l3-6 3 2 2.5-4"/><path d="M11 15l-2-5 3-2 2 3"/><path d="M13 8l1-3 3 1-1 2.5"/><path d="M8 21l1.5 1"/></g>
 <g id="i-trophy"><path d="M6 9H4.5a2.5 2.5 0 010-5H6m12 5h1.5a2.5 2.5 0 000-5H18M6 4h12v5a6 6 0 01-12 0V4zm6 11v3m-3 3h6"/></g>
 <g id="i-flame"><path d="M12 2c1 3 4 5 4 9a4 4 0 01-8 0c0-1 .5-2 1-3-2 1-4 3-4 6a7 7 0 0014 0c0-5-4-8-7-12z"/></g>
 <g id="i-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></g>
@@ -1360,13 +1360,67 @@ function openActivity(id){
     </div>
 
     <div id="actCoachWrap">
-      <button onclick="analyseActivity(${a.id})" style="width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-family:var(--fh);font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:-0.01em">
-        <svg style="width:16px;height:16px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>
-        Analyse This Session
-      </button>
+      ${(()=>{
+        const cached=loadActivityAnalysis(a.id);
+        if(cached){
+          return `<div style="font-size:.62rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+            <span style="display:flex;align-items:center;gap:6px"><svg style="width:13px;height:13px;stroke:var(--purple);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>AI Session Analysis</span>
+            <span style="font-size:.58rem;color:var(--text3);font-weight:400">${cached.date} · <span onclick="analyseActivity(${a.id})" style="color:var(--purple);cursor:pointer;text-decoration:underline">Re-analyse</span></span>
+          </div>${cached.html}`;
+        }
+        return `<button onclick="analyseActivity(${a.id})" style="width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-family:var(--fh);font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:-0.01em">
+          <svg style="width:16px;height:16px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>
+          Analyse This Session
+        </button>`;
+      })()}
     </div>`;
 
   document.getElementById('modal').classList.add('show');
+}
+
+// ── ACTIVITY ANALYSIS STORAGE ──
+function saveActivityAnalysis(id,html){
+  try{
+    const store=JSON.parse(localStorage.getItem('tricoach_analyses')||'{}');
+    // Keep max 50 analyses, drop oldest if over limit
+    const keys=Object.keys(store);
+    if(keys.length>=50){
+      // Remove the oldest entry
+      const oldest=keys.sort((a,b)=>(store[a].ts||0)-(store[b].ts||0))[0];
+      delete store[oldest];
+    }
+    store[String(id)]={html,date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),ts:Date.now()};
+    localStorage.setItem('tricoach_analyses',JSON.stringify(store));
+  }catch(e){console.warn('Analysis save failed:',e);}
+}
+function loadActivityAnalysis(id){
+  try{
+    const store=JSON.parse(localStorage.getItem('tricoach_analyses')||'{}');
+    return store[String(id)]||null;
+  }catch(e){return null;}
+}
+function renderAnalysisHtml(text){
+  const sections=['VERDICT','HR ANALYSIS','PACE/EFFORT','CADENCE','RACE RELEVANCE','ONE THING'];
+  let html='';
+  sections.forEach((sec,i)=>{
+    const next=sections[i+1];
+    const pattern=new RegExp(sec+':\\s*([\\s\\S]*?)'+(next?next+':':'$'));
+    const m=text.match(pattern);
+    if(!m)return;
+    const content=m[1].trim().replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    const isVerdict=sec==='VERDICT',isFlag=sec==='ONE THING';
+    const secCol=isVerdict?'var(--purple)':isFlag?'var(--gold)':'var(--text3)';
+    const bg=isVerdict?'rgba(165,180,252,0.1)':isFlag?'rgba(251,191,36,0.08)':'var(--s2)';
+    const border=isVerdict?'1px solid rgba(165,180,252,0.25)':isFlag?'1px solid rgba(251,191,36,0.2)':'1px solid var(--border)';
+    html+=`<div style="background:${bg};border:${border};border-radius:10px;padding:12px;margin-bottom:8px">
+      <div style="font-size:.58rem;font-weight:700;color:${secCol};text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">${sec}</div>
+      <div style="font-size:.78rem;color:var(--text2);line-height:1.65">${content}</div>
+    </div>`;
+  });
+  if(!html){
+    html=`<div style="background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.78rem;color:var(--text2);line-height:1.7">${text.replace(/\n/g,'<br>')}</div>`;
+  }
+  return html;
 }
 
 async function analyseActivity(id){
@@ -1379,7 +1433,6 @@ async function analyseActivity(id){
   const cal=a.calories||(a.kilojoules?Math.round(a.kilojoules*0.239):0);
   const hrZone=a.average_heartrate?HR_ZONES.find(z=>a.average_heartrate>=z.min&&a.average_heartrate<=z.max):null;
 
-  // Recent context for comparison
   const recentSameType=activities.filter(x=>sp(x)===sp(a)&&x.id!==a.id).slice(0,5);
   const avgRecentHR=recentSameType.filter(x=>x.average_heartrate).length?
     Math.round(recentSameType.filter(x=>x.average_heartrate).reduce((s,x)=>s+x.average_heartrate,0)/recentSameType.filter(x=>x.average_heartrate).length):null;
@@ -1387,16 +1440,9 @@ async function analyseActivity(id){
     recentSameType.filter(x=>x.average_speed).reduce((s,x)=>s+x.average_speed,0)/recentSameType.filter(x=>x.average_speed).length:null;
 
   let paceStr='—',paceContext='';
-  if(isRun(a)&&a.average_speed){
-    paceStr=fmtPace(a.average_speed)+'/km';
-    if(avgRecentSpeed)paceContext=`Recent avg: ${fmtPace(avgRecentSpeed)}/km`;
-  } else if(isSwim(a)&&a.average_speed){
-    paceStr=swim100(a.average_speed)+'/100m';
-    if(avgRecentSpeed)paceContext=`Recent avg: ${swim100(avgRecentSpeed)}/100m`;
-  } else if(isBike(a)&&a.average_speed){
-    paceStr=(a.average_speed*3.6).toFixed(1)+'km/h';
-    if(avgRecentSpeed)paceContext=`Recent avg: ${(avgRecentSpeed*3.6).toFixed(1)}km/h`;
-  }
+  if(isRun(a)&&a.average_speed){paceStr=fmtPace(a.average_speed)+'/km';if(avgRecentSpeed)paceContext=`Recent avg: ${fmtPace(avgRecentSpeed)}/km`;}
+  else if(isSwim(a)&&a.average_speed){paceStr=swim100(a.average_speed)+'/100m';if(avgRecentSpeed)paceContext=`Recent avg: ${swim100(avgRecentSpeed)}/100m`;}
+  else if(isBike(a)&&a.average_speed){paceStr=(a.average_speed*3.6).toFixed(1)+'km/h';if(avgRecentSpeed)paceContext=`Recent avg: ${(avgRecentSpeed*3.6).toFixed(1)}km/h`;}
 
   const prompt=`You are a direct, expert triathlon coach. Analyse this single training session for Shawn with specific, data-driven feedback. Be blunt and precise — no generic advice.
 
@@ -1415,7 +1461,7 @@ SESSION DATA:
 - Distance: ${fmtKm(a.distance||0)}km
 - Moving time: ${fmtT(a.moving_time||0)}
 - Pace/speed: ${paceStr}${paceContext?` (${paceContext})`:''}
-- Avg HR: ${a.average_heartrate?Math.round(a.average_heartrate)+'bpm ('+( hrZone?hrZone.name:'unknown zone')+')':'no HR data'}
+- Avg HR: ${a.average_heartrate?Math.round(a.average_heartrate)+'bpm ('+(hrZone?hrZone.name:'unknown zone')+')':'no HR data'}
 - Max HR: ${a.max_heartrate?Math.round(a.max_heartrate)+'bpm':'—'}
 - Cadence: ${a.average_cadence?Math.round(a.average_cadence*2)+' spm':'no data'}
 - Elevation: ${a.total_elevation_gain?Math.round(a.total_elevation_gain)+'m':'—'}
@@ -1444,35 +1490,13 @@ Max 280 words. Use numbers. Be direct.`;
     const d=await r.json();
     if(!r.ok)throw new Error(d.error||`${r.status}`);
     const text=d.content?.[0]?.text||'No response.';
-
-    // Parse sections
-    const sections=['VERDICT','HR ANALYSIS','PACE/EFFORT','CADENCE','RACE RELEVANCE','ONE THING'];
-    let html='';
-    sections.forEach((sec,i)=>{
-      const next=sections[i+1];
-      const pattern=new RegExp(sec+':\\s*([\\s\\S]*?)'+(next?next+':':'$'));
-      const m=text.match(pattern);
-      if(!m)return;
-      const content=m[1].trim().replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
-      const isVerdict=sec==='VERDICT',isFlag=sec==='ONE THING';
-      const secCol=isVerdict?'var(--purple)':isFlag?'var(--gold)':'var(--text3)';
-      const bg=isVerdict?'rgba(165,180,252,0.1)':isFlag?'rgba(251,191,36,0.08)':'var(--s2)';
-      const border=isVerdict?'1px solid rgba(165,180,252,0.25)':isFlag?'1px solid rgba(251,191,36,0.2)':'1px solid var(--border)';
-      html+=`<div style="background:${bg};border:${border};border-radius:10px;padding:12px;margin-bottom:8px">
-        <div style="font-size:.58rem;font-weight:700;color:${secCol};text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">${sec}</div>
-        <div style="font-size:.78rem;color:var(--text2);line-height:1.65">${content}</div>
-      </div>`;
-    });
-
-    // Fallback if parsing fails
-    if(!html){
-      html=`<div style="background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.78rem;color:var(--text2);line-height:1.7">${text.replace(/\n/g,'<br>')}</div>`;
-    }
-
+    const html=renderAnalysisHtml(text);
+    saveActivityAnalysis(a.id,html);
+    const dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
     wrap.innerHTML=`
-      <div style="font-size:.62rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
-        <svg style="width:13px;height:13px;stroke:var(--purple);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>
-        AI Session Analysis
+      <div style="font-size:.62rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:6px"><svg style="width:13px;height:13px;stroke:var(--purple);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>AI Session Analysis</span>
+        <span style="font-size:.58rem;color:var(--text3);font-weight:400">${dateStr} · <span onclick="analyseActivity(${a.id})" style="color:var(--purple);cursor:pointer;text-decoration:underline">Re-analyse</span></span>
       </div>
       ${html}`;
   }catch(e){
