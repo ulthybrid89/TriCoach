@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#070b14">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TriCoach">
-<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <title>TriCoach</title>
@@ -31,8 +31,7 @@
 html{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-tap-highlight-color:transparent;font-size:17px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{min-height:100dvh;padding-top:var(--st);padding-bottom:calc(70px + var(--sb));overflow-x:hidden}
 ::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
-svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:white;stroke-linecap:round;stroke-linejoin:round}
-svg[viewBox="0 0 24 24"]{stroke:white;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
 
 /* HEADER */
 header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:13px 18px;padding-top:calc(13px + var(--st));display:flex;align-items:center;justify-content:space-between}
@@ -191,20 +190,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .comp-ring svg{transform:rotate(-90deg)}
 .comp-ring-c{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:1.05rem;font-weight:700}
 .comp-info-t{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
-.comp-calendar{margin-bottom:12px}
-.comp-cal-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:10px}
-.comp-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px}
-.comp-cal-day{aspect-ratio:1;background:var(--s3);border-radius:6px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.5rem;color:var(--text3);cursor:pointer;transition:.15s;position:relative}
-.comp-cal-day:hover{transform:scale(1.05);border-color:var(--text2)}
-.comp-cal-day.done{background:var(--green);border-color:var(--green);color:var(--bg);font-weight:700}
-.comp-cal-day.alt{background:var(--bike);border-color:var(--bike);color:var(--bg);font-weight:700}
-.comp-cal-day.pending{background:rgba(255,255,255,0.08);border-color:var(--border)}
-.comp-cal-day.rest{background:var(--s2);border-color:var(--border);opacity:.5}
-.comp-cal-tooltip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--s1);border:1px solid var(--border2);border-radius:8px;padding:6px 10px;font-size:.6rem;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s;z-index:10;margin-bottom:4px}
-.comp-cal-day:hover .comp-cal-tooltip{opacity:1}
-.comp-cal-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:.65rem;color:var(--text3)}
-.comp-cal-legend-item{display:flex;align-items:center;gap:4px}
-.comp-cal-legend-dot{width:10px;height:10px;border-radius:4px}
+.comp-info-v{font-size:.78rem;color:var(--text2);font-family:var(--fm)}
 
 /* XP BARS */
 .xp{margin-bottom:12px}
@@ -220,10 +206,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .xp-fill{height:100%;border-radius:5px;transition:width 1s cubic-bezier(.4,0,.2,1)}
 .xp-fill.sw{background:linear-gradient(90deg,var(--swim),var(--swim2))}
 .xp-fill.bk{background:linear-gradient(90deg,var(--bike),var(--bike2))}
-.xp-lvl{font-size:.65rem;font-family:var(--fm);color:var(--text2)}
-.xp-title{font-size:.7rem;color:var(--text2);font-weight:600;margin-top:2px}
-@keyframes slideIn{from{opacity:0;transform:translateX(100px)}to{opacity:1;transform:translateX(0)}}
-@keyframes slideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(100px)}}
+.xp-fill.rn{background:linear-gradient(90deg,var(--run),var(--run2))}
 
 
 
@@ -290,55 +273,23 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .mb{font-size:.58rem;padding:2px 7px;border-radius:100px;font-weight:600}
 .mb-g{background:var(--green-d);color:var(--green)}.mb-w{background:var(--bike-d);color:var(--bike)}.mb-b{background:var(--run-d);color:var(--danger)}
 
-/* SESSION IMPORTANCE STARS */
-.sess-stars{display:flex;gap:2px;margin-top:4px}
-.sess-stars svg{width:11px;height:11px;stroke-width:2}
-.sess-star-filled{fill:var(--gold);stroke:var(--gold)}
-.sess-star-empty{fill:none;stroke:var(--s4)}
-.sess-importance{font-size:.58rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-top:3px;display:inline-block;padding:2px 7px;border-radius:100px}
-.sess-importance.key{background:linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.1));color:var(--gold);border:1px solid rgba(251,191,36,0.3)}
-.sess-importance.priority{background:rgba(165,180,252,0.15);color:var(--purple);border:1px solid rgba(165,180,252,0.25)}
-.sess-importance.optional{background:var(--s3);color:var(--text3)}
-.sess-alts{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-.sess-alt-tag{font-size:.58rem;padding:2px 8px;border-radius:100px;background:var(--s3);color:var(--text2);border:1px solid var(--border)}
-
-/* SESSION DETAIL MODAL */
-.sess-drill{background:var(--s2);border-radius:10px;padding:14px;margin-top:12px}
-.sess-drill-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:10px}
-.sess-drill-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:.78rem;color:var(--text2);align-items:flex-start}
-.sess-drill-item:last-child{border-bottom:none}
-.sess-drill-bullet{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:6px}
-.sess-drill-text{flex:1;line-height:1.5}
-.sess-drill-text strong{color:var(--text);font-weight:600}
-
 /* DEBRIEF */
 .db-btn{width:100%;padding:15px;border-radius:var(--r);background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-family:var(--fh);font-size:.95rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:.15s;margin-bottom:12px;letter-spacing:-0.01em}
 .db-btn:active{opacity:.88;transform:scale(.99)}.db-btn:disabled{opacity:.5}
 .db-btn svg{width:18px;height:18px;stroke-width:2}
-.db-out{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:none;margin-bottom:12px}
+.db-out{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px;font-size:.8rem;line-height:1.75;color:var(--text2);display:none}
 .db-out.show{display:block}
-.db-section{padding:0;border-bottom:1px solid var(--border)}
-.db-section:last-child{border-bottom:none}
-.db-section-head{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--s2)}
-.db-section-ic{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.db-section-ic svg{width:16px;height:16px;stroke-width:2.2}
-.db-section-title{font-family:var(--fh);font-size:.84rem;font-weight:700;color:var(--text)}
-.db-section-body{padding:14px 16px;font-size:.79rem;line-height:1.75;color:var(--text2)}
-.db-section-body strong{color:var(--text);font-weight:600}
-.db-section-body .flag{color:var(--danger);font-weight:600}
-.db-section-body .good{color:var(--green);font-weight:600}
-.db-raw{padding:16px;font-size:.79rem;line-height:1.75;color:var(--text2)}
-.db-raw strong{color:var(--text);font-weight:600}
-.db-raw .flag{color:var(--danger)}.db-raw .good{color:var(--green)}
-.saved-debrief{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
-.saved-debrief-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--s2);border-bottom:1px solid var(--border)}
+.saved-debrief{background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.saved-debrief-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .saved-debrief-date{font-size:.68rem;color:var(--text3);font-family:var(--fm)}
 .saved-debrief-clear{font-size:.65rem;color:var(--text3);background:var(--s3);border:none;padding:3px 9px;border-radius:100px;cursor:pointer;font-family:var(--fb)}
-.saved-debrief-body{padding:14px 16px;font-size:.78rem;line-height:1.75;color:var(--text2)}
-.saved-debrief-body h3{font-family:var(--fh);font-size:.84rem;font-weight:600;color:var(--purple);margin:14px 0 6px;padding-top:10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:7px}
-.saved-debrief-body h3:first-child{margin-top:0;padding-top:0;border-top:none}
-.saved-debrief-body h3::before{content:'';width:3px;height:14px;border-radius:2px;background:var(--purple);flex-shrink:0}
-.saved-debrief-body strong{color:var(--text);font-weight:600}
+.saved-debrief-body{font-size:.78rem;line-height:1.7;color:var(--text2)}
+.saved-debrief-body h3{font-family:var(--fh);font-size:.84rem;font-weight:600;color:var(--purple);margin:12px 0 5px}
+.saved-debrief-body h3:first-child{margin-top:0}
+.db-out h3{font-family:var(--fh);font-size:.86rem;font-weight:600;color:var(--purple);margin:16px 0 6px;letter-spacing:-0.01em}
+.db-out h3:first-child{margin-top:0}
+.db-out strong{color:var(--text);font-weight:600}
+.db-out .flag{color:var(--danger)}.db-out .good{color:var(--green)}
 .plink{display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:14px 16px;color:var(--purple);font-size:.82rem;font-weight:500;text-decoration:none;margin-bottom:12px;transition:.2s}
 .plink:active{background:var(--s3)}
 .coach-banner{display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
@@ -681,8 +632,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
     <div id="xpBars"></div>
   </div>
 
-  <!-- Compliance Calendar -->
-  <div id="compCalendarSection"></div>
+
+</div>
 
 <!-- STATS -->
 <div id="pageAnalytics" class="page">
@@ -778,24 +729,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
     <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-target"/></svg>Execution Strategy</div>
     <div class="leg"><div class="leg-d" style="background:var(--swim)"></div><div><div class="leg-t">Swim — 3.8km Open Water</div><div class="leg-x">Seed conservatively · sight every 6–8 strokes<br>No sprint start · use legal drafting<br>Exit calm, don't rush T1</div><div class="leg-tag lt-o">Target sub 1:30</div></div></div>
     <div class="leg"><div class="leg-d" style="background:var(--bike)"></div><div><div class="leg-t">Bike — 180km</div><div class="leg-x">HR cap 155–158bpm absolute max<br>First 90km deliberately held back<br>No surges, no ego · ~190–200W target<br>Bolton: HR 183–187 destroyed the run</div><div class="leg-tag lt-d">⚠ Pacing = #1 risk</div></div></div>
-    <div class="leg"><div class="leg-d" style="background:var(--run)"></div><div><div class="leg-t">Run — 42.2km</div><div class="leg-x">Start HR 150–155 · don't chase pace<br>Calella Oct: avg 18–22°C, can spike 25°C+<br>Much cooler than feared — but still 8°C warmer than Manchester<br>Walk aid stations · ice in cap/kit regardless</div><div class="leg-tag lt-w">Heat: manageable, not ignored</div></div></div>
-  </div>
-
-  <!-- Race day weather -->
-  <div class="card">
-    <div class="card-accent" style="background:linear-gradient(90deg,var(--swim),var(--purple))"></div>
-    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-sun"/></svg>Race Day Weather — Calella, 4 Oct</div>
-    <div class="ins good" style="margin-bottom:8px"><div class="ins-ic"><svg viewBox="0 0 24 24"><use href="#i-sun"/></svg></div><div class="ins-tx"><strong>Better than expected</strong>Historical data: avg high 21°C, avg low 17°C on race day. Can reach 25°C on warm years — not a scorcher.</div></div>
-    <div class="ins info" style="margin-bottom:8px"><div class="ins-ic" style="background:rgba(34,211,238,0.22);color:var(--swim2)"><svg viewBox="0 0 24 24"><use href="#i-waves"/></svg></div><div class="ins-tx"><strong>Sea temp ~21–22°C</strong>Mediterranean in early October — wetsuit-borderline. Race decision announced on day. Plan for either.</div></div>
-    <div class="ins warn"><div class="ins-ic"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg></div><div class="ins-tx"><strong>Still 8–10°C warmer than Manchester</strong>Heat acclimatisation still matters — especially for the run. Start run at RPE not pace. Grab ice at every station.</div></div>
-    <div style="margin-top:12px;background:var(--s2);border-radius:10px;padding:12px;font-family:var(--fm);font-size:.7rem;color:var(--text3)">
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center">
-        <div><div style="font-family:var(--fh);font-size:1.1rem;font-weight:700;color:var(--swim2)">21°C</div><div style="margin-top:2px">Avg High</div></div>
-        <div><div style="font-family:var(--fh);font-size:1.1rem;font-weight:700;color:var(--purple)">17°C</div><div style="margin-top:2px">Avg Low</div></div>
-        <div><div style="font-family:var(--fh);font-size:1.1rem;font-weight:700;color:var(--bike2)">25°C</div><div style="margin-top:2px">Warm Year</div></div>
-      </div>
-      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);color:var(--text3);font-size:.65rem">Based on Calella historical weather records, early October 2016–2024. Source: Weather Spark / climate averages.</div>
-    </div>
+    <div class="leg"><div class="leg-d" style="background:var(--run)"></div><div><div class="leg-t">Run — 42.2km</div><div class="leg-x">Start HR 150–155 · don't chase pace<br>Heat 22–26°C · slow first 10km<br>Walk aid stations · ice in kit</div><div class="leg-tag lt-w">⚠ Heat critical</div></div></div>
   </div>
 
   <!-- Nutrition -->
@@ -865,74 +799,13 @@ function weekPlan(wk){
   const ph=phaseFor(wk);
   const scale=ph==='Base'?1:ph==='Build'?1.3:ph==='Peak'?1.5:0.6;
   return [
-    {type:'swim',title:'Swim — Technique Drills',detail:'Tue · coach · front crawl focus',target:1.2*scale,pts:120,fixed:true,importance:'key',
-     drills:[
-       {t:'Warm-up',d:`400m easy choice of stroke`},
-       {t:'Catch drills',d:`<strong>4×50m fingertip drag</strong> — focus on high elbow recovery, 20s rest`},
-       {t:'Pull buoy',d:`<strong>4×100m pull buoy</strong> front crawl, breathe every 3 strokes, 30s rest`},
-       {t:'Kick drills',d:`<strong>4×25m kick on side</strong> — body rotation drill, 15s rest`},
-       {t:'Sighting',d:`<strong>2×200m open-water sim</strong> — sight every 8 strokes, no lane rope aid`},
-       {t:'Cool-down',d:`200m easy breaststroke or backstroke`},
-     ],
-     alts:['Yoga (flexibility)','Strength upper body','Stretching 30min']},
-    {type:'swim',title:'Swim — Endurance',detail:`${(1.5*scale).toFixed(1)}km continuous`,target:1.5*scale,pts:130,importance:'priority',
-     drills:[
-       {t:'Warm-up',d:`300m easy front crawl`},
-       {t:'Main set',d:`<strong>${(1.5*scale).toFixed(1)}km continuous</strong> front crawl — Z2 HR, steady rhythm, no stopping`},
-       {t:'Pace target',d:`Aim for consistent splits — don't go out hard. Count strokes/length for consistency.`},
-       {t:'Cool-down',d:`200m easy any stroke`},
-     ],
-     alts:['Open water swim (if available)','Pool run 30min','Aqua jogging']},
-    {type:'bike',title:'Bike — Zone 2 Endurance',detail:`${Math.round(40*scale)}km · HR <140`,target:40*scale,pts:200,importance:'priority',
-     drills:[
-       {t:'HR cap',d:`<strong>Absolute ceiling: 140bpm</strong> — if you go over, slow down immediately`},
-       {t:'Duration',d:`Approx ${Math.round((40*scale)/25*60)} min at comfortable Z2 pace`},
-       {t:'Focus',d:`Smooth cadence 85–95rpm. Practice nutrition timing — gel every 30 min.`},
-       {t:'Indoor option',d:`Kickr Core at 65% FTP (${Math.round(FTP*0.65)}W) — same rules apply`},
-     ],
-     alts:['Long walk/hike 90min','Strength legs','Cross-trainer 60min']},
-    {type:'bike',title:ph==='Peak'?'Bike — Long Ride':'Bike — Tempo',detail:`${Math.round((ph==='Peak'?90:55)*scale)}km`,target:(ph==='Peak'?90:55)*scale,pts:ph==='Peak'?320:240,importance:'key',
-     drills:ph==='Peak'?[
-       {t:'Key session — non-negotiable',d:`<strong>Long ride: ${Math.round(90*scale)}km</strong> — Barcelona race simulation`},
-       {t:'Pacing rule',d:`<strong>First 60km: HR ≤ 150bpm</strong>. Bolton failure started with HR 183+ late. Don't repeat it.`},
-       {t:'Nutrition',d:`Maurten gel every 30 min, Drink Mix every hour. Practice it exactly as race day.`},
-       {t:'Run off bike',d:`10–15min easy run immediately after. Check HR recovery rate.`},
-     ]:[
-       {t:'Tempo effort',d:`<strong>${Math.round(55*scale)}km</strong> — sustained Z3 effort (HR 141–160)`},
-       {t:'Structure',d:`Warm-up 15min easy → main at Z3 → 10min cool-down`},
-       {t:'Focus',d:`Ride a bit harder than Z2 but stay controlled. Race pace is between Z2 and Z3 on the bike.`},
-       {t:'Power target',d:`If Kickr: ${Math.round(FTP*0.78)}–${Math.round(FTP*0.85)}W. Smooth pedalling.`},
-     ],
-     alts:['Turbo 75min structured intervals','Indoor cycling class','Rowing machine 60min']},
-    {type:'run',title:'Run — Easy Aerobic',detail:`${(5*scale).toFixed(0)}km · Z2`,target:5*scale,pts:140,importance:'priority',
-     drills:[
-       {t:'HR cap',d:`<strong>Ceiling: 140bpm</strong> — run by feel, not pace. Walk if needed.`},
-       {t:'Distance',d:`${(5*scale).toFixed(0)}km — route with no hills if possible for true Z2`},
-       {t:'Cadence focus',d:`Target <strong>170–175 spm</strong>. Short, quick steps. Set Garmin cadence alert if you have it.`},
-       {t:'CV limiter',d:`Your limiter is cardiovascular, not legs. Keep it easy here — save legs for long run.`},
-     ],
-     alts:['Walk 60min (active recovery)','Elliptical 40min Z2','Aqua jogging 30min']},
-    {type:'run',title:'Run — Parkrun + Long',detail:'Sat · 5k + extend',target:8*scale,pts:160,fixed:true,importance:'key',
-     drills:[
-       {t:'Parkrun first',d:`<strong>Treat as tempo</strong> — race it properly. Gets HR data. Goal: sub 25min.`},
-       {t:'Extend after',d:`After finish: ${Math.max(0,(8*scale-5)).toFixed(0)}km extension at easy Z2 pace`},
-       {t:'Brick benefit',d:`Running on tired legs after a 5k effort = great IM-specific training`},
-       {t:'Recovery',d:`Eat within 30 min after. Good day for Maurten Drink Mix 320 practice.`},
-     ],
-     alts:['Time trial 5km (any flat route)','Fartlek 40min','Trail run same distance']},
-    {type:'run',title:ph==='Peak'?'Run — Long':'Run — Tempo',detail:`${(ph==='Peak'?16:8)*scale}km`,target:(ph==='Peak'?16:8)*scale,pts:ph==='Peak'?300:180,importance:ph==='Peak'?'key':'priority',
-     drills:ph==='Peak'?[
-       {t:'Key session — non-negotiable',d:`<strong>Long run: ${Math.round(16*scale)}km</strong> — crucial for marathon fitness`},
-       {t:'Pacing',d:`<strong>HR 135–148bpm throughout</strong>. Start slow, end same pace. No negative split attempts.`},
-       {t:'Heat prep',d:`If possible: run midday, extra layers. BCN run is 18–22°C in early October — manageable but warmer than Manchester.`},
-       {t:'Nutrition',d:`Gel every 25–30 min. Gel + water, not gel dry. Walk 60s after each gel to avoid GI issues.`},
-     ]:[
-       {t:'Tempo effort',d:`<strong>${Math.round(8*scale)}km</strong> — comfortably hard, Z3`},
-       {t:'Structure',d:`1km warm-up → ${Math.round(8*scale)-2}km at Z3 (HR 141–160) → 1km cool-down`},
-       {t:'Pace',d:`Target 5:30–6:00/km depending on fitness. Assess from HR, not pace alone.`},
-       {t:'Cadence',d:`Focus on 172–178 spm. Set a metronome if needed.`},
-     ],
-     alts:['Treadmill same distance','Trail long run (easier on legs)','Elliptical 75min high intensity']},
+    {type:'swim',title:'Swim — Technique Drills',detail:'Tue · coach · front crawl focus',target:1.2*scale,pts:120,fixed:true},
+    {type:'swim',title:'Swim — Endurance',detail:`${(1.5*scale).toFixed(1)}km continuous`,target:1.5*scale,pts:130},
+    {type:'bike',title:'Bike — Zone 2 Endurance',detail:`${Math.round(40*scale)}km · HR <140`,target:40*scale,pts:200},
+    {type:'bike',title:ph==='Peak'?'Bike — Long Ride':'Bike — Tempo',detail:`${Math.round((ph==='Peak'?90:55)*scale)}km`,target:(ph==='Peak'?90:55)*scale,pts:ph==='Peak'?320:240},
+    {type:'run',title:'Run — Easy Aerobic',detail:`${(5*scale).toFixed(0)}km · Z2`,target:5*scale,pts:140},
+    {type:'run',title:'Run — Parkrun + Long',detail:'Sat · 5k + extend',target:8*scale,pts:160,fixed:true},
+    {type:'run',title:ph==='Peak'?'Run — Long':'Run — Tempo',detail:`${(ph==='Peak'?16:8)*scale}km`,target:(ph==='Peak'?16:8)*scale,pts:ph==='Peak'?300:180},
   ];
 }
 
@@ -958,7 +831,7 @@ async function refreshIfNeeded(){const exp=parseInt(localStorage.getItem('strava
 
 // ── DATA ──
 async function loadData(){await refreshIfNeeded();try{const after=Math.floor(Date.now()/1000)-90*86400;const r=await fetch(`https://www.strava.com/api/v3/athlete/activities?per_page=100&after=${after}`,{headers:{Authorization:`Bearer ${stravaToken}`}});if(!r.ok)throw new Error('Strava API');activities=await r.json();renderAll();setBadge('stStatus',true);}catch(e){console.error(e);setBadge('stStatus',false);}}
-function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();loadSavedDebrief();checkNewAchievements();}
+function renderAll(){renderScore();renderDash();renderPlan();renderAnalytics();renderPredictor();renderDebriefPreview();loadSavedDebrief();}
 
 // ── HELPERS ──
 const sp=a=>(a.sport_type||'').toLowerCase();
@@ -1240,7 +1113,7 @@ function renderInsights(thisWk,now){
   if(swims.length<2)ins.push({c:'warn',ic:'i-waves',t:'Swim Gap',x:`Only ${swims.length} swim in 2 weeks. Front crawl needs volume.`});
   else ins.push({c:'good',ic:'i-waves',t:'Swim Consistent',x:`${swims.length} swims in 2 weeks. Good habit.`});
   const bcnD=Math.ceil((BCN_DATE-now)/86400000);
-  if(bcnD<60)ins.push({c:'warn',ic:'i-sun',t:'Heat Prep Due',x:`<60 days to BCN. Calella avg 21°C race day — warmer than Manchester. Start heat acclimatisation runs.`});
+  if(bcnD<60)ins.push({c:'warn',ic:'i-sun',t:'Heat Block Due',x:'<60 days to BCN. Start heat acclimatisation.'});
   const pts=weekPoints();
   if(pts>1500)ins.push({c:'gold',ic:'i-trophy',t:'Big Week',x:`${pts.toLocaleString()} points earned. Strong work.`});
   ins.push({c:'info',ic:'i-calendar',t:`${bcnD}d to Barcelona`,x:`${Math.ceil((AMD_DATE-now)/86400000)}d to Amsterdam.`});
@@ -1258,40 +1131,6 @@ function renderLoadChart(){
     return `<div class="lc"><div class="li"><div class="lb sw" style="height:${f(sw[i])}px"></div><div class="lb bk" style="height:${f(bk[i])}px"></div><div class="lb rn" style="height:${f(rn[i])}px"></div></div></div>`;
   }).join('');
   document.getElementById('loadLabels').innerHTML=labels.map(l=>`<span>${l.split(' ')[0]}</span>`).join('');
-}
-
-// ── COMPLIANCE CALENDAR ──
-function renderComplianceCalendar(){
-  const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  let html=`<div class="card"><div class="card-accent" style="background:linear-gradient(90deg,var(--green),var(--bike),var(--run))"></div><div class="cl"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>Compliance Calendar — 19 Weeks</div>`;
-  html+=`<div class="comp-calendar"><div class="comp-cal-legend">`;
-  html+=`<div class="comp-cal-legend-item"><div class="comp-cal-legend-dot" style="background:var(--green)"></div><span>Session Done</span></div>`;
-  html+=`<div class="comp-cal-legend-item"><div class="comp-cal-legend-dot" style="background:var(--bike)"></div><span>Alt Activity</span></div>`;
-  html+=`<div class="comp-cal-legend-item"><div class="comp-cal-legend-dot" style="background:rgba(255,255,255,0.08)"></div><span>Pending</span></div>`;
-  html+=`<div class="comp-cal-legend-item"><div class="comp-cal-legend-dot" style="background:var(--s2);opacity:0.5"></div><span>Rest</span></div>`;
-  html+=`</div></div>`;
-  
-  // Build 19-week grid
-  for(let wk=1;wk<=PLAN_WEEKS;wk++){
-    const wkStart=new Date(PLAN_START);wkStart.setDate(wkStart.getDate()+(wk-1)*7);
-    html+=`<div style="margin-bottom:12px"><div style="font-size:.65rem;color:var(--text3);font-weight:600;margin-bottom:4px">Week ${wk} (${wkStart.toLocaleDateString('en-GB',{day:'numeric',month:'short'})})</div>`;
-    html+=`<div class="comp-cal-grid">`;
-    for(let d=0;d<7;d++){
-      const dayDate=new Date(wkStart);dayDate.setDate(dayDate.getDate()+d);
-      const dayActs=activities.filter(a=>aDate(a).toDateString()===dayDate.toDateString());
-      let status='rest',tooltip='Rest day';
-      if(dayActs.length>0){
-        const hasPlan=dayActs.some(a=>isSwim(a)||isBike(a)||isRun(a));
-        const hasAlt=dayActs.some(a=>!isSwim(a)&&!isBike(a)&&!isRun(a));
-        if(hasPlan){status='done';tooltip=`${dayActs.length} session${dayActs.length>1?'s':''}`;}
-        else if(hasAlt){status='alt';tooltip=`${dayActs.length} alt${dayActs.length>1?'s':''}`;}
-      }
-      html+=`<div class="comp-cal-day ${status}"><div class="comp-cal-tooltip">${tooltip}</div>${dayNames[d].slice(0,1)}</div>`;
-    }
-    html+=`</div></div>`;
-  }
-  html+=`</div>`;
-  const el=document.getElementById('compCalendarSection');if(el)el.innerHTML=html;
 }
 
 // ── PLAN PAGE ──
@@ -1313,22 +1152,16 @@ function renderPlan(){
     bb.innerHTML=`<div class="ins gold" style="margin-bottom:12px"><div class="ins-ic"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></div><div class="ins-tx"><strong>+${comp.alt} Bonus Session${comp.alt>1?'s':''}</strong>Extra training beyond plan earned ${altPts.toLocaleString()} bonus points. Counts toward your score.</div></div>`;
   }else bb.innerHTML='';
   // session list
-  const starRating={key:5,priority:3,optional:1};
-  const importanceLbl={key:'Key Session',priority:'Priority',optional:'Optional'};
   document.getElementById('sessionList').innerHTML=comp.statuses.map(s=>{
     const done=s.status==='matched';const c=s.type==='swim'?'sw':s.type==='bike'?'bk':'rn';
     const icn=s.type==='swim'?'i-waves':s.type==='bike'?'i-bike':'i-run';
+    const stTxt=done?'Matched':'Pending';const stCls=done?'st-matched':'st-pending';
     const colorBg=s.type==='swim'?'rgba(34,211,238,0.22)':s.type==='bike'?'rgba(251,191,36,0.22)':'rgba(251,113,133,0.22)';
     const colorFg=s.type==='swim'?'var(--swim2)':s.type==='bike'?'var(--bike2)':'var(--run2)';
     const actInfo=done&&s.act?` · ${fmtKm(s.act.distance||0)}km done`:'';
-    const imp=s.importance||'priority';
-    const stars=starRating[imp]||3;
-    const starsHtml=Array.from({length:5},(_,i)=>`<svg viewBox="0 0 24 24" class="${i<stars?'sess-star-filled':'sess-star-empty'}"><use href="#i-star"/></svg>`).join('');
-    const altsHtml=(s.alts&&!done)?`<div class="sess-alts">${s.alts.slice(0,2).map(a=>`<span class="sess-alt-tag">Alt: ${a}</span>`).join('')}</div>`:'';
-    return `<div class="session ${done?'done':''}" onclick="openSession(${JSON.stringify({...s,drills:s.drills||[],alts:s.alts||[],act:s.act?{name:s.act.name,distance:s.act.distance,moving_time:s.act.moving_time,average_heartrate:s.act.average_heartrate,max_heartrate:s.act.max_heartrate,avg_cadence:s.act.avg_cadence,total_calories:s.act.total_calories}:null}).replace(/"/g,'&quot;').replace(/'/g,'&#39;')})"><div class="sess-check"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><div class="sess-ic" style="background:${colorBg};color:${colorFg}"><svg viewBox="0 0 24 24"><use href="#${icn}"/></svg></div><div class="sess-info"><div class="sess-title">${s.title}</div><div class="sess-detail">${s.detail}${actInfo}</div><div class="sess-stars">${starsHtml}</div><span class="sess-importance ${imp}">${importanceLbl[imp]}</span>${altsHtml}</div><div class="sess-pts">+${s.pts}</div></div>`;
+    return `<div class="session ${done?'done':''}" onclick="openSession(${JSON.stringify({...s,act:s.act?{name:s.act.name,distance:s.act.distance,moving_time:s.act.moving_time,average_heartrate:s.act.average_heartrate,max_heartrate:s.act.max_heartrate,avg_cadence:s.act.avg_cadence,total_calories:s.act.total_calories}:null}).replace(/"/g,'&quot;')})"><div class="sess-check"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><div class="sess-ic" style="background:${colorBg};color:${colorFg}"><svg viewBox="0 0 24 24"><use href="#${icn}"/></svg></div><div class="sess-info"><div class="sess-title">${s.title}</div><div class="sess-detail">${s.detail}${actInfo}</div><span class="sess-status ${stCls}">${stTxt}</span></div><div class="sess-pts">+${s.pts}</div></div>`;
   }).join('');
   renderXP();
-  renderComplianceCalendar();
 }
 function ringSet(id,frac,circ){const r=document.getElementById(id);if(!r)return;setTimeout(()=>r.style.transition='stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)',50);setTimeout(()=>r.style.strokeDashoffset=circ-frac*circ,100);}
 
@@ -1337,11 +1170,9 @@ function disciplineXP(filter){return activities.filter(filter).reduce((s,a)=>s+s
 function levelFor(xp){return Math.floor(Math.sqrt(xp/200))+1;}
 function xpInLevel(xp){const lvl=levelFor(xp),base=Math.pow(lvl-1,2)*200,next=Math.pow(lvl,2)*200;return{lvl,pct:Math.round((xp-base)/(next-base)*100),cur:Math.round(xp-base),need:Math.round(next-base)};}
 function renderXP(){
-  const data=[{f:isSwim,c:'sw',ic:'i-waves',n:'Swim',key:'sw'},{f:isBike,c:'bk',ic:'i-bike',n:'Bike',key:'bk'},{f:isRun,c:'rn',ic:'i-run',n:'Run',key:'rn'}];
-  document.getElementById('xpBars').innerHTML=data.map(d=>{
-    const xp=disciplineXP(d.f),L=xpInLevel(xp);
-    const levelData=athleteLevels[d.key].find(x=>x.lvl===L.lvl)||{lvl:L.lvl,title:'Level '+L.lvl};
-    return `<div class="xp"><div class="xp-head"><div class="xp-name ${d.c}"><span class="xp-ic"><svg viewBox="0 0 24 24"><use href="#${d.ic}"/></svg></span>${d.n} · Lv ${L.lvl}</div><div class="xp-lvl">${L.cur}/${L.need} XP</div></div><div style="font-size:.66rem;color:var(--text2);margin-bottom:6px;font-weight:500">${levelData.title}</div><div class="xp-track"><div class="xp-fill ${d.c}" style="width:${L.pct}%"></div></div></div>`;
+  const data=[{f:isSwim,c:'sw',ic:'i-waves',n:'Swim'},{f:isBike,c:'bk',ic:'i-bike',n:'Bike'},{f:isRun,c:'rn',ic:'i-run',n:'Run'}];
+  document.getElementById('xpBars').innerHTML=data.map(d=>{const xp=disciplineXP(d.f),L=xpInLevel(xp);
+    return `<div class="xp"><div class="xp-head"><div class="xp-name ${d.c}"><span class="xp-ic"><svg viewBox="0 0 24 24"><use href="#${d.ic}"/></svg></span>${d.n} · Lv ${L.lvl}</div><div class="xp-lvl">${L.cur}/${L.need} XP</div></div><div class="xp-track"><div class="xp-fill ${d.c}" style="width:${L.pct}%"></div></div></div>`;
   }).join('');
 }
 
@@ -1385,87 +1216,6 @@ function updatePrediction(){
     {ic:'i-run',c:'rn',n:'Run',d:'42.2km marathon',t:rnT},
   ];
   document.getElementById('predSplits').innerHTML=splits.map(s=>`<div class="split-row"><div class="split-ic ${s.c}"><svg viewBox="0 0 24 24"><use href="#${s.ic}"/></svg></div><div class="split-info"><div class="split-name">${s.n}</div><div class="split-detail">${s.d}</div></div><div class="split-time">${fmtHMS(s.t)}</div></div>`).join('');
-}
-
-// ── LEVELS & ACHIEVEMENTS ──
-const athleteLevels={
-  sw:[
-    {lvl:1,title:'Sinker'},{lvl:2,title:'Width Only'},{lvl:3,title:'Armbands Required'},{lvl:4,title:'Chlorine Drinker'},{lvl:5,title:'Doggy Paddler'},
-    {lvl:6,title:'Breaststroke Denier'},{lvl:7,title:'Lane Rope Hugger'},{lvl:8,title:'Splash Hazard'},{lvl:9,title:'Goggle Tan'},{lvl:10,title:'Pool Regular'},
-    {lvl:11,title:'Lucy Charles Fan'},{lvl:12,title:'Emma Pallant Fan'},{lvl:13,title:'Jan Frodeno Student'},{lvl:14,title:'Anne Haug Admirer'},{lvl:15,title:'Sarah True Buddy'},
-    {lvl:16,title:'Poseidon Disciple'},{lvl:17,title:'Aquaman Cosplay'},{lvl:18,title:'Mermaid Status'},{lvl:19,title:'Triton Reborn'},{lvl:20,title:'Nereid Companion'},
-    {lvl:21,title:'Undine Spirit'},{lvl:22,title:'Siren of the Sea'},{lvl:23,title:'Ocean Deity'},{lvl:24,title:'Leviathan Trainer'},{lvl:25,title:'Sea God'}
-  ],
-  bk:[
-    {lvl:1,title:'Stabilisers Still On'},{lvl:2,title:'Afraid of Hills'},{lvl:3,title:'One Gear Wonder'},{lvl:4,title:'Chain Dropper'},{lvl:5,title:'Puncture Magnet'},
-    {lvl:6,title:'Nervous Descender'},{lvl:7,title:'Kickr Hermit'},{lvl:8,title:'Zwift Refugee'},{lvl:9,title:'Cat 5 Cosplay'},{lvl:10,title:'Local Hanger'},
-    {lvl:11,title:'Jonny Brownlee Fan'},{lvl:12,title:'Tim Don Watcher'},{lvl:13,title:'Kristian Blummenfelt Student'},{lvl:14,title:'Lionel Sanders Admirer'},{lvl:15,title:'Fabian Cancellara Spotter'},
-    {lvl:16,title:'Pegasus Rider'},{lvl:17,title:'Road Runner Spirit'},{lvl:18,title:'Flash Training Partner'},{lvl:19,title:'Mercury Blessed'},{lvl:20,title:'Hermes Chosen'},
-    {lvl:21,title:'Wind Spirit'},{lvl:22,title:'Thunder Cyclist'},{lvl:23,title:'Storm Chaser'},{lvl:24,title:'Velocity Incarnate'},{lvl:25,title:'Speed God'}
-  ],
-  rn:[
-    {lvl:1,title:'Waddles'},{lvl:2,title:'Shuffle King'},{lvl:3,title:'Parkrun Tail Walker'},{lvl:4,title:'Never Negative Splits'},{lvl:5,title:'GPS Pauser'},
-    {lvl:6,title:'Heavy Breather'},{lvl:7,title:'Strava Tourist'},{lvl:8,title:'Dreaming of Sub-30'},{lvl:9,title:'Bolton Survivor'},{lvl:10,title:'Age Group Threat'},
-    {lvl:11,title:'Mo Farah Fan'},{lvl:12,title:'Paula Radcliffe Watcher'},{lvl:13,title:'Eliud Kipchoge Student'},{lvl:14,title:'Haile Gebrselassie Admirer'},{lvl:15,title:'Sifan Hassan Inspired'},
-    {lvl:16,title:'Athena Warrior'},{lvl:17,title:'Hermes Messenger'},{lvl:18,title:'Cheetah Spirit'},{lvl:19,title:'Phoenix Rising'},{lvl:20,title:'Valkyrie Runner'},
-    {lvl:21,title:'Mythic Sprinter'},{lvl:22,title:'Legend in Motion'},{lvl:23,title:'Immortal Pace'},{lvl:24,title:'Godspeed'},{lvl:25,title:'Running God'}
-  ]
-};
-
-const achievementDefs=[
-  // Swim
-  {id:'swim_1km',disc:'sw',title:'First Kilometre',desc:'Completed 1km continuous swim',check:a=>a.filter(isSwim).some(s=>km(s.distance||0)>=1)},
-  {id:'swim_3km',disc:'sw',title:'IM Swim Distance',desc:'Completed 3.8km swim (IM distance)',check:a=>a.filter(isSwim).some(s=>km(s.distance||0)>=3.8)},
-  {id:'swim_100m_pace',disc:'sw',title:'Sub-1:45 per 100m',desc:'Pace of 1:45/100m or faster sustained',check:a=>a.filter(isSwim).filter(s=>s.avg_speed>0).some(s=>100/s.avg_speed<=105)},
-  {id:'swim_fast_pace',disc:'sw',title:'Sub-1:30 per 100m',desc:'Elite pace: 1:30/100m or faster',check:a=>a.filter(isSwim).filter(s=>s.avg_speed>0).some(s=>100/s.avg_speed<=90)},
-  {id:'swim_open_water',disc:'sw',title:'Open Water Swimmer',desc:'First open water swim logged',check:a=>a.filter(isSwim).some(s=>(s.location_city||'').toLowerCase().includes('open')||(s.name||'').toLowerCase().includes('open'))},
-  {id:'swim_volume',disc:'sw',title:'5km Swim Week',desc:'5km+ total swim distance in one week',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wswim=a.filter(isSwim).filter(s=>aDate(s)>=ws&&aDate(s)<=we).reduce((t,s)=>t+km(s.distance||0),0);return wswim>=5;}},
-  // Bike
-  {id:'bike_100km',disc:'bk',title:'Century Ride',desc:'Completed 100km ride',check:a=>a.filter(isBike).some(s=>km(s.distance||0)>=100)},
-  {id:'bike_180km',disc:'bk',title:'IM Bike Distance',desc:'Completed 180km ride (full IM distance)',check:a=>a.filter(isBike).some(s=>km(s.distance||0)>=180)},
-  {id:'bike_30kmh',disc:'bk',title:'30km/h Average',desc:'Avg speed 30km/h+ over 50km ride',check:a=>a.filter(isBike).filter(s=>km(s.distance||0)>=50&&s.average_speed).some(s=>s.average_speed>=8.33)},
-  {id:'bike_5hr_180',disc:'bk',title:'Sub-5hr IM Bike',desc:'Completed 180km in under 5 hours',check:a=>a.filter(isBike).some(s=>km(s.distance||0)>=180&&(s.moving_time||0)/3600<5)},
-  {id:'bike_volume',disc:'bk',title:'300km Week',desc:'300km+ total bike distance in one week',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wbike=a.filter(isBike).filter(s=>aDate(s)>=ws&&aDate(s)<=we).reduce((t,s)=>t+km(s.distance||0),0);return wbike>=300;}},
-  {id:'brick_session',disc:'tri',title:'First Brick',desc:'Bike + run on same day',check:a=>{const days=new Map();a.forEach(act=>{const d=aDate(act).toDateString();if(!days.has(d))days.set(d,[]);days.get(d).push(act);});let found=false;days.forEach(acts=>{if(acts.filter(isBike).length>0&&acts.filter(isRun).length>0)found=true;});return found;}},
-  // Run
-  {id:'run_10km',disc:'rn',title:'10km Runner',desc:'Completed 10km run',check:a=>a.filter(isRun).some(s=>km(s.distance||0)>=10)},
-  {id:'run_21km',disc:'rn',title:'Half Marathon',desc:'Completed 21km run (half marathon distance)',check:a=>a.filter(isRun).some(s=>km(s.distance||0)>=21)},
-  {id:'run_42km',disc:'rn',title:'Marathoner',desc:'Completed 42km run (full marathon distance)',check:a=>a.filter(isRun).some(s=>km(s.distance||0)>=42)},
-  {id:'run_sub30_5k',disc:'rn',title:'Sub-30 5k',desc:'5km pace faster than 6:00/km',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)<=5.2&&s.avg_speed).some(s=>1000/s.avg_speed<360)},
-  {id:'run_sub25_5k',disc:'rn',title:'Sub-25 5k',desc:'5km pace faster than 5:00/km',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)<=5.2&&s.avg_speed).some(s=>1000/s.avg_speed<300)},
-  {id:'run_sub60_10k',disc:'rn',title:'Sub-60 10k',desc:'10km pace faster than 6:00/km average',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&km(s.distance||0)<=10.5&&s.avg_speed).some(s=>1000/s.avg_speed<360)},
-  {id:'run_sub55_10k',disc:'rn',title:'Sub-55 10k',desc:'10km pace faster than 5:30/km average',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&km(s.distance||0)<=10.5&&s.avg_speed).some(s=>1000/s.avg_speed<330)},
-  {id:'run_sub2hr_hm',disc:'rn',title:'Sub-2hr Half',desc:'Half marathon in under 2 hours',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=20&&km(s.distance||0)<=21.5).some(s=>(s.moving_time||0)<7200)},
-  {id:'run_sub4hr_marathon',disc:'rn',title:'Sub-4hr Marathon',desc:'Marathon in under 4 hours',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=42).some(s=>(s.moving_time||0)<14400)},
-  {id:'run_sub3hr45_marathon',disc:'rn',title:'Sub-3:45 Marathon',desc:'Marathon in under 3:45',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=42).some(s=>(s.moving_time||0)<13500)},
-  {id:'run_6min_km_10km',disc:'rn',title:'6:00/km for 10km',desc:'Hold 6:00/km pace over 10km+',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&s.avg_speed).some(s=>1000/s.avg_speed<=360)},
-  {id:'run_5min30_km_10km',disc:'rn',title:'5:30/km for 10km',desc:'Hold 5:30/km pace over 10km+',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&s.avg_speed).some(s=>1000/s.avg_speed<=330)},
-  {id:'run_5min_km_10km',disc:'rn',title:'5:00/km for 10km',desc:'Hold 5:00/km pace over 10km+ (very strong)',check:a=>a.filter(isRun).filter(s=>km(s.distance||0)>=10&&s.avg_speed).some(s=>1000/s.avg_speed<=300)},
-  // Triathlon
-  {id:'tri_all_three',disc:'tri',title:'Complete Athlete',desc:'All 3 disciplines in one week',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const acts=a.filter(act=>aDate(act)>=ws&&aDate(act)<=we);return acts.filter(isSwim).length>0&&acts.filter(isBike).length>0&&acts.filter(isRun).length>0;}},
-  {id:'tri_150km_week',disc:'tri',title:'150km Training Week',desc:'150km+ total distance in one week (~10 hours)',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wtot=a.filter(act=>aDate(act)>=ws&&aDate(act)<=we).reduce((t,act)=>t+km(act.distance||0),0);return wtot>=150;}},
-  {id:'tri_200km_week',disc:'tri',title:'200km Training Week',desc:'200km+ total distance in one week (peak week)',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wtot=a.filter(act=>aDate(act)>=ws&&aDate(act)<=we).reduce((t,act)=>t+km(act.distance||0),0);return wtot>=200;}},
-  {id:'tri_300km_week',disc:'tri',title:'300km Week',desc:'300km+ total distance in one week (race prep)',check:a=>{const now=new Date();const ws=wkOf(now),we=new Date(ws);we.setDate(we.getDate()+6);const wtot=a.filter(act=>aDate(act)>=ws&&aDate(act)<=we).reduce((t,act)=>t+km(act.distance||0),0);return wtot>=300;}},
-  {id:'tri_8week_streak',disc:'tri',title:'8-Week Streak',desc:'Trained 8 consecutive weeks without missing a week',check:a=>{let streak=0;const now=new Date();for(let i=0;i<12;i++){const d=new Date(now);d.setDate(d.getDate()-i*7);const ws=wkOf(d),we=new Date(ws);we.setDate(we.getDate()+6);if(a.filter(act=>aDate(act)>=ws&&aDate(act)<=we).length>0)streak++;else break;}return streak>=8;}},
-  {id:'triscore_400',disc:'tri',title:'TriScore 400',desc:'Achieved TriScore of 400+',check:a=>computeTriScore()>=400},
-  {id:'triscore_550',disc:'tri',title:'TriScore 550',desc:'Achieved TriScore of 550+ (Athlete tier)',check:a=>computeTriScore()>=550},
-  {id:'triscore_700',disc:'tri',title:'TriScore 700',desc:'Achieved TriScore of 700+ (Competitor tier)',check:a=>computeTriScore()>=700},
-  {id:'triscore_850',disc:'tri',title:'TriScore 850',desc:'Achieved TriScore of 850+ (Elite tier)',check:a=>computeTriScore()>=850},
-];
-function getUnlockedAchievements(){return JSON.parse(localStorage.getItem('tricoach_achievements')||'{}');}
-function checkNewAchievements(){
-  const unlocked=getUnlockedAchievements();const newAchievements=[];
-  achievementDefs.forEach(def=>{if(!unlocked[def.id]&&def.check(activities)){unlocked[def.id]={unlockedAt:new Date().toISOString()};newAchievements.push(def);}});
-  if(newAchievements.length>0){localStorage.setItem('tricoach_achievements',JSON.stringify(unlocked));newAchievements.forEach(ach=>setTimeout(()=>showAchievementPopup(ach),500));}
-}
-function showAchievementPopup(ach){
-  const colors={sw:'var(--swim)',bk:'var(--bike)',rn:'var(--run)',tri:'var(--purple)'};
-  const icons={sw:'i-waves',bk:'i-bike',rn:'i-run',tri:'i-trophy'};
-  const el=document.createElement('div');
-  el.style.cssText=`position:fixed;bottom:100px;right:16px;z-index:300;background:${colors[ach.disc]};border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:16px;max-width:280px;animation:slideIn .4s ease;box-shadow:0 10px 40px rgba(0,0,0,0.3)`;
-  el.innerHTML=`<div style="display:flex;gap:10px;align-items:flex-start"><div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg class="ic" viewBox="0 0 24 24" style="color:white"><use href="#${icons[ach.disc]}"/></svg></div><div><div style="font-family:var(--fh);font-size:.88rem;font-weight:700;color:white;letter-spacing:-0.01em">${ach.title}</div><div style="font-size:.7rem;color:rgba(255,255,255,0.8);margin-top:3px">${ach.desc}</div></div></div>`;
-  document.body.appendChild(el);
-  setTimeout(()=>{el.style.animation='slideOut .3s ease forwards';setTimeout(()=>el.remove(),300);},3500);
 }
 
 // ── ANALYTICS ──
@@ -1535,61 +1285,22 @@ async function generateDebrief(){
   const now=new Date(),wk7=activities.filter(a=>(now-aDate(a))/86400000<=7);
   const summary=wk7.map(a=>{const hr=a.average_heartrate?` | HR ${Math.round(a.average_heartrate)}/${Math.round(a.max_heartrate||a.average_heartrate)}bpm`:'';const cad=a.avg_cadence?` | ${Math.round(a.avg_cadence*2)}spm`:'';return `- ${a.sport_type}: ${fmtKm(a.distance||0)}km in ${fmtT(a.moving_time||0)}${hr}${cad}`;}).join('\n')||'- No activities';
   const wk=curWeek(),bcnD=Math.ceil((BCN_DATE-now)/86400000),comp=weekCompliance();
-  const prompt=`You are a direct expert triathlon coach reviewing Shawn's week. No fluff. Be specific with numbers.
+  const prompt=`You are a direct expert triathlon coach reviewing Shawn's week. No fluff.
 
-ATHLETE: Ironman Barcelona 4 Oct 2026 (${bcnD}d), Amsterdam Marathon 18 Oct. Week ${wk}/19 (${phaseFor(wk)} phase). Max HR 200. Zones Z1<120 Z2 120-140 Z3 141-160 Z4 161-180 Z5 181+. Bolton 70.3 bike HR 183-187 caused run collapse — pacing is #1 priority. Front crawl from scratch. No road power meter. Maurten-only nutrition. Compliance: ${comp.matched}/${comp.total} planned sessions, ${comp.alt} bonus.
+ATHLETE: Ironman Barcelona 4 Oct 2026 (${bcnD}d), Amsterdam Marathon 18 Oct. Week ${wk}/19 (${phaseFor(wk)} phase). Max HR 200. Zones Z1<120 Z2 120-140 Z3 141-160 Z4 161-180 Z5 181+. Bolton 70.3 bike HR 183-187 caused run collapse — pacing is #1 priority. Front crawl from scratch. No road power meter. Maurten-only nutrition. This week compliance: ${comp.matched}/${comp.total} planned sessions, ${comp.alt} bonus sessions.
 
 LAST 7 DAYS:
 ${summary}
 
-Reply ONLY as JSON (no markdown fences, no preamble). Schema:
-{
-  "sections": [
-    { "id": "sessions", "title": "Sessions Completed", "icon": "calendar", "color": "purple", "body": "..." },
-    { "id": "observations", "title": "Key Observations", "icon": "activity", "color": "swim", "body": "..." },
-    { "id": "flags", "title": "Flags & Concerns", "icon": "zap", "color": "danger", "body": "..." },
-    { "id": "swim", "title": "Swim Progress", "icon": "waves", "color": "swim", "body": "..." },
-    { "id": "next", "title": "Next Week Focus", "icon": "target", "color": "green", "body": "..." }
-  ],
-  "headline": "One sentence verdict on the week"
-}
+Structured debrief:
+### Sessions Completed
+### Key Observations (specific numbers)
+### Flags & Concerns (blunt)
+### Swim Progress
+### Next Week Focus (max 3 points)
 
-Body fields: plain text, max 60 words per section. Use ⚠ for flags, ✓ for positives. Be blunt.`;
-  try{
-    const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);
-    const raw=d.content?.[0]?.text||'';
-    let parsed;
-    try{
-      const clean=raw.replace(/```json|```/g,'').trim();
-      parsed=JSON.parse(clean);
-    }catch(e){
-      // fallback: render as raw formatted text
-      const rendered=raw.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/✓/g,'<span class="good">✓</span>').replace(/\n/g,'<br>');
-      out.innerHTML=`<div class="db-raw">${rendered}</div>`;out.classList.add('show');
-      saveDebrief(out.innerHTML,'raw');loadSavedDebrief();
-      btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg> Regenerate Debrief';return;
-    }
-    const iconMap={calendar:'i-calendar',activity:'i-activity',zap:'i-zap',waves:'i-waves',target:'i-target',heart:'i-heart',clock:'i-clock',flag:'i-shield',sparkle:'i-sparkle'};
-    const colorMap={purple:'var(--purple)',swim:'var(--swim)',bike:'var(--bike)',run:'var(--run)',danger:'var(--danger)',green:'var(--green)',gold:'var(--gold)',text:'var(--text2)'};
-    const bgMap={purple:'rgba(165,180,252,0.15)',swim:'rgba(34,211,238,0.12)',bike:'rgba(251,191,36,0.12)',run:'rgba(251,113,133,0.12)',danger:'rgba(251,113,133,0.12)',green:'rgba(52,211,153,0.12)',gold:'rgba(251,191,36,0.12)',text:'var(--s2)'};
-    let html='';
-    if(parsed.headline){html+=`<div style="padding:14px 16px;background:linear-gradient(135deg,rgba(165,180,252,0.12),rgba(34,211,238,0.08));border-bottom:1px solid var(--border)"><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:3px">Coach Verdict</div><div style="font-family:var(--fh);font-size:.92rem;font-weight:700;color:var(--text);line-height:1.4">${parsed.headline}</div></div>`;}
-    if(parsed.sections){
-      html+=parsed.sections.map(sec=>{
-        const ic=iconMap[sec.icon]||'i-zap';
-        const col=colorMap[sec.color]||'var(--purple)';
-        const bg=bgMap[sec.color]||'var(--s2)';
-        const body=sec.body.replace(/⚠/g,'<span class="flag">⚠</span>').replace(/✓/g,'<span class="good">✓</span>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-        return `<div class="db-section"><div class="db-section-head"><div class="db-section-ic" style="background:${bg};color:${col}"><svg viewBox="0 0 24 24"><use href="#${ic}"/></svg></div><div class="db-section-title">${sec.title}</div></div><div class="db-section-body">${body}</div></div>`;
-      }).join('');
-    }
-    out.innerHTML=html;out.classList.add('show');
-    saveDebrief(html,'structured');loadSavedDebrief();
-  }catch(e){
-    out.innerHTML=`<div class="db-raw"><span class="flag">Error: ${e.message}</span></div>`;out.classList.add('show');
-  }
+Max 400 words.`;
+  try{const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})}),d=await r.json();if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);const t=d.content?.[0]?.text||'No response.';const rendered=t.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/\n/g,'<br>');out.innerHTML=rendered;out.classList.add('show');saveDebrief(rendered);loadSavedDebrief();}catch(e){out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;out.classList.add('show');}
   btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg> Regenerate Debrief';
 }
 
@@ -1620,34 +1331,20 @@ function openActivity(id){
 function openSession(s){
   const t=document.getElementById('modalTitle'),b=document.getElementById('modalBody');
   const c=s.type==='swim'?'var(--swim)':s.type==='bike'?'var(--bike)':'var(--run)';
-  const cval=s.type==='swim'?'#22d3ee':s.type==='bike'?'#fbbf24':'#fb7185';
   const ic=s.type==='swim'?'i-waves':s.type==='bike'?'i-bike':'i-run';
-  const imp=s.importance||'priority';
-  const impLbl={key:'Key Session ★★★★★',priority:'Priority ★★★',optional:'Optional ★'}[imp];
-  const impCol={key:'var(--gold)',priority:'var(--purple)',optional:'var(--text3)'}[imp];
-  t.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" style="stroke:white;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;margin-right:8px;vertical-align:middle"><use href="#${ic}"/></svg> ${s.title}`;
-  let body=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-    <div style="font-size:.7rem;color:${impCol};font-weight:700;text-transform:uppercase;letter-spacing:.05em">${impLbl}</div>
-    <div style="font-size:.7rem;color:var(--text3);font-family:var(--fm)">${s.detail}</div>
-  </div>`;
+  t.innerHTML=`<svg class="ic" style="color:${c}" viewBox="0 0 24 24"><use href="#${ic}"/></svg> ${s.title}`;
+  let body=`<div style="font-size:.82rem;color:var(--text2);line-height:1.7;margin-bottom:14px">${s.detail}</div>`;
   body+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
     <div style="background:var(--s2);border-radius:9px;padding:11px;text-align:center"><div style="font-family:var(--fm);font-size:1rem;font-weight:700;color:${c}">+${s.pts}</div><div style="font-size:.6rem;color:var(--text3);margin-top:2px;text-transform:uppercase">Plan Points</div></div>
-    <div style="background:var(--s2);border-radius:9px;padding:11px;text-align:center"><div style="font-family:var(--fm);font-size:1rem;font-weight:700;color:${s.status==='matched'?'var(--green)':'var(--text3)'}">${s.status==='matched'?'✓ Done':'Pending'}</div><div style="font-size:.6rem;color:var(--text3);margin-top:2px;text-transform:uppercase">Status</div></div>
+    <div style="background:var(--s2);border-radius:9px;padding:11px;text-align:center"><div style="font-family:var(--fm);font-size:1rem;font-weight:700;color:${s.status==='matched'?'var(--green)':'var(--text3)'}">${s.status==='matched'?'Done':'Pending'}</div><div style="font-size:.6rem;color:var(--text3);margin-top:2px;text-transform:uppercase">Status</div></div>
   </div>`;
   if(s.act){
     const a=s.act;
-    body+=`<div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:12px;margin-bottom:12px"><div style="font-size:.7rem;font-weight:700;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">✓ Matched Activity</div>
+    body+=`<div style="background:var(--green-d);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:12px"><div style="font-size:.7rem;font-weight:700;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Matched Activity</div>
     <div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:6px">${a.name||'Activity'}</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">${[['Dist',fmtKm(a.distance||0)+'km'],['Time',fmtT(a.moving_time||0)],['HR',a.average_heartrate?Math.round(a.average_heartrate)+'bpm':'—']].map(([l,v])=>`<div style="text-align:center"><div style="font-family:var(--fm);font-size:.82rem;font-weight:600;color:var(--text)">${v}</div><div style="font-size:.58rem;color:var(--text3);margin-top:1px">${l}</div></div>`).join('')}</div>
     </div>`;
-  }
-  if(s.drills&&s.drills.length){
-    body+=`<div class="sess-drill"><div class="sess-drill-title">Session Plan</div>${s.drills.map(d=>`<div class="sess-drill-item"><div class="sess-drill-bullet" style="background:${c}"></div><div class="sess-drill-text"><strong>${d.t}:</strong> ${d.d}</div></div>`).join('')}</div>`;
-  }
-  if(s.alts&&s.alts.length&&s.status!=='matched'){
-    body+=`<div style="margin-top:12px"><div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:7px">Can't do it? Alternatives</div><div style="display:flex;flex-wrap:wrap;gap:6px">${s.alts.map(a=>`<span style="font-size:.72rem;padding:5px 11px;border-radius:100px;background:var(--s2);border:1px solid var(--border);color:var(--text2)">${a}</span>`).join('')}</div></div>`;
-  }
-  if(!s.act&&(!s.drills||!s.drills.length)){
+  } else {
     body+=`<div style="background:var(--s2);border-radius:10px;padding:12px;font-size:.78rem;color:var(--text2)">No matching Strava activity found yet for this session. Complete it and sync to earn your points.</div>`;
   }
   b.innerHTML=body;
@@ -1703,11 +1400,8 @@ function renderFitnessScores(){
 // ── SAVED DEBRIEF ──
 function loadSavedDebrief(){
   const saved=localStorage.getItem('tricoach_debrief');
-  if(!saved){document.getElementById('savedDebriefWrap').innerHTML='';return;}
+  if(!saved)return;
   const d=JSON.parse(saved);
-  const body=d.html||d.rendered||'';
-  // Re-apply h3 styling for old plain-text debriefs
-  const renderedBody=body.includes('<h3>')?body.replace(/<h3>/g,'<h3>').replace(/<\/h3>/g,'</h3>'):body;
   document.getElementById('savedDebriefWrap').innerHTML=`
     <div class="saved-debrief">
       <div class="saved-debrief-head">
@@ -1717,12 +1411,12 @@ function loadSavedDebrief(){
           <button class="saved-debrief-clear" onclick="clearSavedDebrief()">Clear</button>
         </div>
       </div>
-      <div class="saved-debrief-body">${renderedBody}</div>
+      <div class="saved-debrief-body">${d.html}</div>
     </div>`;
 }
-function saveDebrief(html,type='structured'){
+function saveDebrief(html){
   const now=new Date();
-  localStorage.setItem('tricoach_debrief',JSON.stringify({html,type,date:now.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}));
+  localStorage.setItem('tricoach_debrief',JSON.stringify({html,date:now.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}));
 }
 function clearSavedDebrief(){localStorage.removeItem('tricoach_debrief');document.getElementById('savedDebriefWrap').innerHTML='';}
 
