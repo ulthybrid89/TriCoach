@@ -32,6 +32,7 @@ html{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-tap-hi
 body{min-height:100dvh;padding-top:var(--st);padding-bottom:calc(70px + var(--sb));overflow-x:hidden}
 ::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
 svg.ic{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:white;stroke-linecap:round;stroke-linejoin:round}
+svg[viewBox="0 0 24 24"]{stroke:white;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 /* HEADER */
 header{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:13px 18px;padding-top:calc(13px + var(--st));display:flex;align-items:center;justify-content:space-between}
@@ -190,7 +191,20 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(7,11,20,0
 .comp-ring svg{transform:rotate(-90deg)}
 .comp-ring-c{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:1.05rem;font-weight:700}
 .comp-info-t{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
-.comp-info-v{font-size:.78rem;color:var(--text2);font-family:var(--fm)}
+.comp-calendar{margin-bottom:12px}
+.comp-cal-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:10px}
+.comp-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px}
+.comp-cal-day{aspect-ratio:1;background:var(--s3);border-radius:6px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.5rem;color:var(--text3);cursor:pointer;transition:.15s;position:relative}
+.comp-cal-day:hover{transform:scale(1.05);border-color:var(--text2)}
+.comp-cal-day.done{background:var(--green);border-color:var(--green);color:var(--bg);font-weight:700}
+.comp-cal-day.alt{background:var(--bike);border-color:var(--bike);color:var(--bg);font-weight:700}
+.comp-cal-day.pending{background:rgba(255,255,255,0.08);border-color:var(--border)}
+.comp-cal-day.rest{background:var(--s2);border-color:var(--border);opacity:.5}
+.comp-cal-tooltip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--s1);border:1px solid var(--border2);border-radius:8px;padding:6px 10px;font-size:.6rem;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s;z-index:10;margin-bottom:4px}
+.comp-cal-day:hover .comp-cal-tooltip{opacity:1}
+.comp-cal-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:.65rem;color:var(--text3)}
+.comp-cal-legend-item{display:flex;align-items:center;gap:4px}
+.comp-cal-legend-dot{width:10px;height:10px;border-radius:4px}
 
 /* XP BARS */
 .xp{margin-bottom:12px}
@@ -667,8 +681,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
     <div id="xpBars"></div>
   </div>
 
-
-</div>
+  <!-- Compliance Calendar -->
+  <div id="compCalendarSection"></div>
 
 <!-- STATS -->
 <div id="pageAnalytics" class="page">
@@ -1246,6 +1260,40 @@ function renderLoadChart(){
   document.getElementById('loadLabels').innerHTML=labels.map(l=>`<span>${l.split(' ')[0]}</span>`).join('');
 }
 
+// ── COMPLIANCE CALENDAR ──
+function renderComplianceCalendar(){
+  const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  let html=`<div class="card"><div class="card-accent" style="background:linear-gradient(90deg,var(--green),var(--bike),var(--run))"></div><div class="cl"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>Compliance Calendar — 19 Weeks</div>`;
+  html+=`<div class="comp-calendar"><div class="comp-cal-legend">`;
+  html+=`<div class="comp-cal-legend-item"><div class="comp-cal-legend-dot" style="background:var(--green)"></div><span>Session Done</span></div>`;
+  html+=`<div class="comp-cal-legend-item"><div class="comp-cal-legend-dot" style="background:var(--bike)"></div><span>Alt Activity</span></div>`;
+  html+=`<div class="comp-cal-legend-item"><div class="comp-cal-legend-dot" style="background:rgba(255,255,255,0.08)"></div><span>Pending</span></div>`;
+  html+=`<div class="comp-cal-legend-item"><div class="comp-cal-legend-dot" style="background:var(--s2);opacity:0.5"></div><span>Rest</span></div>`;
+  html+=`</div></div>`;
+  
+  // Build 19-week grid
+  for(let wk=1;wk<=PLAN_WEEKS;wk++){
+    const wkStart=new Date(PLAN_START);wkStart.setDate(wkStart.getDate()+(wk-1)*7);
+    html+=`<div style="margin-bottom:12px"><div style="font-size:.65rem;color:var(--text3);font-weight:600;margin-bottom:4px">Week ${wk} (${wkStart.toLocaleDateString('en-GB',{day:'numeric',month:'short'})})</div>`;
+    html+=`<div class="comp-cal-grid">`;
+    for(let d=0;d<7;d++){
+      const dayDate=new Date(wkStart);dayDate.setDate(dayDate.getDate()+d);
+      const dayActs=activities.filter(a=>aDate(a).toDateString()===dayDate.toDateString());
+      let status='rest',tooltip='Rest day';
+      if(dayActs.length>0){
+        const hasPlan=dayActs.some(a=>isSwim(a)||isBike(a)||isRun(a));
+        const hasAlt=dayActs.some(a=>!isSwim(a)&&!isBike(a)&&!isRun(a));
+        if(hasPlan){status='done';tooltip=`${dayActs.length} session${dayActs.length>1?'s':''}`;}
+        else if(hasAlt){status='alt';tooltip=`${dayActs.length} alt${dayActs.length>1?'s':''}`;}
+      }
+      html+=`<div class="comp-cal-day ${status}"><div class="comp-cal-tooltip">${tooltip}</div>${dayNames[d].slice(0,1)}</div>`;
+    }
+    html+=`</div></div>`;
+  }
+  html+=`</div>`;
+  const el=document.getElementById('compCalendarSection');if(el)el.innerHTML=html;
+}
+
 // ── PLAN PAGE ──
 function renderPlan(){
   const wk=curWeek(),ph=phaseFor(wk);
@@ -1280,6 +1328,7 @@ function renderPlan(){
     return `<div class="session ${done?'done':''}" onclick="openSession(${JSON.stringify({...s,drills:s.drills||[],alts:s.alts||[],act:s.act?{name:s.act.name,distance:s.act.distance,moving_time:s.act.moving_time,average_heartrate:s.act.average_heartrate,max_heartrate:s.act.max_heartrate,avg_cadence:s.act.avg_cadence,total_calories:s.act.total_calories}:null}).replace(/"/g,'&quot;').replace(/'/g,'&#39;')})"><div class="sess-check"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><div class="sess-ic" style="background:${colorBg};color:${colorFg}"><svg viewBox="0 0 24 24"><use href="#${icn}"/></svg></div><div class="sess-info"><div class="sess-title">${s.title}</div><div class="sess-detail">${s.detail}${actInfo}</div><div class="sess-stars">${starsHtml}</div><span class="sess-importance ${imp}">${importanceLbl[imp]}</span>${altsHtml}</div><div class="sess-pts">+${s.pts}</div></div>`;
   }).join('');
   renderXP();
+  renderComplianceCalendar();
 }
 function ringSet(id,frac,circ){const r=document.getElementById(id);if(!r)return;setTimeout(()=>r.style.transition='stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)',50);setTimeout(()=>r.style.strokeDashoffset=circ-frac*circ,100);}
 
@@ -1343,21 +1392,21 @@ const athleteLevels={
   sw:[
     {lvl:1,title:'Sinker'},{lvl:2,title:'Width Only'},{lvl:3,title:'Armbands Required'},{lvl:4,title:'Chlorine Drinker'},{lvl:5,title:'Doggy Paddler'},
     {lvl:6,title:'Breaststroke Denier'},{lvl:7,title:'Lane Rope Hugger'},{lvl:8,title:'Splash Hazard'},{lvl:9,title:'Goggle Tan'},{lvl:10,title:'Pool Regular'},
-    {lvl:11,title:'Lucy Charles Fan'},{lvl:12,title:'Jan Frodeno Watcher'},{lvl:13,title:'Anne Haug Student'},{lvl:14,title:'Sarah True Admirer'},{lvl:15,title:'Alistair Brownlee Buddy'},
+    {lvl:11,title:'Lucy Charles Fan'},{lvl:12,title:'Flora Duffy Watcher'},{lvl:13,title:'Jan Frodeno Student'},{lvl:14,title:'Anne Haug Admirer'},{lvl:15,title:'Sarah True Buddy'},
     {lvl:16,title:'Poseidon Disciple'},{lvl:17,title:'Aquaman Cosplay'},{lvl:18,title:'Mermaid Status'},{lvl:19,title:'Triton Reborn'},{lvl:20,title:'Nereid Companion'},
     {lvl:21,title:'Undine Spirit'},{lvl:22,title:'Siren of the Sea'},{lvl:23,title:'Ocean Deity'},{lvl:24,title:'Leviathan Trainer'},{lvl:25,title:'Sea God'}
   ],
   bk:[
     {lvl:1,title:'Stabilisers Still On'},{lvl:2,title:'Afraid of Hills'},{lvl:3,title:'One Gear Wonder'},{lvl:4,title:'Chain Dropper'},{lvl:5,title:'Puncture Magnet'},
     {lvl:6,title:'Nervous Descender'},{lvl:7,title:'Kickr Hermit'},{lvl:8,title:'Zwift Refugee'},{lvl:9,title:'Cat 5 Cosplay'},{lvl:10,title:'Local Hanger'},
-    {lvl:11,title:'Kristian Blummenfelt Student'},{lvl:12,title:'Lionel Sanders Watcher'},{lvl:13,title:'Fabian Cancellara Fan'},{lvl:14,title:'Geraint Thomas Admirer'},{lvl:15,title:'Tadej Pogacar Spotter'},
+    {lvl:11,title:'Jonny Brownlee Fan'},{lvl:12,title:'Tim Don Watcher'},{lvl:13,title:'Kristian Blummenfelt Student'},{lvl:14,title:'Lionel Sanders Admirer'},{lvl:15,title:'Fabian Cancellara Spotter'},
     {lvl:16,title:'Pegasus Rider'},{lvl:17,title:'Road Runner Spirit'},{lvl:18,title:'Flash Training Partner'},{lvl:19,title:'Mercury Blessed'},{lvl:20,title:'Hermes Chosen'},
     {lvl:21,title:'Wind Spirit'},{lvl:22,title:'Thunder Cyclist'},{lvl:23,title:'Storm Chaser'},{lvl:24,title:'Velocity Incarnate'},{lvl:25,title:'Speed God'}
   ],
   rn:[
     {lvl:1,title:'Waddles'},{lvl:2,title:'Shuffle King'},{lvl:3,title:'Parkrun Tail Walker'},{lvl:4,title:'Never Negative Splits'},{lvl:5,title:'GPS Pauser'},
     {lvl:6,title:'Heavy Breather'},{lvl:7,title:'Strava Tourist'},{lvl:8,title:'Dreaming of Sub-30'},{lvl:9,title:'Bolton Survivor'},{lvl:10,title:'Age Group Threat'},
-    {lvl:11,title:'Eliud Kipchoge Student'},{lvl:12,title:'Paula Radcliffe Watcher'},{lvl:13,title:'Haile Gebrselassie Fan'},{lvl:14,title:'Mo Farah Admirer'},{lvl:15,title:'Sifan Hassan Inspired'},
+    {lvl:11,title:'Mo Farah Fan'},{lvl:12,title:'Paula Radcliffe Watcher'},{lvl:13,title:'Eliud Kipchoge Student'},{lvl:14,title:'Haile Gebrselassie Admirer'},{lvl:15,title:'Sifan Hassan Inspired'},
     {lvl:16,title:'Athena Warrior'},{lvl:17,title:'Hermes Messenger'},{lvl:18,title:'Cheetah Spirit'},{lvl:19,title:'Phoenix Rising'},{lvl:20,title:'Valkyrie Runner'},
     {lvl:21,title:'Mythic Sprinter'},{lvl:22,title:'Legend in Motion'},{lvl:23,title:'Immortal Pace'},{lvl:24,title:'Godspeed'},{lvl:25,title:'Running God'}
   ]
