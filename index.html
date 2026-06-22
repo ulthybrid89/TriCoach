@@ -4,14 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#070b14">
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TriCoach">
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <title>TriCoach</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 <style>
 :root{
   --bg:#070b14;--s1:#0f1728;--s2:#172240;--s3:#1f2e54;--s4:#283a66;
@@ -433,7 +432,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .fit-bar{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin-top:8px}
 .fit-bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
 .fit-desc{font-size:.64rem;color:var(--text2);margin-top:5px;line-height:1.4}
-svg.ic{stroke:currentColor!important;fill:none!important}</style>
+</style>
 </head>
 <body>
 
@@ -668,8 +667,8 @@ svg.ic{stroke:currentColor!important;fill:none!important}</style>
     <div id="cadenceStats"><div class="loading"><div class="spin"></div></div></div>
   </div>
   <div class="card">
-    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-medal"/></svg>Achievements & Milestones</div>
-    <div id="achievementsGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px"></div>
+    <div class="cl"><svg viewBox="0 0 24 24"><use href="#i-activity"/></svg>90-Day Volume Split</div>
+    <div id="volumeSplit"></div>
   </div>
 </div>
 
@@ -1220,7 +1219,7 @@ function updatePrediction(){
 }
 
 // ── ANALYTICS ──
-function renderAnalytics(){renderFitnessScores();renderKeyMetrics();renderHRZones();renderRunPace();renderSwimTable();renderCadence();renderVolume();renderAchievements();}
+function renderAnalytics(){renderFitnessScores();renderKeyMetrics();renderHRZones();renderRunPace();renderSwimTable();renderCadence();renderVolume();}
 function renderKeyMetrics(){
   const runs=activities.filter(isRun),swims=activities.filter(isSwim),bikes=activities.filter(isBike),now=new Date();
   const longRun=runs.reduce((b,a)=>km(a.distance||0)>km(b.distance||0)?a:b,runs[0]||{});
@@ -1274,54 +1273,7 @@ function renderVolume(){
   document.getElementById('volumeSplit').innerHTML=[{l:'Swim',v:sw,c:'var(--swim)'},{l:'Bike',v:bk,c:'var(--bike)'},{l:'Run',v:rn,c:'var(--run)'}].map(d=>{const p=Math.round(d.v/tot*100);return `<div class="vol-bar"><div class="vol-head"><span>${d.l}</span><span style="color:${d.c}">${d.v.toFixed(0)} km · ${p}%</span></div><div class="vol-track"><div class="vol-fill" style="width:${p}%;background:${d.c}"></div></div></div>`;}).join('');
 }
 
-// ── ACHIEVEMENTS ──
-function renderAchievements(){
-  const now=new Date();
-  const achievements=[];
-  
-  // Streak
-  const streak=computeStreak();
-  if(streak>=1)achievements.push({icon:'🔥',label:'Week Streak',value:`${streak}`,color:'var(--bike2)',desc:`${streak} weeks of consistent training`});
-  
-  // Total Volume
-  const totalKm=activities.reduce((s,a)=>s+km(a.distance||0),0);
-  if(totalKm>=1000)achievements.push({icon:'📍',label:'1000km Club',value:'🏆',color:'var(--gold)',desc:`${Math.round(totalKm)}km total logged`});
-  if(totalKm>=500)achievements.push({icon:'📍',label:'500km Logged',value:'✓',color:'var(--swim)',desc:`${Math.round(totalKm)}km tracked`});
-  
-  // Swim
-  const swims=activities.filter(isSwim);
-  const swimKm=swims.reduce((s,a)=>s+km(a.distance||0),0);
-  if(swimKm>=50)achievements.push({icon:'🏊',label:'50km Swimmer',value:'50',color:'var(--swim)',desc:`${swimKm.toFixed(0)}km swim volume`});
-  if(swims.length>=10)achievements.push({icon:'🌊',label:'10 Swims',value:'10',color:'var(--swim2)',desc:`${swims.length} swimming sessions`});
-  
-  // Bike
-  const bikes=activities.filter(isBike);
-  const bikeKm=bikes.reduce((s,a)=>s+km(a.distance||0),0);
-  if(bikeKm>=500)achievements.push({icon:'🚴',label:'500km Cyclist',value:'500',color:'var(--bike)',desc:`${Math.round(bikeKm)}km bike volume`});
-  if(bikes.length>=10)achievements.push({icon:'⛰️',label:'10 Bike Sessions',value:'10',color:'var(--bike2)',desc:`${bikes.length} cycling sessions`});
-  
-  // Run
-  const runs=activities.filter(isRun);
-  const runKm=runs.reduce((s,a)=>s+km(a.distance||0),0);
-  if(runKm>=100)achievements.push({icon:'🏃',label:'100km Runner',value:'100',color:'var(--run)',desc:`${runKm.toFixed(0)}km run volume`});
-  if(runs.length>=15)achievements.push({icon:'⚡',label:'15 Runs',value:'15',color:'var(--run2)',desc:`${runs.length} running sessions`});
-  
-  // All three disciplines
-  if(swims.length>=1&&bikes.length>=1&&runs.length>=1)achievements.push({icon:'🏅',label:'Triathlete',value:'3️⃣',color:'var(--purple)',desc:'Trained in all three disciplines'});
-  
-  // Consistency
-  const last28=activities.filter(a=>(now-aDate(a))/86400000<=28);
-  if(last28.length>=20)achievements.push({icon:'💪',label:'Consistent',value:'20+',color:'var(--green)',desc:`${last28.length} sessions in 28 days`});
-  
-  // Display
-  const el=document.getElementById('achievementsGrid');
-  if(achievements.length===0){
-    el.innerHTML='<div style="grid-column:1 / -1;text-align:center;padding:20px;color:var(--text3);font-size:.78rem">Keep training to unlock achievements!</div>';
-  }else{
-    el.innerHTML=achievements.map(a=>'<div style="background:var(--s2);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px;text-align:center"><div style="font-size:2rem;margin-bottom:6px">'+a.icon+'</div><div style="font-size:.75rem;font-weight:600;color:'+a.color+';margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">'+a.label+'</div><div style="font-size:.7rem;color:var(--text2)">'+a.desc+'</div></div>').join('');
-  }
-}
-
+// ── DEBRIEF ──
 function renderDebriefPreview(){
   const now=new Date(),wk7=activities.filter(a=>(now-aDate(a))/86400000<=7);
   const sw=wk7.filter(isSwim).reduce((s,a)=>s+km(a.distance||0),0),bk=wk7.filter(isBike).reduce((s,a)=>s+km(a.distance||0),0),rn=wk7.filter(isRun).reduce((s,a)=>s+km(a.distance||0),0);
@@ -1331,8 +1283,7 @@ async function generateDebrief(){
   const btn=document.getElementById('debriefBtn'),out=document.getElementById('debriefOut');
   btn.disabled=true;btn.innerHTML='<div class="spin"></div> Analysing…';out.classList.remove('show');
   const now=new Date(),wk7=activities.filter(a=>(now-aDate(a))/86400000<=7);
-  const summary=wk7.map(a=>{const hr=a.average_heartrate?` | HR ${Math.round(a.average_heartrate)}/${Math.round(a.max_heartrate||a.average_heartrate)}bpm`:'';const cad=a.avg_cadence?` | ${Math.round(a.avg_cadence*2)}spm`:'';return `- ${a.sport_type}: ${fmtKm(a.distance||0)}km in ${fmtT(a.moving_time||0)}${hr}${cad}`;}).join('
-')||'- No activities';
+  const summary=wk7.map(a=>{const hr=a.average_heartrate?` | HR ${Math.round(a.average_heartrate)}/${Math.round(a.max_heartrate||a.average_heartrate)}bpm`:'';const cad=a.avg_cadence?` | ${Math.round(a.avg_cadence*2)}spm`:'';return `- ${a.sport_type}: ${fmtKm(a.distance||0)}km in ${fmtT(a.moving_time||0)}${hr}${cad}`;}).join('\n')||'- No activities';
   const wk=curWeek(),bcnD=Math.ceil((BCN_DATE-now)/86400000),comp=weekCompliance();
   const prompt=`You are a direct expert triathlon coach reviewing Shawn's week. No fluff.
 
@@ -1349,8 +1300,7 @@ Structured debrief:
 ### Next Week Focus (max 3 points)
 
 Max 400 words.`;
-  try{const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})}),d=await r.json();if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);const t=d.content?.[0]?.text||'No response.';const rendered=t.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/
-/g,'<br>');out.innerHTML=rendered;out.classList.add('show');saveDebrief(rendered);loadSavedDebrief();}catch(e){out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;out.classList.add('show');}
+  try{const r=await fetch(`${CLAUDE_WORKER_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})}),d=await r.json();if(!r.ok)throw new Error(d.error||`Worker ${r.status}`);const t=d.content?.[0]?.text||'No response.';const rendered=t.replace(/### (.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/⚠/g,'<span class="flag">⚠</span>').replace(/\n/g,'<br>');out.innerHTML=rendered;out.classList.add('show');saveDebrief(rendered);loadSavedDebrief();}catch(e){out.innerHTML=`<span class="flag">Error: ${e.message}</span>`;out.classList.add('show');}
   btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg> Regenerate Debrief';
 }
 
